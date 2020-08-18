@@ -1380,6 +1380,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestById(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="requestId"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.SeedData.LocationConfiguration">
             <summary>
             confirgure location data
@@ -1494,6 +1501,13 @@
             <summary>
             
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestById(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="requestId"></param>
             <returns></returns>
         </member>
         <member name="P:HTTAPI.Startup.Environment">
