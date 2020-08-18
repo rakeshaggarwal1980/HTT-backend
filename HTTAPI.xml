@@ -1,0 +1,1738 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HTTAPI</name>
+    </assembly>
+    <members>
+        <member name="M:HTTAPI.Controllers.EmployeeController.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Controllers.EmployeeController},HTTAPI.Manager.Contract.IEmployeeService)">
+            <summary>
+            
+            </summary>
+            <param name="logger"></param>
+            <param name="employeeService"></param>
+        </member>
+        <member name="M:HTTAPI.Controllers.EmployeeController.CreateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Controllers.LoginController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Controllers.LoginController.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Logging.ILogger{HTTAPI.Controllers.LoginController},HTTAPI.Manager.Contract.IEmployeeService)">
+            <summary>
+            
+            </summary>
+            <param name="configuration"></param>
+            <param name="logger"></param>
+            <param name="employeeService"></param>
+        </member>
+        <member name="M:HTTAPI.Controllers.LoginController.LoginUser(HTTAPI.ViewModels.UserLoginViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="loginViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Controllers.RequestController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Controllers.RequestController.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Controllers.RequestController},HTTAPI.Manager.Contract.IRequestService)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Controllers.RequestController.CreateRequest(HTTAPI.ViewModels.ComeToOfficeRequestViewModel)">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.RequestController.UpdateRequest(HTTAPI.ViewModels.ComeToOfficeRequestViewModel)">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.RequestController.GetAllRequests">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Enums.EntityStatus">
+            <summary>
+            Use in database to set status of records
+            like general status, proposal, content, user invitation .
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.EntityStatus.Active">
+            <summary>
+            records status
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.EntityStatus.Deleted">
+            <summary>
+            Delete status
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.EntityStatus.InProgress">
+            <summary>
+            proposal and content status
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.EntityStatus.Finished">
+            <summary>
+            Finish
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.EntityStatus.Accept">
+            <summary>
+            User Invitation status
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.EntityStatus.Deny">
+            <summary>
+            Deny
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Enums.Status">
+            <summary>
+            Operation\Request status
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.Status.Fail">
+            <summary>
+            fail
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.Status.Success">
+            <summary>
+            Sucess
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.Status.Error">
+            <summary>
+            Error
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Enums.Operation">
+            <summary>
+            Operation\Request type
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.Operation.Create">
+            <summary>
+            Create
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.Operation.Read">
+            <summary>
+            Read
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.Operation.Update">
+            <summary>
+            Update
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.Operation.Delete">
+            <summary>
+            Delete
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Enums.MailType">
+            <summary>
+            Type of mail to send
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.MailType.Proposal">
+            <summary>
+            TBD
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.MailType.Type2">
+            <summary>
+            TBD
+            </summary>
+        </member>
+        <member name="T:HTTAPI.FilterTypes.PagingFilter">
+            <summary>
+            BaseFilter setting
+            </summary>
+        </member>
+        <member name="P:HTTAPI.FilterTypes.PagingFilter.SortDirection">
+            <summary>
+            SortDirection
+            </summary>
+        </member>
+        <member name="P:HTTAPI.FilterTypes.PagingFilter.Skip">
+            <summary>
+            Skip
+            </summary>
+        </member>
+        <member name="P:HTTAPI.FilterTypes.PagingFilter.Take">
+            <summary>
+            Take
+            </summary>
+        </member>
+        <member name="P:HTTAPI.FilterTypes.PagingFilter.SearchContent">
+            <summary>
+            SearchContent
+            </summary>
+        </member>
+        <member name="P:HTTAPI.FilterTypes.PagingFilter.Category">
+            <summary>
+            Selected category for searching
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Helpers.AppEmailHelper">
+            <summary>
+            Email Helper
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.AppEmailHelper._client">
+            <summary>
+            Smtp client
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.AppEmailHelper._viewRenderService">
+            <summary>
+            view render service initialization
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.AppEmailHelper._appEmailSetting">
+            <summary>
+            email settings
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Helpers.AppEmailHelper.#ctor">
+            <summary>
+            Ctor
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Helpers.AppEmailHelper.InitMailMessage">
+            <summary>
+            Send Email
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Helpers.AppEmailHelper.PrepareMailBody">
+            <summary>
+            Prepare mail body
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.ToMailAddresses">
+            <summary>
+            To mailing list
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.CCMailAddresses">
+            <summary>
+            Cc mailing list
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.BCCMailAddresses">
+            <summary>
+            Bcc mailing list
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.FromMailAddress">
+            <summary>
+            From mail address
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.Subject">
+            <summary>
+            Mail Subject
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.MailType">
+            <summary>
+            Type/Category of mail
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.MailBodyViewModel">
+            <summary>
+            Provide mail body viewmodel to prepare the email body as html template
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Helpers.AppEmailSetting">
+            <summary>
+            App email settings
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailSetting.SmtpClient">
+            <summary>
+            smtp client
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailSetting.Port">
+            <summary>
+            port
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailSetting.NetworkUserName">
+            <summary>
+            network user name
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailSetting.NetworkPassword">
+            <summary>
+            network password
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailSetting.FromEmail">
+            <summary>
+            mail sent from address
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailSetting.FromName">
+            <summary>
+            Mail sent from address name
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Helpers.AppHelper">
+            <summary>
+            Application helper methods
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppHelper.HostingEnvironment">
+            <summary>
+            hosting env
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppHelper.Configuration">
+            <summary>
+            Configuration
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppHelper.ServiceProvider">
+            <summary>
+            Service provider for geeting injected services
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppHelper.CurrentDate">
+            <summary>
+            Current date time
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Helpers.AppHelper.GetUserClaimDetails(System.Security.Claims.ClaimsIdentity)">
+            <summary>
+            Get logged user claims
+            </summary>
+            <param name="identity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Helpers.AppHelper.GetColumnValue(System.String,System.Object)">
+            <summary>
+            Gets the column value.
+            </summary>
+            <param name="columnName">Name of the column.</param>
+            <param name="entity">The entity.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Helpers.AppHelper.SetColumnValue(System.String,System.Object,System.Object)">
+            <summary>
+            Sets the column value.
+            </summary>
+            <param name="columnName">Name of the column.</param>
+            <param name="entity">The entity.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:HTTAPI.Helpers.AppHelper.MapAuditColumns(System.Object,System.Security.Claims.ClaimsIdentity)">
+            <summary>
+            Maps the audit columns.
+            </summary>
+            <param name="model">The model.</param>
+            <param name="identity"></param>
+        </member>
+        <member name="T:HTTAPI.Helpers.CommonErrorMessages">
+            <summary>
+            Common messages
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.CommonErrorMessages.UnknownError">
+            <summary>
+            UnknownError
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.CommonErrorMessages.BadRequest">
+            <summary>
+            BadRequest
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.CommonErrorMessages.NoResultFound">
+            <summary>
+            NoResultFound
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.CommonErrorMessages.SomethingWentWrong">
+            <summary>
+            SomethingWentWrong
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Helpers.Constants">
+            <summary>
+            Application constants
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.Constants.CreatedBy">
+            <summary>
+            Added By Column
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.Constants.CreatedDate">
+            <summary>
+            Added Date Column
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.Constants.ModifiedBy">
+            <summary>
+            The modified by column
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.Constants.ModifiedDate">
+            <summary>
+            The modified date column
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.Constants.FilterCollaboratorCount">
+            <summary>
+            limited collaborator to be shown
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Helpers.ControlTypes">
+            <summary>
+            Control Types
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.ControlTypes.Title">
+            <summary>
+            Title Type
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.ControlTypes.SubTitle">
+            <summary>
+            SubTitle Type
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.ControlTypes.Image">
+            <summary>
+            Image Type
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.ControlTypes.TimeLine">
+            <summary>
+            TimeLine Type
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.ControlTypes.Description">
+            <summary>
+            Description Type
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Helpers.EmailTemplatePath">
+            <summary>
+            Email template path
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.EmailTemplatePath.Proposal">
+            <summary>
+            Proposal mail template path
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Helpers.FileActionMessages">
+            <summary>
+            Messages reslated to file action
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.FileActionMessages.CoverPhotoKey">
+            <summary>
+            FileCoverPhoto key
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.FileActionMessages.NoFileMatch">
+            <summary>
+            No file matched during file upload
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.FileActionMessages.CategoryNotFound">
+            <summary>
+            No category found during file upload
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Helpers.EntityMapperExtensions">
+            <summary>
+            Extension Methods for Entity Mapper.
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Helpers.EntityMapperExtensions.MapFromModel``2(System.Object,System.Collections.Generic.List{``0},System.String)">
+            <summary>
+            Map list of records to view model
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <typeparam name="TViewModel"></typeparam>
+            <param name="target"></param>
+            <param name="model"></param>
+            <param name="ignoreProperties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Helpers.EntityMapperExtensions.MapFromModel``1(System.Object,``0,System.String)">
+            <summary>
+            Map single item from model
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="target"></param>
+            <param name="model"></param>
+            <param name="ignoreProperties"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Helpers.EntityMapperExtensions.MapFromViewModel``1(System.Object,``0,System.Security.Claims.ClaimsIdentity,System.String)">
+            <summary>
+            Map from view model
+            </summary>
+            <typeparam name="TModel"></typeparam>
+            <param name="target"></param>
+            <param name="viewModel"></param>
+            <param name="identity"></param>
+            <param name="ignoreProperties"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Helpers.AvoidNullProps">
+            <summary>
+            Avoid null properties
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Helpers.AvoidNullProps.SetValue(System.Object,System.Object,System.Reflection.PropertyInfo,System.Reflection.PropertyInfo)">
+            <summary>
+            Implicit method to set value
+            </summary>
+            <param name="source"></param>
+            <param name="target"></param>
+            <param name="sp"></param>
+            <param name="tp"></param>
+        </member>
+        <member name="T:HTTAPI.Helpers.IgnoreProperty">
+            <summary>
+            Ignore properties
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.IgnoreProperty._ignoreProperties">
+            <summary>
+            readonly local variable
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Helpers.IgnoreProperty.#ctor(System.String)">
+            <summary>
+            Properties ignore
+            </summary>
+            <param name="ignoreProperties"></param>
+        </member>
+        <member name="T:HTTAPI.Helpers.ExceptionMiddlewareExtensions">
+            <summary>
+            Handling Errors Globally with the Built-In Middleware
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Helpers.ExceptionMiddlewareExtensions.ConfigureExceptionHandler(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.Extensions.Logging.ILogger{HTTAPI.Startup})">
+            <summary>
+            configire global error handling 
+            </summary>
+            <param name="app"></param>
+            <param name="logger"></param>
+        </member>
+        <member name="T:HTTAPI.Helpers.IResult">
+            <summary>
+            IResult data return type
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.IResult.Operation">
+            <summary>
+            operation type property
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.IResult.Status">
+            <summary>
+            operation status
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.IResult.Message">
+            <summary>
+            Oparation message if any
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.IResult.Body">
+            <summary>
+            operation body
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.IResult.StatusCode">
+            <summary>
+            Http status code
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Helpers.Result">
+            <summary>
+            Result 
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.Result.Operation">
+            <summary>
+            operation type property
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.Result.Status">
+            <summary>
+            operation status
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.Result.Message">
+            <summary>
+            Oparation message if any
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.Result.Body">
+            <summary>
+            operation body
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.Result.StatusCode">
+            <summary>
+            Http status code
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Helpers.Result.ToString">
+            <summary>
+            return string 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Helpers.WebHostExtension">
+            <summary>
+            web host extension to run migration and seed data 
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Helpers.WebHostExtension.MigrateDatabase(Microsoft.AspNetCore.Hosting.IWebHost)">
+            <summary>
+            run migrations
+            </summary>
+            <param name="webHost"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Helpers.UserClaim">
+            <summary>
+            Logged user claim
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.UserClaim.Name">
+            <summary>
+            Logged user name
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.UserClaim.Email">
+            <summary>
+            Logged user email
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Manager.Contract.IEmployeeService">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.CreateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+            <summary>
+             Create the CreateEmployee
+            </summary>
+            <param name="employeeViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.GetEmployee(HTTAPI.ViewModels.UserLoginViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="loginModel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Manager.Contract.IHealthTrackService">
+            <summary>
+            interface for ContentDetailService 
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IHealthTrackService.CreateHealthTrack(HTTAPI.ViewModels.HealthTrackViewModel)">
+            <summary>
+             Create the CreateHealthTrack
+            </summary>
+            <param name="healthTrackViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Manager.Contract.IRequestService">
+            <summary>
+             Contract for Come to office request
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IRequestService.GetRequestsList">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IRequestService.CreateRequest(HTTAPI.ViewModels.ComeToOfficeRequestViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="requestViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IRequestService.UpdateRequest(HTTAPI.ViewModels.ComeToOfficeRequestViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="requestViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Manager.Contract.IViewRenderService">
+            <summary>
+            View Render Service interface
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IViewRenderService.RenderToStringAsync(System.String,System.Object)">
+            <summary>
+            Render view to string
+            </summary>
+            <param name="viewName"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Manager.Contract.EmployeeService">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Manager.Contract.EmployeeService._logger">
+            <summary>
+            logger EmployeeService
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Manager.Contract.EmployeeService._configuration">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Manager.Contract.EmployeeService._employeeRepository">
+            <summary>
+            contract with EmployeeRepository
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Manager.Contract.EmployeeService._principal">
+            <summary>
+            Claim Identity
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Contract.EmployeeService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IEmployeeRepository,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            EmployeeService constructor
+            </summary>
+            <param name="logger"></param>
+            <param name="principal"></param>
+            <param name="employeeRepository"></param>
+            <param name="configuration"></param>      
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.CreateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+            <summary>
+            Create Employee
+            </summary>
+            <param name="employeeViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetEmployee(HTTAPI.ViewModels.UserLoginViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="loginModel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Manager.Service.HealthTrackService">
+            <summary>
+            use in with HealthController to manage HealthTrack entity
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Manager.Service.HealthTrackService._logger">
+            <summary>
+            logger HealthTrackService
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Manager.Service.HealthTrackService._healthTrackRepository">
+            <summary>
+            contract with HealthTrackRepository
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Manager.Service.HealthTrackService._principal">
+            <summary>
+            Claim Identity
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Service.HealthTrackService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IHealthTrackRepository)">
+            <summary>
+            HealthTrackService constructor
+            </summary>
+            <param name="logger"></param>
+            <param name="principal"></param>
+            <param name="healthTrackRepository"></param>      
+        </member>
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.CreateHealthTrack(HTTAPI.ViewModels.HealthTrackViewModel)">
+            <summary>
+            Create Health Track
+            </summary>
+            <param name="healthTrackViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Manager.Service.RequestService">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Manager.Service.RequestService._logger">
+            <summary>
+            logger RequestService
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Manager.Service.RequestService._requestRepository">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Manager.Service.RequestService._principal">
+            <summary>
+            Claim Identity
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.RequestService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Service.RequestService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IRequestRepository)">
+            <summary>
+            
+            </summary>
+            <param name="logger"></param>
+            <param name="principal"></param>
+            <param name="requestRepository"></param>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.RequestService.GetRequestsList">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.RequestService.CreateRequest(HTTAPI.ViewModels.ComeToOfficeRequestViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="requestViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.RequestService.UpdateRequest(HTTAPI.ViewModels.ComeToOfficeRequestViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="requestViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Models.BaseEntity">
+            <summary>
+            Base entity for audit columns
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.BaseEntity.CreatedBy">
+            <summary>
+            Creator, Owner
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.BaseEntity.CreatedDate">
+            <summary>
+            Record creation date
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.BaseEntity.ModifiedBy">
+            <summary>
+            Record modified by
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.BaseEntity.ModifiedDate">
+            <summary>
+            Record modification date
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.BaseEntity.Status">
+            <summary>
+            Record status
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Models.ComeToOfficeRequest">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.ComeToOfficeRequest.Id">
+            <summary>
+            Primary key of entity
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.ComeToOfficeRequest.RequestNumber">
+            <summary>
+            Random generated request Number
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.ComeToOfficeRequest.EmployeeCode">
+            <summary>
+            EmployeeCode
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.ComeToOfficeRequest.DateOfRequest">
+            <summary>
+             DateOfRequest
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.ComeToOfficeRequest.IsApproved">
+            <summary>
+            IsApproved
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.ComeToOfficeRequest.IsDeclined">
+            <summary>
+            IsDeclined
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Models.Employee">
+            <summary>
+            Employee entity
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Employee.Id">
+            <summary>
+            Primary key of entity
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Employee.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Employee.Email">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Employee.Password">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Employee.EmployeeCode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Models.FileDetail">
+            <summary>
+            File Management
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.FileDetail.Id">
+            <summary>
+            primary key
+            File saved in local directory with same key and extension
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.FileDetail.FileName">
+            <summary>
+            File original name
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Models.HealthTrack">
+            <summary>
+            HealthTrack
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.Id">
+            <summary>
+            primary key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.ResidentialAddress">
+            <summary>
+            ResidentialAddress
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.PreExistHealthIssue">
+            <summary>
+            PreExistHealthIssue
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.ContactWithCovidPeople">
+            <summary>
+            ContactWithCovidPeople
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.TravelOustSideInLast15Days">
+            <summary>
+            TravelOustSideInLast15Days
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.SampleDate">
+            <summary>
+            TravelOustSideInLast15Days
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.LocationId">
+            <summary>
+            Location ForeignKey
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.Location">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.ZoneId">
+            <summary>
+            Zone ForeignKey
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.Zone">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.EmployeeId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.Employee">
+            <summary>
+            Zone ForeignKey
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.HealthTrackSymptoms">
+            <summary>
+            Collection HealthTrackSymptom
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.HealthTrackQuestions">
+            <summary>
+            Collection HealthTrackQuestionAnswer
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Models.HealthTrackQuestionAnswer">
+            <summary>
+            HealthTrack
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackQuestionAnswer.Id">
+            <summary>
+            primary key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackQuestionAnswer.HealthTrackId">
+            <summary>
+            HealthTrack ForeignKey
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackQuestionAnswer.QuestionId">
+            <summary>
+            Symptom ForeignKey
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackQuestionAnswer.value">
+            <summary>
+            value
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Models.HealthTrackSymptom">
+            <summary>
+            HealthTrack
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackSymptom.Id">
+            <summary>
+            primary key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackSymptom.HealthTrackId">
+            <summary>
+            HealthTrack ForeignKey
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackSymptom.SymptomId">
+            <summary>
+            Symptom ForeignKey
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackSymptom.value">
+            <summary>
+            value
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Models.Location">
+            <summary>
+            Location
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Location.Id">
+            <summary>
+            primary key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Location.Name">
+            <summary>
+            Location Name
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Location.Order">
+            <summary>
+            Location position\order
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Location.Status">
+            <summary>
+            Record status
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Models.Question">
+            <summary>
+            Question
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Question.Id">
+            <summary>
+            primary key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Question.Name">
+            <summary>
+            Question 
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Question.Order">
+            <summary>
+            position\order
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Question.Status">
+            <summary>
+            Record status
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Models.Symptom">
+            <summary>
+            Symptom
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Symptom.Id">
+            <summary>
+            primary key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Symptom.Name">
+            <summary>
+            Symptom Name
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Symptom.Order">
+            <summary>
+            Symptom position\order
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Symptom.Status">
+            <summary>
+            Symptom status
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Models.Zone">
+            <summary>
+            Zone
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Zone.Id">
+            <summary>
+            primary key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Zone.Name">
+            <summary>
+            Location Name
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Zone.Order">
+            <summary>
+            Location position\order
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Zone.Status">
+            <summary>
+            Record status
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Models.HealthTrackQuestionAnswerViewModel">
+            <summary>
+            HealthTrackQuestionAnswerViewModel
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackQuestionAnswerViewModel.Id">
+            <summary>
+            primary key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackQuestionAnswerViewModel.HealthTrackId">
+            <summary>
+            HealthTrack ForeignKey
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:HTTAPI.Models.HealthTrackQuestionAnswerViewModel.QuestionId" -->
+        <!-- Badly formed XML comment ignored for member "P:HTTAPI.Models.HealthTrackQuestionAnswerViewModel.Question" -->
+        <member name="P:HTTAPI.Models.HealthTrackQuestionAnswerViewModel.value">
+            <summary>
+            value
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Models.HealthTrackSymptomViewModel">
+            <summary>
+            HealthTrack
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackSymptomViewModel.Id">
+            <summary>
+            primary key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackSymptomViewModel.HealthTrackId">
+            <summary>
+            HealthTrackId
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackSymptomViewModel.SymptomId">
+            <summary>
+            SymptomId
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackSymptomViewModel.Name">
+            <summary>
+            Symptom Name
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrackSymptomViewModel.value">
+            <summary>
+            value
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Repository.Context">
+            <summary>
+            HTT context
+            </summary>
+            <summary>
+            HTT db set
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Context.#ctor">
+            <summary>
+            ctor default
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Context.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{HTTAPI.Repository.Context})">
+            <summary>
+            ctor 
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="M:HTTAPI.Repository.Context.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            On model creating event
+            </summary>
+            <param name="modelBuilder"></param>
+        </member>
+        <member name="M:HTTAPI.Repository.Context.SeedData">
+            <summary>
+            Get set data on db creation
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Repository.Context.Location">
+            <summary>
+            Locations
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Repository.Context.Zone">
+            <summary>
+            Zones
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Repository.Context.Symptom">
+            <summary>
+            Symptoms
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Repository.Context.Question">
+            <summary>
+            Questions
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Repository.Context.Employee">
+            <summary>
+            Employee
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Repository.Context.HealthTrack">
+            <summary>
+            HealthTrack
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Repository.Context.HealthTrackQuestionAnswer">
+            <summary>
+            HealthTrackQuestionAnswer
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Repository.Context.HealthTrackSymptom">
+            <summary>
+            HealthTrackSymptom
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Repository.Context.ComeToOfficeRequest">
+            <summary>
+            Come to office request 
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.ModelBuilderExtensions.Seed(HTTAPI.Repository.Context)">
+            <summary>
+            Get set data on db creation
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:HTTAPI.Repository.ContextFactory">
+            <summary>
+            To Enable migration; IDesignTimeDbContextFactory need to be implemented
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.ContextFactory.#ctor">
+            <summary>
+            CTOR of context factory
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.ContextFactory.CreateDbContext(System.String[])">
+            <summary>
+            Create db context
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Repository.Contracts.IEmployeeRepository">
+            <summary>
+            Employee Repo
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.CreateEmployee(HTTAPI.Models.Employee)">
+            <summary>
+            
+            </summary>
+            <param name="employee"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetEmployee(HTTAPI.Models.Employee)">
+            <summary>
+            
+            </summary>
+            <param name="employee"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Repository.Contracts.IHealthTrackRepository">
+            <summary>
+            HealthTrackRepository 
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IHealthTrackRepository.CreateHealthTrack(HTTAPI.Models.HealthTrack)">
+            <summary>
+             This method is used to save new health track
+            </summary>
+            <param name="healthTrack"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Repository.Contracts.IRequestRepository">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.CreateRequest(HTTAPI.Models.ComeToOfficeRequest)">
+            <summary>
+            
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.UpdateRequest(HTTAPI.Models.ComeToOfficeRequest)">
+            <summary>
+            
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestsList">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Repository.SeedData.LocationConfiguration">
+            <summary>
+            confirgure location data
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.SeedData.LocationConfiguration.Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{HTTAPI.Models.Location})">
+            <summary>
+            configure master data
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Repository.SeedData.QuestionConfiguration">
+            <summary>
+            confirgure Question data
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.SeedData.QuestionConfiguration.Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{HTTAPI.Models.Question})">
+            <summary>
+            configure master data
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Repository.SeedData.SymptomConfiguration">
+            <summary>
+            confirgure Symptom data
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.SeedData.SymptomConfiguration.Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{HTTAPI.Models.Symptom})">
+            <summary>
+            configure master data
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Repository.SeedData.ZoneConfiguration">
+            <summary>
+            confirgure Zone data
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.SeedData.ZoneConfiguration.Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{HTTAPI.Models.Zone})">
+            <summary>
+            configure master data
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Repository.Services.EmployeeRepository">
+            <summary>
+            EmployeeRepository
+            Here all method should be async
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.#ctor(HTTAPI.Repository.Context)">
+            <summary>
+            Ctor
+            context injection\creation
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.CreateEmployee(HTTAPI.Models.Employee)">
+            <summary>
+            
+            </summary>
+            <param name="employee"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetEmployee(HTTAPI.Models.Employee)">
+            <summary>
+            
+            </summary>
+            <param name="employee"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Repository.Services.HealthTrackRepository">
+             <summary>
+            HealthTrackRepository
+             Here all method should be async
+             </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.HealthTrackRepository.#ctor(HTTAPI.Repository.Context)">
+            <summary>
+            Ctor
+            context injection\creation
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.HealthTrackRepository.CreateHealthTrack(HTTAPI.Models.HealthTrack)">
+            <summary>
+            This method is used to Create Health Track
+            </summary>       
+        </member>
+        <member name="T:HTTAPI.Repository.Services.RequestRepository">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.RequestRepository.#ctor(HTTAPI.Repository.Context)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.RequestRepository.CreateRequest(HTTAPI.Models.ComeToOfficeRequest)">
+            <summary>
+            
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.RequestRepository.UpdateRequest(HTTAPI.Models.ComeToOfficeRequest)">
+            <summary>
+            
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestsList">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:HTTAPI.Startup.Environment">
+            <summary>
+            Environment
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Startup.ConfigureSwagger(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            swagger configuration
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="T:HTTAPI.ViewModels.ComeToOfficeRequestViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.Id">
+            <summary>
+            Primary key of entity
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.RequestNumber">
+            <summary>
+            Random generated request Number
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.EmployeeCode">
+            <summary>
+            EmployeeCode
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.DateOfRequest">
+            <summary>
+             DateOfRequest
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.IsApproved">
+            <summary>
+            IsApproved
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.IsDeclined">
+            <summary>
+            IsDeclined
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.EmployeeViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.Id">
+            <summary>
+             Primary Key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.Email">
+            <summary>
+            Email
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.Password">
+            <summary>
+            Password
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.EmployeeCode">
+            <summary>
+            EmployeeId
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.Status">
+            <summary>
+            Status
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.HealthTrackViewModel">
+            <summary>
+            Health Track View Model
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.Id">
+            <summary>
+            Primary key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.ResidentialAddress">
+            <summary>
+            ResidentialAddress
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.PreExistHealthIssue">
+            <summary>
+            PreExistHealthIssue
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.ContactWithCovidPeople">
+            <summary>
+            ContactWithCovidPeople
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.TravelOustSideInLast15Days">
+            <summary>
+            TravelOustSideInLast15Days
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.SampleDate">
+            <summary>
+            SampleDate
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.LocationId">
+            <summary>
+            LocationId
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.ZoneId">
+            <summary>
+            file checked out by user
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.EmployeeId">
+            <summary>
+            created by user id
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.HealthTrackSymptoms">
+             <summary>
+            Health Track Symptoms
+             </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.HealthTrackQuestions">
+             <summary>
+            Health Track Question Answer ViewModel
+             </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.Status">
+            <summary>
+            Status
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.UserLoginViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserLoginViewModel.Email">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserLoginViewModel.Password">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.UserViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserViewModel.UserId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserViewModel.EmployeeCode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserViewModel.Password">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserViewModel.Email">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserViewModel.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserViewModel.Token">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:HTT.Manager.Service.ViewRenderService">
+            <summary>
+            Render view service
+            </summary>
+        </member>
+        <member name="F:HTT.Manager.Service.ViewRenderService._logger">
+            <summary>
+            logger ContentDetailService
+            </summary>
+        </member>
+        <member name="F:HTT.Manager.Service.ViewRenderService._accessor">
+            <summary>
+            http context accessor
+            </summary>
+        </member>
+        <member name="F:HTT.Manager.Service.ViewRenderService._razorViewEngine">
+            <summary>
+            razor engine
+            </summary>
+        </member>
+        <member name="F:HTT.Manager.Service.ViewRenderService._tempDataProvider">
+            <summary>
+            temp data initializer
+            </summary>
+        </member>
+        <member name="M:HTT.Manager.Service.ViewRenderService.#ctor(Microsoft.Extensions.Logging.ILogger{HTT.Manager.Service.ViewRenderService},Microsoft.AspNetCore.Http.IHttpContextAccessor,Microsoft.AspNetCore.Mvc.Razor.IRazorViewEngine,Microsoft.AspNetCore.Mvc.ViewFeatures.ITempDataProvider)">
+            <summary>
+            CTOR
+            </summary> 
+            <param name="logger"></param>
+            <param name="accessor"></param>
+            <param name="razorViewEngine"></param>
+            <param name="tempDataProvider"></param>
+        </member>
+        <member name="M:HTT.Manager.Service.ViewRenderService.RenderToStringAsync(System.String,System.Object)">
+            <summary>
+            Render view to string
+            </summary>
+            <param name="viewName"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
