@@ -1,8 +1,5 @@
 ﻿using HTTAPI.Helpers;
 using HTTAPI.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace HTTAPI.Manager.Contract
@@ -32,5 +29,12 @@ namespace HTTAPI.Manager.Contract
         /// <param name="requestViewModel"></param>
         /// <returns></returns>
         Task<IResult> UpdateRequest(ComeToOfficeRequestViewModel requestViewModel);
+
+        /// <summary>
+        /// Get request detail
+        /// </summary>
+        /// <param name="requestId"></param>
+        /// <returns></returns>
+        Task<IResult> GetRequestDetail(int requestId);
     }
 }

@@ -4,16 +4,21 @@
         <name>HTTAPI</name>
     </assembly>
     <members>
+        <member name="T:HTTAPI.Controllers.EmployeeController">
+            <summary>
+            Employee Controller
+            </summary>
+        </member>
         <member name="M:HTTAPI.Controllers.EmployeeController.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Controllers.EmployeeController},HTTAPI.Manager.Contract.IEmployeeService)">
             <summary>
-            
+            Employee Controller Constructor
             </summary>
             <param name="logger"></param>
             <param name="employeeService"></param>
         </member>
         <member name="M:HTTAPI.Controllers.EmployeeController.CreateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
             <summary>
-            
+            Registers an employee
             </summary>
             <returns></returns>
         </member>
@@ -62,6 +67,12 @@
         <member name="M:HTTAPI.Controllers.RequestController.GetAllRequests">
             <summary>
             
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.RequestController.GetRequestDetail(System.Int32)">
+            <summary>
+             Returns request detail
             </summary>
             <returns></returns>
         </member>
@@ -694,6 +705,13 @@
             <param name="requestViewModel"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.IRequestService.GetRequestDetail(System.Int32)">
+            <summary>
+            Get request detail
+            </summary>
+            <param name="requestId"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Manager.Contract.IViewRenderService">
             <summary>
             View Render Service interface
@@ -836,6 +854,13 @@
             
             </summary>
             <param name="requestViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.RequestService.GetRequestDetail(System.Int32)">
+            <summary>
+            Returns Request detail
+            </summary>
+            <param name="requestId"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Models.BaseEntity">
@@ -1376,13 +1401,13 @@
         </member>
         <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestsList">
             <summary>
-            
+            Get all requests
             </summary>
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestById(System.Int32)">
             <summary>
-            
+             Get Request detail
             </summary>
             <param name="requestId"></param>
             <returns></returns>

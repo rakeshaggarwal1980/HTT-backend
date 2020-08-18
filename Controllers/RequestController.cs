@@ -74,5 +74,20 @@ namespace HTTAPI.Controllers
             var result = await _requestService.GetRequestsList();
             return StatusCode((int)result.StatusCode, result);
         }
+
+        /// <summary>
+        ///  Returns request detail
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [ProducesResponseType(typeof(ComeToOfficeRequestViewModel), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public async Task<ActionResult<IResult>> GetRequestDetail(int id)
+        {
+            _logger.LogInformation("Get request detail");
+            var result = await _requestService.GetRequestDetail(id);
+            return StatusCode((int)result.StatusCode, result);
+        }
     }
 }

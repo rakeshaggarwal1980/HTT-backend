@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Diagnostics.SymbolStore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
@@ -50,7 +49,7 @@ namespace HTTAPI.Manager.Contract
         /// <param name="employeeRepository"></param>
         /// <param name="configuration"></param>      
         public EmployeeService(ILogger<EmployeeService> logger, IPrincipal principal,
-            IEmployeeRepository employeeRepository,  IConfiguration configuration)
+            IEmployeeRepository employeeRepository, IConfiguration configuration)
         {
             _logger = logger;
             _principal = principal as ClaimsPrincipal;
@@ -120,7 +119,7 @@ namespace HTTAPI.Manager.Contract
                     employeeModel.MapFromViewModel(loginModel);
 
                     employeeModel = await _employeeRepository.GetEmployee(employeeModel);
-                    if (employeeModel!=null && employeeModel.Id != 0)
+                    if (employeeModel != null && employeeModel.Id != 0)
                     {
                         // employee exists
                         UserViewModel userView = new UserViewModel()
@@ -129,12 +128,13 @@ namespace HTTAPI.Manager.Contract
                             EmployeeCode = employeeModel.EmployeeCode,
                             Name = employeeModel.Name,
                             UserId = employeeModel.Id,
-                            Token= GenerateToken(employeeModel.Name, employeeModel.Email)
+                            Token = GenerateToken(employeeModel.Name, employeeModel.Email)
                         };
-                        
+
                         result.Body = userView;
                     }
-                    else {
+                    else
+                    {
                         result.Body = null;
                         result.Message = "No Employee exists";
                         result.Status = Enums.Status.Fail;

@@ -1,15 +1,18 @@
 ﻿using HTTAPI.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Security.Claims;
+using System.Security.Principal;
+using System.Threading.Tasks;
 using HTTAPI.Helpers;
 using HTTAPI.Manager.Contract;
 using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
 using HTTAPI.ViewModels;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Threading.Tasks;
+
 
 namespace HTTAPI.Manager.Service
 {
@@ -55,6 +58,7 @@ namespace HTTAPI.Manager.Service
         /// <returns></returns>
         public async Task<IResult> GetRequestsList()
         {
+            var requestViewModels = new List<ComeToOfficeRequestViewModel>();
             var result = new Result
             {
                 Operation = Operation.Read,
@@ -63,11 +67,22 @@ namespace HTTAPI.Manager.Service
             };
             try
             {
-                var contents = await _requestRepository.GetRequestsList();
-                if (contents.Count()==0) {
+                var requests = await _requestRepository.GetRequestsList();
+                if (requests.Any())
+                {
+                    requestViewModels = requests.Select(t =>
+                    {
+                        var requestViewModel = new ComeToOfficeRequestViewModel();
+                        requestViewModel.MapFromModel(t);
+                        return requestViewModel;
+                    }).ToList();
+                }
+                else
+                {
                     result.Message = "No records found";
                 }
-                result.Body = contents;
+                result.Body = requestViewModels;
+
             }
             catch (Exception ex)
             {
@@ -155,6 +170,43 @@ namespace HTTAPI.Manager.Service
                 result.Status = Status.Error;
                 return result;
             }
+        }
+
+        /// <summary>
+        /// Returns Request detail
+        /// </summary>
+        /// <param name="requestId"></param>
+        /// <returns></returns>
+        public async Task<IResult> GetRequestDetail(int requestId)
+        {
+            var requestViewModel = new ComeToOfficeRequestViewModel();
+            var result = new Result
+            {
+                Operation = Operation.Read,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                var request = await _requestRepository.GetRequestById(requestId);
+                if (request != null)
+                {
+                    requestViewModel.MapFromModel(request);
+                }
+                else
+                {
+                    result.Message = "No record found matching Id";
+                }
+                result.Body = requestViewModel;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                result.Status = Status.Error;
+                result.Message = ex.Message;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
+            return result;
         }
     }
 

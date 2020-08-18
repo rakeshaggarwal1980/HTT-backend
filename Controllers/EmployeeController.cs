@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace HTTAPI.Controllers
 {
+    /// <summary>
+    /// Employee Controller
+    /// </summary>
     [Produces("application/json")]
     [Route("api/employee")]
     [ApiController]
@@ -16,7 +19,7 @@ namespace HTTAPI.Controllers
         private readonly ILogger<EmployeeController> _logger;
         IEmployeeService _employeeService;
         /// <summary>
-        /// 
+        /// Employee Controller Constructor
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="employeeService"></param>
@@ -27,7 +30,7 @@ namespace HTTAPI.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Registers an employee
         /// </summary>
         /// <returns></returns>
         [HttpPost("employee")]

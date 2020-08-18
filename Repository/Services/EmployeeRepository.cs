@@ -41,13 +41,14 @@ namespace HTTAPI.Repository.Services
         /// </summary>
         /// <param name="employee"></param>
         /// <returns></returns>
-        public async Task<Employee> GetEmployee(Employee employee) {
+        public async Task<Employee> GetEmployee(Employee employee)
+        {
 
-           var result= await _context.Employee
-                  .Where(e => e.Email == employee.Email && e.Password == employee.Password)
-                  .SingleOrDefaultAsync();
+            var result = await _context.Employee
+                   .Where(e => e.Email == employee.Email && e.Password == employee.Password)
+                   .SingleOrDefaultAsync();
             return result;
-        } 
+        }
     }
 }
 

@@ -1,7 +1,5 @@
 ﻿using HTTAPI.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace HTTAPI.Repository.Contracts
@@ -27,13 +25,13 @@ namespace HTTAPI.Repository.Contracts
 
 
         /// <summary>
-        /// 
+        /// Get all requests
         /// </summary>
         /// <returns></returns>
         Task<List<ComeToOfficeRequest>> GetRequestsList();
 
         /// <summary>
-        /// 
+        ///  Get Request detail
         /// </summary>
         /// <param name="requestId"></param>
         /// <returns></returns>
