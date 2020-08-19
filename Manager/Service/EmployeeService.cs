@@ -67,9 +67,9 @@ namespace HTTAPI.Manager.Contract
         {
             var result = new Result
             {
-                Operation = Enums.Operation.Create,
-                Status = Enums.Status.Success,
-                StatusCode = System.Net.HttpStatusCode.OK
+                Operation = Operation.Create,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
             };
             try
             {
@@ -84,8 +84,8 @@ namespace HTTAPI.Manager.Contract
                     result.Body = employeeViewModel;
                     return result;
                 }
-                result.Status = Enums.Status.Fail;
-                result.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                result.Status = Status.Fail;
+                result.StatusCode = HttpStatusCode.BadRequest;
                 return result;
             }
             catch (Exception e)
@@ -106,9 +106,9 @@ namespace HTTAPI.Manager.Contract
         {
             var result = new Result
             {
-                Operation = Enums.Operation.Read,
-                Status = Enums.Status.Success,
-                StatusCode = System.Net.HttpStatusCode.OK
+                Operation = Operation.Read,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
             };
             try
             {
@@ -137,12 +137,12 @@ namespace HTTAPI.Manager.Contract
                     {
                         result.Body = null;
                         result.Message = "No Employee exists";
-                        result.Status = Enums.Status.Fail;
-                        result.StatusCode = System.Net.HttpStatusCode.Unauthorized;
+                        result.Status = Status.Fail;
+                        result.StatusCode = HttpStatusCode.Unauthorized;
                     }
                     return result;
                 }
-                result.Status = Enums.Status.Fail;
+                result.Status = Status.Fail;
                 result.StatusCode = HttpStatusCode.BadRequest;
                 return result;
             }

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 
 
@@ -68,7 +69,7 @@ namespace HTT.Manager.Service
             {
                 Operation = Operation.Read,
                 Status = Status.Success,
-                StatusCode = System.Net.HttpStatusCode.OK
+                StatusCode = HttpStatusCode.OK
             };
 
             try
@@ -85,9 +86,9 @@ namespace HTT.Manager.Service
                         var msg = $"{viewName} does not match any available view";
 
                         _logger.LogError(msg);
-                        result.Status = HTTAPI.Enums.Status.Error;
+                        result.Status = Status.Error;
                         result.Message = msg;
-                        result.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                        result.StatusCode = HttpStatusCode.BadRequest;
                         return result;
                     }
 
@@ -107,9 +108,9 @@ namespace HTT.Manager.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                result.Status = HTTAPI.Enums.Status.Error;
+                result.Status = Status.Error;
                 result.Message = ex.Message;
-                result.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                result.StatusCode = HttpStatusCode.InternalServerError;
             }
             return result;
         }
