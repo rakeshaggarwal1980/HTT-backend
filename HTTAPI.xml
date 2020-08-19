@@ -22,6 +22,24 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:HTTAPI.Controllers.HealthTrackController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Controllers.HealthTrackController.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Controllers.HealthTrackController},HTTAPI.Manager.Contract.IHealthTrackService)">
+            <summary>
+            Health Track Controller Constructor
+            </summary>
+            <param name="logger"></param>
+            <param name="healthTrackService"></param>
+        </member>
+        <member name="M:HTTAPI.Controllers.HealthTrackController.GetDeclarationFormData">
+            <summary>
+             Form detail
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Controllers.LoginController">
             <summary>
             
@@ -75,6 +93,11 @@
              Returns request detail
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:HTTAPI.DependencyInjection">
+            <summary>
+            
+            </summary>
         </member>
         <member name="T:HTTAPI.Enums.EntityStatus">
             <summary>
@@ -680,6 +703,12 @@
             <param name="healthTrackViewModel"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.IHealthTrackService.GetDeclarationFormData">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Manager.Contract.IRequestService">
             <summary>
              Contract for Come to office request
@@ -793,19 +822,29 @@
             Claim Identity
             </summary>
         </member>
-        <member name="M:HTTAPI.Manager.Service.HealthTrackService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Service.HealthTrackService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IHealthTrackRepository)">
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Service.HealthTrackService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IHealthTrackRepository,HTTAPI.Repository.Contracts.IZoneRepository,HTTAPI.Repository.Contracts.ILocationRepository,HTTAPI.Repository.Contracts.ISymptomRepository,HTTAPI.Repository.Contracts.IQuestionRepository)">
             <summary>
             HealthTrackService constructor
             </summary>
             <param name="logger"></param>
             <param name="principal"></param>
-            <param name="healthTrackRepository"></param>      
+            <param name="healthTrackRepository"></param>
+            <param name="zoneRepository"></param>
+            <param name="locationRepository"></param>
+            <param name="symptomRepository"></param>
+            <param name="questionRepository"></param>      
         </member>
         <member name="M:HTTAPI.Manager.Service.HealthTrackService.CreateHealthTrack(HTTAPI.ViewModels.HealthTrackViewModel)">
             <summary>
             Create Health Track
             </summary>
             <param name="healthTrackViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.GetDeclarationFormData">
+            <summary>
+             Returns data to bind on declaration form
+            </summary>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Manager.Service.RequestService">
@@ -1114,6 +1153,11 @@
             Location Name
             </summary>
         </member>
+        <member name="P:HTTAPI.Models.Location.Type">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:HTTAPI.Models.Location.Order">
             <summary>
             Location position\order
@@ -1164,6 +1208,11 @@
             Symptom Name
             </summary>
         </member>
+        <member name="P:HTTAPI.Models.Symptom.Type">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:HTTAPI.Models.Symptom.Order">
             <summary>
             Symptom position\order
@@ -1187,6 +1236,11 @@
         <member name="P:HTTAPI.Models.Zone.Name">
             <summary>
             Location Name
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Zone.Type">
+            <summary>
+            
             </summary>
         </member>
         <member name="P:HTTAPI.Models.Zone.Order">
@@ -1380,6 +1434,28 @@
             <param name="healthTrack"></param>
             <returns></returns>
         </member>
+        <member name="T:HTTAPI.Repository.Contracts.ILocationRepository">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.ILocationRepository.GetLocations">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Repository.Contracts.IQuestionRepository">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IQuestionRepository.GetQuestions">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Contracts.IRequestRepository">
             <summary>
             
@@ -1410,6 +1486,28 @@
              Get Request detail
             </summary>
             <param name="requestId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Repository.Contracts.ISymptomRepository">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.ISymptomRepository.GetSymptoms">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Repository.Contracts.IZoneRepository">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IZoneRepository.GetZones">
+            <summary>
+            
+            </summary>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.SeedData.LocationConfiguration">
@@ -1497,6 +1595,42 @@
             This method is used to Create Health Track
             </summary>       
         </member>
+        <member name="T:HTTAPI.Repository.Services.LocationRepository">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.LocationRepository.#ctor(HTTAPI.Repository.Context)">
+            <summary>
+            Ctor
+            context injection\creation
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.LocationRepository.GetLocations">
+            <summary>
+            Returns list of locations
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Repository.Services.QuestionRepository">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.QuestionRepository.#ctor(HTTAPI.Repository.Context)">
+            <summary>
+            Ctor
+            context injection\creation
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.QuestionRepository.GetQuestions">
+            <summary>
+            Returns list of questions
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Services.RequestRepository">
             <summary>
             
@@ -1533,6 +1667,42 @@
             
             </summary>
             <param name="requestId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Repository.Services.SymptomRepository">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.SymptomRepository.#ctor(HTTAPI.Repository.Context)">
+            <summary>
+            Ctor
+            context injection\creation
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.SymptomRepository.GetSymptoms">
+            <summary>
+            Returns list of symptoms
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Repository.Services.ZoneRepository">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.ZoneRepository.#ctor(HTTAPI.Repository.Context)">
+            <summary>
+            Ctor
+            context injection\creation
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.ZoneRepository.GetZones">
+            <summary>
+            Returns list of symptoms
+            </summary>
             <returns></returns>
         </member>
         <member name="P:HTTAPI.Startup.Environment">
@@ -1579,6 +1749,31 @@
         <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.IsDeclined">
             <summary>
             IsDeclined
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.DeclarationViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.DeclarationViewModel.Symptoms">
+            <summary>
+            Symptoms
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.DeclarationViewModel.Questions">
+            <summary>
+            Questions
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.DeclarationViewModel.Zones">
+            <summary>
+            Zones
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.DeclarationViewModel.Locations">
+            <summary>
+            Locations
             </summary>
         </member>
         <member name="T:HTTAPI.ViewModels.EmployeeViewModel">
@@ -1679,6 +1874,31 @@
         <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.Status">
             <summary>
             Status
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.OptionsViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.OptionsViewModel.Id">
+            <summary>
+            primary key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.OptionsViewModel.Name">
+            <summary>
+             Name
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.OptionsViewModel.Type">
+            <summary>
+            Option type
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.OptionsViewModel.Order">
+            <summary>
+            Symptom position\order
             </summary>
         </member>
         <member name="T:HTTAPI.ViewModels.UserLoginViewModel">

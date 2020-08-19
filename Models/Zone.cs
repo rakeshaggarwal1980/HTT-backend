@@ -22,6 +22,12 @@ namespace HTTAPI.Models
         public string Name { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        [Required, Column(TypeName = "nvarchar(200)")]
+        public string Type { get; set; }
+
+        /// <summary>
         /// Location position\order
         /// </summary>
         public int Order { get; set; }

@@ -16,6 +16,12 @@ namespace HTTAPI.Manager.Contract
         /// <param name="healthTrackViewModel"></param>
         /// <returns></returns>
         Task<IResult> CreateHealthTrack(HealthTrackViewModel healthTrackViewModel);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        Task<IResult> GetDeclarationFormData();
     }
 
 }

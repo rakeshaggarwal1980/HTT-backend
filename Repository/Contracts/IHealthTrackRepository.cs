@@ -15,6 +15,5 @@ namespace HTTAPI.Repository.Contracts
         /// <param name="healthTrack"></param>
         /// <returns></returns>
         Task<HealthTrack> CreateHealthTrack(HealthTrack healthTrack);
-
     }
 }

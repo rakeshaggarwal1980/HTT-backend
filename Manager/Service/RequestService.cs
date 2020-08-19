@@ -1,4 +1,10 @@
 ﻿using HTTAPI.Enums;
+using HTTAPI.Helpers;
+using HTTAPI.Manager.Contract;
+using HTTAPI.Models;
+using HTTAPI.Repository.Contracts;
+using HTTAPI.ViewModels;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,12 +12,6 @@ using System.Net;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using HTTAPI.Helpers;
-using HTTAPI.Manager.Contract;
-using HTTAPI.Models;
-using HTTAPI.Repository.Contracts;
-using HTTAPI.ViewModels;
-using Microsoft.Extensions.Logging;
 
 
 namespace HTTAPI.Manager.Service
@@ -63,7 +63,7 @@ namespace HTTAPI.Manager.Service
             {
                 Operation = Operation.Read,
                 Status = Status.Success,
-                StatusCode = System.Net.HttpStatusCode.OK
+                StatusCode = HttpStatusCode.OK
             };
             try
             {
@@ -87,9 +87,9 @@ namespace HTTAPI.Manager.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                result.Status = Enums.Status.Error;
+                result.Status = Status.Error;
                 result.Message = ex.Message;
-                result.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                result.StatusCode = HttpStatusCode.InternalServerError;
             }
             return result;
         }
@@ -104,9 +104,9 @@ namespace HTTAPI.Manager.Service
         {
             var result = new Result
             {
-                Operation = Enums.Operation.Create,
-                Status = Enums.Status.Success,
-                StatusCode = System.Net.HttpStatusCode.OK
+                Operation = Operation.Create,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
             };
             try
             {
@@ -121,8 +121,8 @@ namespace HTTAPI.Manager.Service
                     result.Body = requestViewModel;
                     return result;
                 }
-                result.Status = Enums.Status.Fail;
-                result.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                result.Status = Status.Fail;
+                result.StatusCode = HttpStatusCode.BadRequest;
                 return result;
             }
             catch (Exception ex)
@@ -143,9 +143,9 @@ namespace HTTAPI.Manager.Service
         {
             var result = new Result
             {
-                Operation = Enums.Operation.Update,
-                Status = Enums.Status.Success,
-                StatusCode = System.Net.HttpStatusCode.OK
+                Operation = Operation.Update,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
             };
             try
             {
@@ -159,8 +159,8 @@ namespace HTTAPI.Manager.Service
                     result.Body = requestViewModel;
                     return result;
                 }
-                result.Status = Enums.Status.Fail;
-                result.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                result.Status = Status.Fail;
+                result.StatusCode = HttpStatusCode.BadRequest;
                 return result;
             }
             catch (Exception e)

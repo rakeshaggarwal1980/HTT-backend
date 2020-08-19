@@ -11,6 +11,9 @@ using System.Security.Principal;
 
 namespace HTTAPI
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class DependencyInjection
     {
         internal void ConfigureRepositories(IServiceCollection services, IConfiguration configuration)
@@ -34,6 +37,10 @@ namespace HTTAPI
             services.AddTransient<IHealthTrackRepository, HealthTrackRepository>();
             services.AddTransient<IEmployeeRepository, EmployeeRepository>();
             services.AddTransient<IRequestRepository, RequestRepository>();
+            services.AddTransient<ISymptomRepository, SymptomRepository>();
+            services.AddTransient<IQuestionRepository, QuestionRepository>();
+            services.AddTransient<IZoneRepository, ZoneRepository>();
+            services.AddTransient<ILocationRepository, LocationRepository>();
             #endregion
 
         }
