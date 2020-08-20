@@ -41,8 +41,12 @@ namespace HTTAPI.Models
         /// <summary>
         /// TravelOustSideInLast15Days
         /// </summary>
-        public DateTime SampleDate { get; set; }
+        public DateTime DateOfTravel { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public string RequestNumber { get; set; }
 
         /// <summary>
         /// Location ForeignKey

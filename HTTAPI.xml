@@ -46,6 +46,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Controllers.HealthTrackController.getSelfDeclaration(System.Int32,System.String)">
+            <summary>
+             Form detail
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Controllers.LoginController">
             <summary>
             
@@ -715,6 +721,14 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.IHealthTrackService.GetSelfDeclarationByEmployeeForRequest(System.Int32,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="employeedId"></param>
+            <param name="requestNumber"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Manager.Contract.IRequestService">
             <summary>
              Contract for Come to office request
@@ -848,6 +862,12 @@
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Manager.Service.HealthTrackService.GetDeclarationFormData">
+            <summary>
+             Returns data to bind on declaration form
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.GetSelfDeclarationByEmployeeForRequest(System.Int32,System.String)">
             <summary>
              Returns data to bind on declaration form
             </summary>
@@ -1059,9 +1079,14 @@
             TravelOustSideInLast15Days
             </summary>
         </member>
-        <member name="P:HTTAPI.Models.HealthTrack.SampleDate">
+        <member name="P:HTTAPI.Models.HealthTrack.DateOfTravel">
             <summary>
             TravelOustSideInLast15Days
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.HealthTrack.RequestNumber">
+            <summary>
+            
             </summary>
         </member>
         <member name="P:HTTAPI.Models.HealthTrack.LocationId">
@@ -1091,7 +1116,7 @@
         </member>
         <member name="P:HTTAPI.Models.HealthTrack.Employee">
             <summary>
-             ForeignKey
+            Zone ForeignKey
             </summary>
         </member>
         <member name="P:HTTAPI.Models.HealthTrack.HealthTrackSymptoms">
@@ -1450,6 +1475,14 @@
             <param name="healthTrack"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Contracts.IHealthTrackRepository.GetSelfDeclarationByEmployeeForRequest(System.Int32,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="employeedId"></param>
+            <param name="requestNumber"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Contracts.ILocationRepository">
             <summary>
             
@@ -1502,6 +1535,13 @@
              Get Request detail
             </summary>
             <param name="requestId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestByEmployee(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="employeeId"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Contracts.ISymptomRepository">
@@ -1611,6 +1651,14 @@
             This method is used to Create Health Track
             </summary>       
         </member>
+        <member name="M:HTTAPI.Repository.Services.HealthTrackRepository.GetSelfDeclarationByEmployeeForRequest(System.Int32,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="employeedId"></param>
+            <param name="requestNumber"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Services.LocationRepository">
             <summary>
             
@@ -1683,6 +1731,13 @@
             
             </summary>
             <param name="requestId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestByEmployee(System.Int32)">
+            <summary>
+            Checks if Employee has already submitted request
+            </summary>
+            <param name="employeeId"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Services.SymptomRepository">
@@ -1867,9 +1922,9 @@
             TravelOustSideInLast15Days
             </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.SampleDate">
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.DateOfTravel">
             <summary>
-            SampleDate
+            DateOfTravel
             </summary>
         </member>
         <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.LocationId">
@@ -1900,6 +1955,11 @@
         <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.Status">
             <summary>
             Status
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.RequestNumber">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:HTTAPI.ViewModels.OptionsViewModel">

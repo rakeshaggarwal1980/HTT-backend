@@ -78,6 +78,20 @@ namespace HTTAPI.Repository.Services
         {
             return await _context.ComeToOfficeRequest.Include("Employee").Where(x => x.Id == requestId).SingleOrDefaultAsync();
         }
+
+
+        /// <summary>
+        /// Checks if Employee has already submitted request
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <returns></returns>
+        public async Task<ComeToOfficeRequest> GetRequestByEmployee(int employeeId)
+        {
+            return await _context.ComeToOfficeRequest.Where(x => x.EmployeeId == employeeId
+                                                            && x.Status == EntityStatus.Active
+                                                            && !x.IsApproved && !x.IsDeclined
+                                                            && x.DateOfRequest >= DateTime.Now).SingleOrDefaultAsync();
+        }
     }
 
 }

@@ -1,5 +1,8 @@
-﻿using HTTAPI.Models;
+﻿using HTTAPI.Enums;
+using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HTTAPI.Repository.Services
@@ -31,6 +34,21 @@ namespace HTTAPI.Repository.Services
             await _context.SaveChangesAsync();
             return healthTrack;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeedId"></param>
+        /// <param name="requestNumber"></param>
+        /// <returns></returns>
+        public async Task<HealthTrack> GetSelfDeclarationByEmployeeForRequest(int employeedId, string requestNumber)
+        {
+            // when employee enters office , set entity status to finished
+            return await _context.HealthTrack.Include("HealthTrackSymptoms").Include("HealthTrackQuestions")
+                .Where(x => x.EmployeeId == employeedId && x.Status == EntityStatus.Active
+                && x.RequestNumber == requestNumber).SingleOrDefaultAsync();
+        }
+
     }
 }
 

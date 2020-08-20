@@ -15,5 +15,13 @@ namespace HTTAPI.Repository.Contracts
         /// <param name="healthTrack"></param>
         /// <returns></returns>
         Task<HealthTrack> CreateHealthTrack(HealthTrack healthTrack);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeedId"></param>
+        /// <param name="requestNumber"></param>
+        /// <returns></returns>
+        Task<HealthTrack> GetSelfDeclarationByEmployeeForRequest(int employeedId, string requestNumber);
     }
 }

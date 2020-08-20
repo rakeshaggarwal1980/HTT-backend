@@ -80,45 +80,58 @@ namespace HTTAPI.Manager.Service
             {
                 if (healthTrackViewModel != null)
                 {
-                    var healthTrackModel = new HealthTrack();
-                    // To map health Track detail
-                    healthTrackModel.MapFromViewModel(healthTrackViewModel, (ClaimsIdentity)_principal.Identity);
-
-                    var healthTrackSymptoms = new List<HealthTrackSymptom>();
-
-                    if (healthTrackViewModel.HealthTrackSymptoms.Any())
+                    // check if user already submitted self declaration for a request
+                    var declaration = _healthTrackRepository.GetSelfDeclarationByEmployeeForRequest(healthTrackViewModel.EmployeeId, healthTrackViewModel.RequestNumber);
+                    if (declaration == null)
                     {
-                        // To map HealthTrack Symptoms
-                        healthTrackSymptoms = healthTrackViewModel.HealthTrackSymptoms.Select(t =>
-                        {
-                            var symptom = new HealthTrackSymptom();
-                            symptom.MapFromViewModel(t);
-                            return symptom;
-                        }).ToList();
-                    }
+                        var healthTrackModel = new HealthTrack();
+                        // To map health Track detail
+                        healthTrackModel.MapFromViewModel(healthTrackViewModel, (ClaimsIdentity)_principal.Identity);
 
-                    var healthTrackQuestionAnswer = new List<HealthTrackQuestionAnswer>();
-                    if (healthTrackViewModel.HealthTrackQuestionAnswers.Any())
+                        var healthTrackSymptoms = new List<HealthTrackSymptom>();
+
+                        if (healthTrackViewModel.HealthTrackSymptoms.Any())
+                        {
+                            // To map HealthTrack Symptoms
+                            healthTrackSymptoms = healthTrackViewModel.HealthTrackSymptoms.Select(t =>
+                            {
+                                var symptom = new HealthTrackSymptom();
+                                symptom.MapFromViewModel(t);
+                                return symptom;
+                            }).ToList();
+                        }
+
+                        var healthTrackQuestionAnswer = new List<HealthTrackQuestionAnswer>();
+                        if (healthTrackViewModel.HealthTrackQuestionAnswers.Any())
+                        {
+                            healthTrackQuestionAnswer = healthTrackViewModel.HealthTrackQuestionAnswers.Select(t =>
+                            {
+                                var questionAns = new HealthTrackQuestionAnswer();
+                                questionAns.MapFromViewModel(t);
+                                return questionAns;
+                            }).ToList();
+                        }
+
+                        healthTrackModel.HealthTrackSymptoms = healthTrackSymptoms;
+                        healthTrackModel.HealthTrackQuestions = healthTrackQuestionAnswer;
+
+                        healthTrackModel = await _healthTrackRepository.CreateHealthTrack(healthTrackModel);
+                        healthTrackViewModel.Id = healthTrackModel.Id;
+                        result.Body = healthTrackViewModel;
+
+                    }
+                    else
                     {
-                        healthTrackQuestionAnswer = healthTrackViewModel.HealthTrackQuestionAnswers.Select(t =>
-                        {
-                            var questionAns = new HealthTrackQuestionAnswer();
-                            questionAns.MapFromViewModel(t);
-                            return questionAns;
-                        }).ToList();
+                        result.Status = Status.Fail;
+                        result.StatusCode = HttpStatusCode.AlreadyReported;
+                        result.Message = "You have already submitted self declaration";
+
                     }
-
-                    healthTrackModel.HealthTrackSymptoms = healthTrackSymptoms;
-                    healthTrackModel.HealthTrackQuestions = healthTrackQuestionAnswer;
-
-                    healthTrackModel = await _healthTrackRepository.CreateHealthTrack(healthTrackModel);
-                    healthTrackViewModel.Id = healthTrackModel.Id;
-                    result.Body = healthTrackViewModel;
                     return result;
                 }
                 result.Status = Status.Fail;
                 result.StatusCode = HttpStatusCode.BadRequest;
-
+                return result;
             }
             catch (Exception ex)
             {
@@ -126,8 +139,9 @@ namespace HTTAPI.Manager.Service
                 result.Status = Status.Error;
                 result.Message = ex.Message;
                 result.StatusCode = HttpStatusCode.InternalServerError;
+                return result;
             }
-            return result;
+
         }
 
 
@@ -207,5 +221,69 @@ namespace HTTAPI.Manager.Service
             }
             return result;
         }
+
+
+        /// <summary>
+        ///  Returns data to bind on declaration form
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IResult> GetSelfDeclarationByEmployeeForRequest(int employeedId, string requestNumber)
+        {
+            var healthViewModel = new HealthTrackViewModel();
+            var result = new Result
+            {
+                Operation = Operation.Read,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                var declaration = await _healthTrackRepository.GetSelfDeclarationByEmployeeForRequest(employeedId, requestNumber);
+                if (declaration != null)
+                {
+                    healthViewModel.MapFromModel(declaration);
+                    var symptoms = new List<HealthTrackSymptomViewModel>();
+                    var questions = new List<HealthTrackQuestionAnswerViewModel>();
+                    if (declaration.HealthTrackQuestions.Any())
+                    {
+                        questions = declaration.HealthTrackQuestions.Select(t =>
+                        {
+                            var questions = new HealthTrackQuestionAnswerViewModel();
+                            questions.MapFromModel(t);
+                            return questions;
+                        }).ToList();
+                    }
+
+                    if (declaration.HealthTrackSymptoms.Any())
+                    {
+                        symptoms = declaration.HealthTrackSymptoms.Select(t =>
+                        {
+                            var symptom = new HealthTrackSymptomViewModel();
+                            symptom.MapFromModel(t);
+                            return symptom;
+                        }).ToList();
+                    }
+                    healthViewModel.HealthTrackSymptoms = symptoms;
+                    healthViewModel.HealthTrackQuestionAnswers = questions;
+
+                    result.Body = healthViewModel;
+                }
+                else
+                {
+                    result.Status = Status.Fail;
+                    result.StatusCode = HttpStatusCode.NotFound;
+                    result.Message = "No declaration exists";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                result.Status = Status.Error;
+                result.Message = ex.Message;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
+            return result;
+        }
+
     }
 }
