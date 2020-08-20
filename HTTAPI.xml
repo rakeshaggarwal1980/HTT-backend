@@ -967,6 +967,16 @@
             IsDeclined
             </summary>
         </member>
+        <member name="P:HTTAPI.Models.ComeToOfficeRequest.EmployeeId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.ComeToOfficeRequest.Employee">
+            <summary>
+            Employee ForeignKey
+            </summary>
+        </member>
         <member name="T:HTTAPI.Models.Employee">
             <summary>
             Employee entity
@@ -1075,7 +1085,7 @@
         </member>
         <member name="P:HTTAPI.Models.HealthTrack.Employee">
             <summary>
-            Zone ForeignKey
+             ForeignKey
             </summary>
         </member>
         <member name="P:HTTAPI.Models.HealthTrack.HealthTrackSymptoms">
@@ -1749,6 +1759,16 @@
         <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.IsDeclined">
             <summary>
             IsDeclined
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.EmployeeId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.Employee">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:HTTAPI.ViewModels.DeclarationViewModel">

@@ -48,5 +48,15 @@ namespace HTTAPI.Models
         public bool IsDeclined { get; set; }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        [ForeignKey("Employee")] public int EmployeeId { get; set; }
+
+        /// <summary>
+        /// Employee ForeignKey
+        /// </summary>
+        public Employee Employee { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HTTAPI.Models;
+using System;
 
 namespace HTTAPI.ViewModels
 {
@@ -26,21 +27,27 @@ namespace HTTAPI.ViewModels
         /// <summary>
         ///  DateOfRequest
         /// </summary>
-
         public DateTime DateOfRequest { get; set; }
 
 
         /// <summary>
         /// IsApproved
         /// </summary>
-
         public bool IsApproved { get; set; }
 
 
         /// <summary>
         /// IsDeclined
         /// </summary>
-
         public bool IsDeclined { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int EmployeeId { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public Employee Employee { get; set; }
     }
 }

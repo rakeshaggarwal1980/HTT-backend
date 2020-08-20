@@ -64,7 +64,9 @@ namespace HTTAPI.Repository.Services
         /// <returns></returns>
         public async Task<List<ComeToOfficeRequest>> GetRequestsList()
         {
-            return await _context.ComeToOfficeRequest.ToListAsync();
+            // Employe can have only 1 request "Active" at a time
+            // when entered office it is set to "finished"
+            return await _context.ComeToOfficeRequest.Include("Employee").Where(x => x.Status == EntityStatus.Active).ToListAsync();
         }
 
         /// <summary>
@@ -74,7 +76,7 @@ namespace HTTAPI.Repository.Services
         /// <returns></returns>
         public async Task<ComeToOfficeRequest> GetRequestById(int requestId)
         {
-            return await _context.ComeToOfficeRequest.Where(x => x.Id == requestId).SingleOrDefaultAsync();
+            return await _context.ComeToOfficeRequest.Include("Employee").Where(x => x.Id == requestId).SingleOrDefaultAsync();
         }
     }
 
