@@ -42,5 +42,21 @@ namespace HTTAPI.Controllers
             var result = await _healthTrackService.GetDeclarationFormData();
             return StatusCode((int)result.StatusCode, result);
         }
+
+        /// <summary>
+        ///  Form detail
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("declarationData")]
+        [ProducesResponseType(typeof(HealthTrackViewModel), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public async Task<ActionResult<IResult>> SubmitDeclarationFormData([FromBody] HealthTrackViewModel healthTrackViewModel)
+        {
+            _logger.LogInformation("Save employee declaration detail");
+            var result = await _healthTrackService.CreateHealthTrack(healthTrackViewModel);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
     }
 }

@@ -60,7 +60,7 @@ namespace HTTAPI.ViewModels
         /// <summary>
         ///Health Track Question Answer ViewModel
         /// </summary>
-        public List<HealthTrackQuestionAnswerViewModel> HealthTrackQuestions { get; set; }
+        public List<HealthTrackQuestionAnswerViewModel> HealthTrackQuestionAnswers { get; set; }
 
         /// <summary>
         /// Status

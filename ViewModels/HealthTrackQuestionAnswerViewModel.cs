@@ -30,7 +30,7 @@
         /// <summary>
         /// value
         /// </summary>
-        public string value { get; set; }
+        public bool value { get; set; }
 
     }
 }

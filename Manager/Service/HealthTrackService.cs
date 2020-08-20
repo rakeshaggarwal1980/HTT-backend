@@ -76,55 +76,57 @@ namespace HTTAPI.Manager.Service
                 Status = Status.Success,
                 StatusCode = HttpStatusCode.OK
             };
-            if (healthTrackViewModel != null)
+            try
             {
-                var healthTrackModel = new HealthTrack();
-                // To map health Track detail
-                healthTrackModel.MapFromViewModel(healthTrackViewModel, (ClaimsIdentity)_principal.Identity);
-
-                var healthTrackSymptoms = new List<HealthTrackSymptom>();
-
-                if (healthTrackViewModel.HealthTrackSymptoms.Any())
+                if (healthTrackViewModel != null)
                 {
-                    // To map HealthTrack Symptoms
-                    var rowSymptom = healthTrackViewModel.HealthTrackSymptoms.Select(t =>
+                    var healthTrackModel = new HealthTrack();
+                    // To map health Track detail
+                    healthTrackModel.MapFromViewModel(healthTrackViewModel, (ClaimsIdentity)_principal.Identity);
+
+                    var healthTrackSymptoms = new List<HealthTrackSymptom>();
+
+                    if (healthTrackViewModel.HealthTrackSymptoms.Any())
                     {
-                        // To map HealthTrack Symptoms one by one
-                        var symptom = new HealthTrackSymptom();
-                        symptom.MapFromViewModel(t, (ClaimsIdentity)_principal.Identity);
-                        healthTrackSymptoms.Add(symptom);
-                        return healthTrackSymptoms;
+                        // To map HealthTrack Symptoms
+                        healthTrackSymptoms = healthTrackViewModel.HealthTrackSymptoms.Select(t =>
+                        {
+                            var symptom = new HealthTrackSymptom();
+                            symptom.MapFromViewModel(t);
+                            return symptom;
+                        }).ToList();
+                    }
 
-                    }).ToList();
-                }
-
-                var healthTrackQuestions = new List<HealthTrackQuestionAnswer>();
-                if (healthTrackViewModel.HealthTrackQuestions.Any())
-                {
-                    // To map HealthTrack Questions
-                    var rowQuestions = healthTrackViewModel.HealthTrackQuestions.Select(t =>
+                    var healthTrackQuestionAnswer = new List<HealthTrackQuestionAnswer>();
+                    if (healthTrackViewModel.HealthTrackQuestionAnswers.Any())
                     {
-                        // To map HealthTrack HealthTrackQuestionAnswer one by one
-                        var question = new HealthTrackQuestionAnswer();
-                        question.MapFromViewModel(t, (ClaimsIdentity)_principal.Identity);
-                        healthTrackQuestions.Add(question);
-                        return healthTrackQuestions;
+                        healthTrackQuestionAnswer = healthTrackViewModel.HealthTrackQuestionAnswers.Select(t =>
+                        {
+                            var questionAns = new HealthTrackQuestionAnswer();
+                            questionAns.MapFromViewModel(t);
+                            return questionAns;
+                        }).ToList();
+                    }
 
-                    }).ToList();
+                    healthTrackModel.HealthTrackSymptoms = healthTrackSymptoms;
+                    healthTrackModel.HealthTrackQuestions = healthTrackQuestionAnswer;
+
+                    healthTrackModel = await _healthTrackRepository.CreateHealthTrack(healthTrackModel);
+                    healthTrackViewModel.Id = healthTrackModel.Id;
+                    result.Body = healthTrackViewModel;
+                    return result;
                 }
+                result.Status = Status.Fail;
+                result.StatusCode = HttpStatusCode.BadRequest;
 
-                healthTrackModel.HealthTrackSymptoms = healthTrackSymptoms;
-                healthTrackModel.CreatedBy = "Employee";
-                healthTrackModel.CreatedDate = DateTime.Now;
-                healthTrackModel.HealthTrackQuestions = healthTrackQuestions;
-
-                healthTrackModel = await _healthTrackRepository.CreateHealthTrack(healthTrackModel);
-                healthTrackViewModel.Id = healthTrackModel.Id;
-                result.Body = healthTrackViewModel;
-                return result;
             }
-            result.Status = Status.Fail;
-            result.StatusCode = HttpStatusCode.BadRequest;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                result.Status = Status.Error;
+                result.Message = ex.Message;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
             return result;
         }
 

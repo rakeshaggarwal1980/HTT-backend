@@ -40,6 +40,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Controllers.HealthTrackController.SubmitDeclarationFormData(HTTAPI.ViewModels.HealthTrackViewModel)">
+            <summary>
+             Form detail
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Controllers.LoginController">
             <summary>
             
@@ -1866,7 +1872,7 @@
             Health Track Symptoms
              </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.HealthTrackQuestions">
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.HealthTrackQuestionAnswers">
              <summary>
             Health Track Question Answer ViewModel
              </summary>
