@@ -112,14 +112,25 @@ namespace HTTAPI.Manager.Service
             {
                 if (requestViewModel != null)
                 {
-                    var requesModel = new ComeToOfficeRequest();
-                    // To map employee detail
-                    requesModel.MapFromViewModel(requestViewModel, (ClaimsIdentity)_principal.Identity);
+                    // check if employee already has active request
+                    var empRequest = _requestRepository.GetRequestByEmployee(requestViewModel.EmployeeId);
+                    if (empRequest == null)
+                    {
+                        var requesModel = new ComeToOfficeRequest();
+                        // To map employee detail
+                        requesModel.MapFromViewModel(requestViewModel, (ClaimsIdentity)_principal.Identity);
 
-                    requesModel = await _requestRepository.CreateRequest(requesModel);
-                    requestViewModel.Id = requesModel.Id;
-                    result.Body = requestViewModel;
-                    return result;
+                        requesModel = await _requestRepository.CreateRequest(requesModel);
+                        requestViewModel.Id = requesModel.Id;
+                        result.Body = requestViewModel;
+                        return result;
+                    }
+                    else
+                    {
+                        result.Status = Status.Fail;
+                        result.StatusCode = HttpStatusCode.NotAcceptable;
+                        result.Message = "You have already raised a request";
+                    }
                 }
                 result.Status = Status.Fail;
                 result.StatusCode = HttpStatusCode.BadRequest;

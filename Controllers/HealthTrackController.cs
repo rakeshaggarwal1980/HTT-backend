@@ -58,5 +58,21 @@ namespace HTTAPI.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
+
+        /// <summary>
+        ///  Form detail
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("selfDeclaration")]
+        [ProducesResponseType(typeof(HealthTrackViewModel), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public async Task<ActionResult<IResult>> getSelfDeclaration(int employeeId, string requestNumber)
+        {
+            _logger.LogInformation("get employee declaration detail");
+            var result = await _healthTrackService.GetSelfDeclarationByEmployeeForRequest(employeeId, requestNumber);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
     }
 }

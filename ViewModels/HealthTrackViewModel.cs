@@ -34,9 +34,9 @@ namespace HTTAPI.ViewModels
         public bool TravelOustSideInLast15Days { get; set; }
 
         /// <summary>
-        /// SampleDate
+        /// DateOfTravel
         /// </summary>
-        public DateTime SampleDate { get; set; }
+        public DateTime DateOfTravel { get; set; }
 
         /// <summary>
         /// LocationId
@@ -66,5 +66,10 @@ namespace HTTAPI.ViewModels
         /// Status
         /// </summary>
         public EntityStatus Status { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string RequestNumber { get; set; }
     }
 }
