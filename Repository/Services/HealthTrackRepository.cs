@@ -1,6 +1,5 @@
 ﻿using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
-using System;
 using System.Threading.Tasks;
 
 namespace HTTAPI.Repository.Services
@@ -28,17 +27,9 @@ namespace HTTAPI.Repository.Services
         /// </summary>       
         public async Task<HealthTrack> CreateHealthTrack(HealthTrack healthTrack)
         {
-            try
-            {
-                _context.HealthTrack.Add(healthTrack);
-                await _context.SaveChangesAsync();
-                return healthTrack;
-            }
-            catch (Exception ex)
-            {
-                return healthTrack;
-            }
-
+            _context.HealthTrack.Add(healthTrack);
+            await _context.SaveChangesAsync();
+            return healthTrack;
         }
     }
 }
