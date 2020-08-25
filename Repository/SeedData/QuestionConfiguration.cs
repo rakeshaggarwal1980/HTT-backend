@@ -30,7 +30,7 @@ namespace HTTAPI.Repository.SeedData
                      {
                          Id = 2,
                          Name = "Is any Of them under 5 years or over 65 years in age?",
-                         Type = "CheckBox",
+                         Type = "Radio",
                          Order = 2,
                          Status = EntityStatus.Active
 
@@ -39,7 +39,7 @@ namespace HTTAPI.Repository.SeedData
                       {
                           Id = 3,
                           Name = "Has any Of them presented Covid-19 related symptoms recently?",
-                          Type = "CheckBox",
+                          Type = "Radio",
                           Order = 3,
                           Status = EntityStatus.Active
 
@@ -48,7 +48,7 @@ namespace HTTAPI.Repository.SeedData
                        {
                            Id = 4,
                            Name = "Has any Of them had any recent travel — abroad, inter-state or inter or district ? ",
-                           Type = "CheckBox",
+                           Type = "Radio",
                            Order = 4,
                            Status = EntityStatus.Active
 

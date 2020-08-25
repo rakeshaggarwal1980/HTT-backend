@@ -21,7 +21,7 @@ namespace HTTAPI.Repository.SeedData
                     {
                         Id = 1,
                         Name = "Tricity (CHD/PKL/Mohali)",
-                        Type = "CheckBox",
+                        Type = "Radio",
                         Order = 1,
                         Status = EntityStatus.Active
 
@@ -30,7 +30,7 @@ namespace HTTAPI.Repository.SeedData
                      {
                          Id = 2,
                          Name = "Outside Tricity",
-                         Type = "CheckBox",
+                         Type = "Radio",
                          Order = 2,
                          Status = EntityStatus.Active
                      }

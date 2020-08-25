@@ -21,7 +21,7 @@ namespace HTTAPI.Repository.SeedData
                     {
                         Id = 1,
                         Name = "Fever",
-                        Type = "CheckBox",
+                        Type = "Radio",
                         Order = 1,
                         Status = EntityStatus.Active
 
@@ -30,7 +30,7 @@ namespace HTTAPI.Repository.SeedData
                      {
                          Id = 2,
                          Name = "Shortness Of Breath",
-                         Type = "CheckBox",
+                         Type = "Radio",
                          Order = 2,
                          Status = EntityStatus.Active
                      },
@@ -38,7 +38,7 @@ namespace HTTAPI.Repository.SeedData
                       {
                           Id = 3,
                           Name = "Dry Cough",
-                          Type = "CheckBox",
+                          Type = "Radio",
                           Order = 3,
                           Status = EntityStatus.Active
                       },
@@ -46,7 +46,7 @@ namespace HTTAPI.Repository.SeedData
                        {
                            Id = 4,
                            Name = "Running Nose",
-                           Type = "CheckBox",
+                           Type = "Radio",
                            Order = 4,
                            Status = EntityStatus.Active
                        },
@@ -54,7 +54,7 @@ namespace HTTAPI.Repository.SeedData
                         {
                             Id = 5,
                             Name = "Sore Throat",
-                            Type = "CheckBox",
+                            Type = "Radio",
                             Order = 5,
                             Status = EntityStatus.Active
                         }

@@ -21,7 +21,7 @@ namespace HTTAPI.Repository.SeedData
                     {
                         Id = 1,
                         Name = "Containment Zone",
-                        Type = "CheckBox",
+                        Type = "Radio",
                         Order = 1,
                         Status = EntityStatus.Active
 
@@ -30,7 +30,7 @@ namespace HTTAPI.Repository.SeedData
                      {
                          Id = 2,
                          Name = "Red Zone",
-                         Type = "CheckBox",
+                         Type = "Radio",
                          Order = 2,
                          Status = EntityStatus.Active
 
@@ -39,7 +39,7 @@ namespace HTTAPI.Repository.SeedData
                       {
                           Id = 3,
                           Name = "Green Zone",
-                          Type = "CheckBox",
+                          Type = "Radio",
                           Order = 3,
                           Status = EntityStatus.Active
 
@@ -48,7 +48,7 @@ namespace HTTAPI.Repository.SeedData
                        {
                            Id = 4,
                            Name = "Orange Zone",
-                           Type = "CheckBox",
+                           Type = "Radio",
                            Order = 4,
                            Status = EntityStatus.Active
 
