@@ -973,11 +973,6 @@
             Random generated request Number
             </summary>
         </member>
-        <member name="P:HTTAPI.Models.ComeToOfficeRequest.EmployeeCode">
-            <summary>
-            EmployeeCode
-            </summary>
-        </member>
         <member name="P:HTTAPI.Models.ComeToOfficeRequest.DateOfRequest">
             <summary>
              DateOfRequest
@@ -991,6 +986,11 @@
         <member name="P:HTTAPI.Models.ComeToOfficeRequest.IsDeclined">
             <summary>
             IsDeclined
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.ComeToOfficeRequest.HRComments">
+            <summary>
+            
             </summary>
         </member>
         <member name="P:HTTAPI.Models.ComeToOfficeRequest.EmployeeId">
@@ -1537,7 +1537,7 @@
             <param name="requestId"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestByEmployee(System.Int32)">
+        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestsByEmployee(System.Int32)">
             <summary>
             
             </summary>
@@ -1733,7 +1733,7 @@
             <param name="requestId"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestByEmployee(System.Int32)">
+        <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestsByEmployee(System.Int32)">
             <summary>
             Checks if Employee has already submitted request
             </summary>
@@ -1802,11 +1802,6 @@
             Random generated request Number
             </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.EmployeeCode">
-            <summary>
-            EmployeeCode
-            </summary>
-        </member>
         <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.DateOfRequest">
             <summary>
              DateOfRequest
@@ -1828,6 +1823,11 @@
             </summary>
         </member>
         <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.Employee">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.HRComments">
             <summary>
             
             </summary>
