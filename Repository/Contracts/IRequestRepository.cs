@@ -42,7 +42,7 @@ namespace HTTAPI.Repository.Contracts
         /// </summary>
         /// <param name="employeeId"></param>
         /// <returns></returns>
-        Task<ComeToOfficeRequest> GetRequestByEmployee(int employeeId);
+        Task<List<ComeToOfficeRequest>> GetRequestsByEmployee(int employeeId);
 
     }
 }

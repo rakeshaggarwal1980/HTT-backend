@@ -22,12 +22,6 @@ namespace HTTAPI.Models
         public string RequestNumber { get; set; }
 
         /// <summary>
-        /// EmployeeCode
-        /// </summary>
-        [Required]
-        public int EmployeeCode { get; set; }
-
-        /// <summary>
         ///  DateOfRequest
         /// </summary>
         [Required]
@@ -47,6 +41,10 @@ namespace HTTAPI.Models
         [Required]
         public bool IsDeclined { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public string HRComments { get; set; }
 
         /// <summary>
         /// 

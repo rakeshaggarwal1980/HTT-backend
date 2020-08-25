@@ -85,12 +85,11 @@ namespace HTTAPI.Repository.Services
         /// </summary>
         /// <param name="employeeId"></param>
         /// <returns></returns>
-        public async Task<ComeToOfficeRequest> GetRequestByEmployee(int employeeId)
+        public async Task<List<ComeToOfficeRequest>> GetRequestsByEmployee(int employeeId)
         {
             return await _context.ComeToOfficeRequest.Where(x => x.EmployeeId == employeeId
                                                             && x.Status == EntityStatus.Active
-                                                            && !x.IsApproved && !x.IsDeclined
-                                                            && x.DateOfRequest >= DateTime.Now).SingleOrDefaultAsync();
+                                                            && x.DateOfRequest >= DateTime.Now).ToListAsync();
         }
     }
 

@@ -18,11 +18,6 @@ namespace HTTAPI.ViewModels
         /// </summary>
         public string RequestNumber { get; set; }
 
-        /// <summary>
-        /// EmployeeCode
-        /// </summary>
-
-        public int EmployeeCode { get; set; }
 
         /// <summary>
         ///  DateOfRequest
@@ -49,5 +44,10 @@ namespace HTTAPI.ViewModels
         /// 
         /// </summary>
         public Employee Employee { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string HRComments { get; set; }
     }
 }
