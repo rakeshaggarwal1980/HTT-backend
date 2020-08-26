@@ -110,6 +110,7 @@ namespace HTTAPI.Manager.Service
             };
             try
             {
+                var requesModel = new ComeToOfficeRequest();
                 if (requestViewModel != null)
                 {
                     // check if employee already has active request for current and next days
@@ -117,7 +118,7 @@ namespace HTTAPI.Manager.Service
                     if (empRequests.Count() > 0)
                     {
                         //  if request for the same date exists and is approved , then can not raise new request
-                        if (empRequests.Where(x => x.DateOfRequest == requestViewModel.DateOfRequest && x.IsApproved).Any())
+                        if (empRequests.Where(x => x.DateOfRequest.Date == requestViewModel.DateOfRequest.Date && x.IsApproved).Any())
                         {
                             result.Status = Status.Fail;
                             result.StatusCode = HttpStatusCode.NotAcceptable;
@@ -125,18 +126,19 @@ namespace HTTAPI.Manager.Service
                             return result;
                         }
                         //  if request for the same date exists and is declined , then can raise new request
-                        else if (empRequests.Where(x => x.DateOfRequest == requestViewModel.DateOfRequest && x.IsDeclined).Any())
+                        //  and if no request matching date exists
+                        else if (empRequests.Where(x => x.DateOfRequest.Date == requestViewModel.DateOfRequest.Date && x.IsDeclined).Any()
+                            || empRequests.Where(x=>x.DateOfRequest.Date != requestViewModel.DateOfRequest.Date).Any())
                         {
-                            var requesModel = new ComeToOfficeRequest();
-                            // To map employee detail
+                            
                             requesModel.MapFromViewModel(requestViewModel, (ClaimsIdentity)_principal.Identity);
-
                             requesModel = await _requestRepository.CreateRequest(requesModel);
                             requestViewModel.Id = requesModel.Id;
                             result.Body = requestViewModel;
                             return result;
                         }
-                        else {
+                        else if (empRequests.Where(x => x.DateOfRequest.Date == requestViewModel.DateOfRequest.Date && !x.IsDeclined && !x.IsApproved).Any())
+                        {
                             result.Status = Status.Fail;
                             result.StatusCode = HttpStatusCode.NotAcceptable;
                             result.Message = "You already have request pending for approval for this date";
@@ -145,7 +147,6 @@ namespace HTTAPI.Manager.Service
                     }
                     else
                     {
-                        var requesModel = new ComeToOfficeRequest();
                         // To map employee detail
                         requesModel.MapFromViewModel(requestViewModel, (ClaimsIdentity)_principal.Identity);
                         requesModel = await _requestRepository.CreateRequest(requesModel);

@@ -89,7 +89,7 @@ namespace HTTAPI.Repository.Services
         {
             return await _context.ComeToOfficeRequest.Where(x => x.EmployeeId == employeeId
                                                             && x.Status == EntityStatus.Active
-                                                            && x.DateOfRequest >= DateTime.Now).ToListAsync();
+                                                            && x.DateOfRequest.Date >= DateTime.Now.Date).ToListAsync();
         }
     }
 
