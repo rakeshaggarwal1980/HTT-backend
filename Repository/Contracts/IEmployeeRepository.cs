@@ -21,5 +21,11 @@ namespace HTTAPI.Repository.Contracts
         /// <param name="employee"></param>
         /// <returns></returns>
         Task<Employee> GetEmployee(Employee employee);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        Task<Employee> GetHRDetails();
     }
 }

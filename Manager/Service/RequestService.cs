@@ -4,11 +4,14 @@ using HTTAPI.Manager.Contract;
 using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
 using HTTAPI.ViewModels;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -35,19 +38,30 @@ namespace HTTAPI.Manager.Service
         /// </summary>
         private readonly ClaimsPrincipal _principal;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly IHostingEnvironment _hostingEnvironment;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly IConfiguration _configuration;
         /// <summary>
         /// 
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="principal"></param>
         /// <param name="requestRepository"></param>
+        /// <param name="hostingEnvironment"></param>
         public RequestService(ILogger<RequestService> logger, IPrincipal principal,
-            IRequestRepository requestRepository)
+            IRequestRepository requestRepository, IHostingEnvironment hostingEnvironment, IConfiguration configuration)
         {
             _logger = logger;
             _principal = principal as ClaimsPrincipal;
             _requestRepository = requestRepository;
+            _hostingEnvironment = hostingEnvironment;
+            _configuration = configuration;
 
         }
 
@@ -128,12 +142,14 @@ namespace HTTAPI.Manager.Service
                         //  if request for the same date exists and is declined , then can raise new request
                         //  and if no request matching date exists
                         else if (empRequests.Where(x => x.DateOfRequest.Date == requestViewModel.DateOfRequest.Date && x.IsDeclined).Any()
-                            || empRequests.Where(x=>x.DateOfRequest.Date != requestViewModel.DateOfRequest.Date).Any())
+                            || empRequests.Where(x => x.DateOfRequest.Date != requestViewModel.DateOfRequest.Date).Any())
                         {
-                            
+
                             requesModel.MapFromViewModel(requestViewModel, (ClaimsIdentity)_principal.Identity);
                             requesModel = await _requestRepository.CreateRequest(requesModel);
                             requestViewModel.Id = requesModel.Id;
+                            // send email to HR
+
                             result.Body = requestViewModel;
                             return result;
                         }
@@ -242,6 +258,36 @@ namespace HTTAPI.Manager.Service
             }
             return result;
         }
-    }
 
-}
+
+        private EmailOptions PrepareEmailOptions(ComeToOfficeRequestViewModel requestViewModel, MailTemplate template)
+        {
+            var emailOptions = new EmailOptions
+            {
+                Template = template,
+                PlainBody = string.Empty,
+                Attachments = new List<Attachment>()
+            };
+
+            var msgBody = AppEmailHelper.MailBody(_hostingEnvironment, emailOptions.Template);
+            if (string.IsNullOrEmpty(msgBody)) return emailOptions;
+            var link = $"{ _configuration["AppUrl"]}requests";
+          
+            emailOptions.Subject = "Request for attending Office";
+            var ccMailUsers = new List<MailUser>()
+            {
+                new MailUser { Name = _configuration["FromName"], Email = _configuration["requestEmail"] },
+                new MailUser { Name = ((ClaimsIdentity)_principal.Identity).GetActiveUserName(), Email = ((ClaimsIdentity)_principal.Identity).GetActiveUserId() }
+            };
+            emailOptions.ToCcMailList = ccMailUsers;
+            emailOptions.ToMailsList = requestViewModel.MailUsers;
+            emailOptions.HtmlBody = msgBody.Replace("{BomDescription}", requestViewModel.Description).
+                Replace("{Description}", PrepareHtmlBody(requestViewModel)).
+                Replace("{FromDate}", requestViewModel.FromDate.ToString("dd-MM-yyyy")).
+                Replace("{ToDate}", requestViewModel.ToDate.ToString("dd-MM-yyyy")).
+                Replace("{BomName}", requestViewModel.BomTitle).
+                Replace("{BomLink}", link);
+            return emailOptions;
+        }
+
+    }

@@ -36,5 +36,10 @@ namespace HTTAPI.ViewModels
         /// Status
         /// </summary>
         public EntityStatus Status { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool isHRManager { get; set; }
     }
 }

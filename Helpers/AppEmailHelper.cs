@@ -1,9 +1,11 @@
 ﻿using HTTAPI.Enums;
 using HTTAPI.Manager.Contract;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -29,7 +31,7 @@ namespace HTTAPI.Helpers
         /// email settings
         /// </summary>
         private AppEmailSetting _appEmailSetting;
-
+        private readonly IHostingEnvironment _hostingEnvironment;
         /// <summary>
         /// Ctor
         /// </summary>
@@ -65,7 +67,9 @@ namespace HTTAPI.Helpers
                 BCCMailAddresses.ForEach(t => message.Bcc.Add(t));
 
                 message.Subject = Subject;
-                message.Body = await PrepareMailBody();
+             //   message.Body = await PrepareMailBody();
+
+                message.Body = AppEmailHelper.MailBody(_hostingEnvironment, emailOptions.Template);
                 message.IsBodyHtml = true;
 
                 {
@@ -81,16 +85,44 @@ namespace HTTAPI.Helpers
         {
             switch (MailType)
             {
-                case MailType.Proposal:
-                    var result = await _viewRenderService.RenderToStringAsync(EmailTemplatePath.Proposal, MailBodyViewModel);
+                case MailType.RequestToHR:
+                    var result = await _viewRenderService.RenderToStringAsync(EmailTemplatePath.RequestToHR, MailBodyViewModel);
                     return result.Body;
-                case MailType.Type2:
-                    var result2 = await _viewRenderService.RenderToStringAsync(EmailTemplatePath.Proposal, MailBodyViewModel);
+                case MailType.ResponseFromHR:
+                    var result2 = await _viewRenderService.RenderToStringAsync(EmailTemplatePath.ResponseFromHR, MailBodyViewModel);
                     return result2.Body;
                 default:
-                    var result3 = await _viewRenderService.RenderToStringAsync(EmailTemplatePath.Proposal, MailBodyViewModel);
-                    return result3.Body;
+                    return "";
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hostingEnvironment"></param>
+        /// <param name="template"></param>
+        /// <returns></returns>
+        public static string MailBody(IHostingEnvironment hostingEnvironment, MailTemplate template)
+        {
+            var path = Path.Combine(hostingEnvironment.ContentRootPath, "MailTemplate");
+            var msgBody = string.Empty;
+            switch (template)
+            {
+                case MailTemplate.RequestToHR:
+                    path += "/RequestToHR.html";
+                    break;
+                case MailTemplate.ResponseFromHR:
+                    path += "/ResponseFromHR.html";
+                    break;
+            }
+            if (File.Exists(path))
+            {
+                using (var reader = new StreamReader(path))
+                {
+                    msgBody = reader.ReadToEnd();
+                }
+            }
+            return msgBody;
         }
 
         /// <summary>
@@ -121,7 +153,7 @@ namespace HTTAPI.Helpers
         /// <summary>
         /// Type/Category of mail
         /// </summary>
-        public MailType MailType { get; set; }
+        public MailTemplate MailTemplate { get; set; }
 
         /// <summary>
         /// Provide mail body viewmodel to prepare the email body as html template
