@@ -53,6 +53,10 @@ namespace HTTAPI.ViewModels
         public int EmployeeId { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public EmployeeViewModel Employee { get; set; }
+        /// <summary>
         ///Health Track Symptoms
         /// </summary>
         public List<HealthTrackSymptomViewModel> HealthTrackSymptoms { get; set; }

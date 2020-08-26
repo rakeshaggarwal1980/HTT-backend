@@ -61,9 +61,9 @@ namespace HTTAPI.Manager.Contract
         /// <summary>
         /// Create Employee
         /// </summary>
-        /// <param name="employeeViewModel"></param>
+        /// <param name="signUpViewModel"></param>
         /// <returns></returns>
-        public async Task<IResult> CreateEmployee(EmployeeViewModel employeeViewModel)
+        public async Task<IResult> CreateEmployee(UserSignUpViewModel signUpViewModel)
         {
             var result = new Result
             {
@@ -73,14 +73,17 @@ namespace HTTAPI.Manager.Contract
             };
             try
             {
-                if (employeeViewModel != null)
+                var employeeViewModel = new EmployeeViewModel();
+                if (signUpViewModel != null)
                 {
                     var employeeModel = new Employee();
                     // To map employee detail
-                    employeeModel.MapFromViewModel(employeeViewModel);
+                    employeeModel.MapFromViewModel(signUpViewModel);
 
                     employeeModel = await _employeeRepository.CreateEmployee(employeeModel);
-                    employeeViewModel.Id = employeeModel.Id;
+
+                    employeeViewModel.MapFromModel(employeeModel);
+                   
                     result.Body = employeeViewModel;
                     return result;
                 }

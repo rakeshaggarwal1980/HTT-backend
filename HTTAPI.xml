@@ -16,7 +16,7 @@
             <param name="logger"></param>
             <param name="employeeService"></param>
         </member>
-        <member name="M:HTTAPI.Controllers.EmployeeController.CreateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+        <member name="M:HTTAPI.Controllers.EmployeeController.CreateEmployee(HTTAPI.ViewModels.UserSignUpViewModel)">
             <summary>
             Registers an employee
             </summary>
@@ -689,11 +689,11 @@
             
             </summary>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.CreateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.CreateEmployee(HTTAPI.ViewModels.UserSignUpViewModel)">
             <summary>
              Create the CreateEmployee
             </summary>
-            <param name="employeeViewModel"></param>
+            <param name="signUpViewModel"></param>
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Manager.Contract.IEmployeeService.GetEmployee(HTTAPI.ViewModels.UserLoginViewModel)">
@@ -808,11 +808,11 @@
             <param name="employeeRepository"></param>
             <param name="configuration"></param>      
         </member>
-        <member name="M:HTTAPI.Manager.Contract.EmployeeService.CreateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.CreateEmployee(HTTAPI.ViewModels.UserSignUpViewModel)">
             <summary>
             Create Employee
             </summary>
-            <param name="employeeViewModel"></param>
+            <param name="signUpViewModel"></param>
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetEmployee(HTTAPI.ViewModels.UserLoginViewModel)">
@@ -1029,6 +1029,11 @@
             </summary>
         </member>
         <member name="P:HTTAPI.Models.Employee.EmployeeCode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Employee.IsHrManager">
             <summary>
             
             </summary>
@@ -1463,6 +1468,12 @@
             <param name="employee"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetHRDetails">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Contracts.IHealthTrackRepository">
             <summary>
             HealthTrackRepository 
@@ -1631,6 +1642,12 @@
             
             </summary>
             <param name="employee"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetHRDetails">
+            <summary>
+            
+            </summary>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Services.HealthTrackRepository">
@@ -1877,11 +1894,6 @@
             Email
             </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.Password">
-            <summary>
-            Password
-            </summary>
-        </member>
         <member name="P:HTTAPI.ViewModels.EmployeeViewModel.EmployeeCode">
             <summary>
             EmployeeId
@@ -1890,6 +1902,11 @@
         <member name="P:HTTAPI.ViewModels.EmployeeViewModel.Status">
             <summary>
             Status
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.IsHrManager">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:HTTAPI.ViewModels.HealthTrackViewModel">
@@ -1940,6 +1957,11 @@
         <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.EmployeeId">
             <summary>
             created by user id
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.Employee">
+            <summary>
+            
             </summary>
         </member>
         <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.HealthTrackSymptoms">
@@ -1998,6 +2020,46 @@
             </summary>
         </member>
         <member name="P:HTTAPI.ViewModels.UserLoginViewModel.Password">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.UserSignUpViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.Id">
+            <summary>
+             Primary Key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.Email">
+            <summary>
+            Email
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.Password">
+            <summary>
+            Password
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.EmployeeCode">
+            <summary>
+            EmployeeId
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.Status">
+            <summary>
+            Status
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.IsHrManager">
             <summary>
             
             </summary>

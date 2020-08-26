@@ -1,13 +1,16 @@
 ﻿using HTTAPI.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HTTAPI.ViewModels
 {
     /// <summary>
     /// 
     /// </summary>
-    public class EmployeeViewModel
+    public class UserSignUpViewModel
     {
-
         /// <summary>
         ///  Primary Key
         /// </summary>
@@ -22,6 +25,11 @@ namespace HTTAPI.ViewModels
         /// Email
         /// </summary>
         public string Email { get; set; }
+
+        /// <summary>
+        /// Password
+        /// </summary>
+        public string Password { get; set; }
 
         /// <summary>
         /// EmployeeId

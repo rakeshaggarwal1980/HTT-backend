@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -87,7 +88,6 @@ namespace HTTAPI.Manager.Service
                         var healthTrackModel = new HealthTrack();
                         // To map health Track detail
                         healthTrackModel.MapFromViewModel(healthTrackViewModel, (ClaimsIdentity)_principal.Identity);
-
                         var healthTrackSymptoms = new List<HealthTrackSymptom>();
 
                         if (healthTrackViewModel.HealthTrackSymptoms.Any())
@@ -242,6 +242,9 @@ namespace HTTAPI.Manager.Service
                 if (declaration != null)
                 {
                     healthViewModel.MapFromModel(declaration);
+                    var employeeVm = new EmployeeViewModel();
+                    employeeVm.MapFromModel(declaration.Employee);
+                    healthViewModel.Employee = employeeVm;
                     var symptoms = new List<HealthTrackSymptomViewModel>();
                     var questions = new List<HealthTrackQuestionAnswerViewModel>();
                     if (declaration.HealthTrackQuestions.Any())

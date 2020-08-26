@@ -37,6 +37,11 @@ namespace HTTAPI.Models
         /// </summary>
         [Required]
         public int EmployeeCode { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsHrManager { get; set; }
     }
 
 

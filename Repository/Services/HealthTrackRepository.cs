@@ -44,7 +44,7 @@ namespace HTTAPI.Repository.Services
         public async Task<HealthTrack> GetSelfDeclarationByEmployeeForRequest(int employeedId, string requestNumber)
         {
             // when employee enters office , set entity status to finished
-            return await _context.HealthTrack.Include("HealthTrackSymptoms").Include("HealthTrackQuestions")
+            return await _context.HealthTrack.Include("Employee").Include("HealthTrackSymptoms").Include("HealthTrackQuestions")
                 .Where(x => x.EmployeeId == employeedId && x.Status == EntityStatus.Active
                 && x.RequestNumber == requestNumber).SingleOrDefaultAsync();
         }
