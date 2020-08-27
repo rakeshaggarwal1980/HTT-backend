@@ -98,6 +98,10 @@ namespace HTTAPI.Manager.Service
                     {
                         var requestViewModel = new ComeToOfficeRequestViewModel();
                         requestViewModel.MapFromModel(t);
+                        var employeeVm = new EmployeeViewModel();
+                        employeeVm.MapFromModel(t.Employee);
+                        requestViewModel.Employee = employeeVm;
+
                         return requestViewModel;
                     }).ToList();
                 }
@@ -162,27 +166,8 @@ namespace HTTAPI.Manager.Service
                             var employeeVm = new EmployeeViewModel();
                             employeeVm.MapFromModel(requesModel.Employee);
                             requestViewModel.Employee = employeeVm;
-
-
                             // send email to HR
-
-                            //List<MailUser> mailUsers = new List<MailUser>();
-                            //var hrEmployee = await _employeeRepository.GetHRDetails();
-                            //if (hrEmployee != null)
-                            //{
-                            //    MailUser user = new MailUser
-                            //    {
-                            //        Email = hrEmployee.Email,
-                            //        Name = hrEmployee.Name
-                            //    };
-                            //    mailUsers.Add(user);
-                            //}
-                            //var emailOptions = PrepareEmailOptions(requestViewModel, MailTemplate.RequestToHR, mailUsers);
-                            //if (!string.IsNullOrEmpty(emailOptions.HtmlBody))
-                            //{
-                            //    AppEmailHelper.SendMail(emailOptions);
-                            //}
-                            SendRequestEmail(requestViewModel);
+                            SendRequestEmail(requestViewModel, MailTemplate.RequestToHR);
 
                             result.Body = requestViewModel;
                             return result;
@@ -201,8 +186,11 @@ namespace HTTAPI.Manager.Service
                         requesModel.MapFromViewModel(requestViewModel, (ClaimsIdentity)_principal.Identity);
                         requesModel = await _requestRepository.CreateRequest(requesModel);
                         requestViewModel.Id = requesModel.Id;
+                        var employeeVm = new EmployeeViewModel();
+                        employeeVm.MapFromModel(requesModel.Employee);
+                        requestViewModel.Employee = employeeVm;
                         // send emal to HR
-                        SendRequestEmail(requestViewModel);
+                        SendRequestEmail(requestViewModel, MailTemplate.RequestToHR);
                         result.Body = requestViewModel;
                         return result;
                     }
@@ -242,6 +230,13 @@ namespace HTTAPI.Manager.Service
                     requestModel.MapFromViewModel(requestViewModel, (ClaimsIdentity)_principal.Identity);
 
                     requestModel = await _requestRepository.UpdateRequest(requestModel);
+
+                    var employeeVm = new EmployeeViewModel();
+                    employeeVm.MapFromModel(requestModel.Employee);
+                    requestViewModel.Employee = employeeVm;
+
+                    // send HR response in email to employee and send link for declaration form to Employee if approved
+                    
                     result.Body = requestViewModel;
                     return result;
                 }
@@ -317,7 +312,7 @@ namespace HTTAPI.Manager.Service
             return emailOptions;
         }
 
-        private async void SendRequestEmail(ComeToOfficeRequestViewModel requestViewModel)
+        private async void SendRequestEmail(ComeToOfficeRequestViewModel requestViewModel, MailTemplate mailTemplate)
         {
             List<MailUser> mailUsers = new List<MailUser>();
             var hrEmployee = await _employeeRepository.GetHRDetails();
@@ -330,7 +325,7 @@ namespace HTTAPI.Manager.Service
                 };
                 mailUsers.Add(user);
             }
-            var emailOptions = PrepareEmailOptions(requestViewModel, MailTemplate.RequestToHR, mailUsers);
+            var emailOptions = PrepareEmailOptions(requestViewModel, mailTemplate, mailUsers);
             if (!string.IsNullOrEmpty(emailOptions.HtmlBody))
             {
                 AppEmailHelper.SendMailExtended(_configuration, emailOptions);

@@ -56,6 +56,7 @@ namespace HTTAPI.Repository.Services
             officeRequest.IsDeclined = request.IsDeclined;
             officeRequest.Status = request.Status;
             await _context.SaveChangesAsync();
+            _context.Entry(request).Reference(c => c.Employee).Load();
             return request;
         }
 
