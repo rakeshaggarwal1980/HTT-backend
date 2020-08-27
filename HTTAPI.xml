@@ -16,7 +16,7 @@
             <param name="logger"></param>
             <param name="employeeService"></param>
         </member>
-        <member name="M:HTTAPI.Controllers.EmployeeController.CreateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+        <member name="M:HTTAPI.Controllers.EmployeeController.CreateEmployee(HTTAPI.ViewModels.UserSignUpViewModel)">
             <summary>
             Registers an employee
             </summary>
@@ -192,17 +192,17 @@
             Delete
             </summary>
         </member>
-        <member name="T:HTTAPI.Enums.MailType">
+        <member name="T:HTTAPI.Enums.MailTemplate">
             <summary>
             Type of mail to send
             </summary>
         </member>
-        <member name="F:HTTAPI.Enums.MailType.Proposal">
+        <member name="F:HTTAPI.Enums.MailTemplate.RequestToHR">
             <summary>
             TBD
             </summary>
         </member>
-        <member name="F:HTTAPI.Enums.MailType.Type2">
+        <member name="F:HTTAPI.Enums.MailTemplate.ResponseFromHR">
             <summary>
             TBD
             </summary>
@@ -247,65 +247,35 @@
             Smtp client
             </summary>
         </member>
-        <member name="F:HTTAPI.Helpers.AppEmailHelper._viewRenderService">
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.Configuration">
             <summary>
-            view render service initialization
+            Configuration
             </summary>
         </member>
-        <member name="F:HTTAPI.Helpers.AppEmailHelper._appEmailSetting">
-            <summary>
-            email settings
-            </summary>
-        </member>
-        <member name="M:HTTAPI.Helpers.AppEmailHelper.#ctor">
+        <member name="M:HTTAPI.Helpers.AppEmailHelper.GetMailSettings(Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             Ctor
             </summary>
         </member>
-        <member name="M:HTTAPI.Helpers.AppEmailHelper.InitMailMessage">
+        <member name="M:HTTAPI.Helpers.AppEmailHelper.SendMailExtended(Microsoft.Extensions.Configuration.IConfiguration,HTTAPI.Helpers.EmailOptions)">
             <summary>
-            Send Email
+            
+            </summary>
+            <param name="configuration"></param>
+            <param name="emailOptions"></param>
+        </member>
+        <member name="M:HTTAPI.Helpers.AppEmailHelper.SendMail(HTTAPI.Helpers.AppEmailSetting,HTTAPI.Helpers.EmailOptions)">
+            <summary>
+            
             </summary>
         </member>
-        <member name="M:HTTAPI.Helpers.AppEmailHelper.PrepareMailBody">
+        <member name="M:HTTAPI.Helpers.AppEmailHelper.MailBody(Microsoft.AspNetCore.Hosting.IWebHostEnvironment,HTTAPI.Enums.MailTemplate)">
             <summary>
-            Prepare mail body
+            
             </summary>
-        </member>
-        <member name="P:HTTAPI.Helpers.AppEmailHelper.ToMailAddresses">
-            <summary>
-            To mailing list
-            </summary>
-        </member>
-        <member name="P:HTTAPI.Helpers.AppEmailHelper.CCMailAddresses">
-            <summary>
-            Cc mailing list
-            </summary>
-        </member>
-        <member name="P:HTTAPI.Helpers.AppEmailHelper.BCCMailAddresses">
-            <summary>
-            Bcc mailing list
-            </summary>
-        </member>
-        <member name="P:HTTAPI.Helpers.AppEmailHelper.FromMailAddress">
-            <summary>
-            From mail address
-            </summary>
-        </member>
-        <member name="P:HTTAPI.Helpers.AppEmailHelper.Subject">
-            <summary>
-            Mail Subject
-            </summary>
-        </member>
-        <member name="P:HTTAPI.Helpers.AppEmailHelper.MailType">
-            <summary>
-            Type/Category of mail
-            </summary>
-        </member>
-        <member name="P:HTTAPI.Helpers.AppEmailHelper.MailBodyViewModel">
-            <summary>
-            Provide mail body viewmodel to prepare the email body as html template
-            </summary>
+            <param name="hostingEnvironment"></param>
+            <param name="template"></param>
+            <returns></returns>
         </member>
         <member name="T:HTTAPI.Helpers.AppEmailSetting">
             <summary>
@@ -345,21 +315,6 @@
         <member name="T:HTTAPI.Helpers.AppHelper">
             <summary>
             Application helper methods
-            </summary>
-        </member>
-        <member name="P:HTTAPI.Helpers.AppHelper.HostingEnvironment">
-            <summary>
-            hosting env
-            </summary>
-        </member>
-        <member name="P:HTTAPI.Helpers.AppHelper.Configuration">
-            <summary>
-            Configuration
-            </summary>
-        </member>
-        <member name="P:HTTAPI.Helpers.AppHelper.ServiceProvider">
-            <summary>
-            Service provider for geeting injected services
             </summary>
         </member>
         <member name="P:HTTAPI.Helpers.AppHelper.CurrentDate">
@@ -487,7 +442,7 @@
             Email template path
             </summary>
         </member>
-        <member name="F:HTTAPI.Helpers.EmailTemplatePath.Proposal">
+        <member name="F:HTTAPI.Helpers.EmailTemplatePath.RequestToHR">
             <summary>
             Proposal mail template path
             </summary>
@@ -510,6 +465,26 @@
         <member name="F:HTTAPI.Helpers.FileActionMessages.CategoryNotFound">
             <summary>
             No category found during file upload
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Helpers.EmailOptions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Helpers.MailUser">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.MailUser.Email">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.MailUser.Name">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:HTTAPI.Helpers.EntityMapperExtensions">
@@ -689,11 +664,11 @@
             
             </summary>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.CreateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.CreateEmployee(HTTAPI.ViewModels.UserSignUpViewModel)">
             <summary>
              Create the CreateEmployee
             </summary>
-            <param name="employeeViewModel"></param>
+            <param name="signUpViewModel"></param>
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Manager.Contract.IEmployeeService.GetEmployee(HTTAPI.ViewModels.UserLoginViewModel)">
@@ -808,11 +783,11 @@
             <param name="employeeRepository"></param>
             <param name="configuration"></param>      
         </member>
-        <member name="M:HTTAPI.Manager.Contract.EmployeeService.CreateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.CreateEmployee(HTTAPI.ViewModels.UserSignUpViewModel)">
             <summary>
             Create Employee
             </summary>
-            <param name="employeeViewModel"></param>
+            <param name="signUpViewModel"></param>
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetEmployee(HTTAPI.ViewModels.UserLoginViewModel)">
@@ -893,13 +868,26 @@
             Claim Identity
             </summary>
         </member>
-        <member name="M:HTTAPI.Manager.Service.RequestService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Service.RequestService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IRequestRepository)">
+        <member name="F:HTTAPI.Manager.Service.RequestService._hostingEnvironment">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Manager.Service.RequestService._configuration">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.RequestService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Service.RequestService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IRequestRepository,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.Extensions.Configuration.IConfiguration,HTTAPI.Repository.Contracts.IEmployeeRepository)">
             <summary>
             
             </summary>
             <param name="logger"></param>
             <param name="principal"></param>
             <param name="requestRepository"></param>
+            <param name="hostingEnvironment"></param>
+            <param name="configuration"></param>
+            <param name="employeeRepository"></param>
         </member>
         <member name="M:HTTAPI.Manager.Service.RequestService.GetRequestsList">
             <summary>
@@ -1029,6 +1017,11 @@
             </summary>
         </member>
         <member name="P:HTTAPI.Models.Employee.EmployeeCode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Employee.IsHrManager">
             <summary>
             
             </summary>
@@ -1463,6 +1456,12 @@
             <param name="employee"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetHRDetails">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Contracts.IHealthTrackRepository">
             <summary>
             HealthTrackRepository 
@@ -1631,6 +1630,12 @@
             
             </summary>
             <param name="employee"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetHRDetails">
+            <summary>
+            
+            </summary>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Services.HealthTrackRepository">
@@ -1877,11 +1882,6 @@
             Email
             </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.Password">
-            <summary>
-            Password
-            </summary>
-        </member>
         <member name="P:HTTAPI.ViewModels.EmployeeViewModel.EmployeeCode">
             <summary>
             EmployeeId
@@ -1890,6 +1890,11 @@
         <member name="P:HTTAPI.ViewModels.EmployeeViewModel.Status">
             <summary>
             Status
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.IsHrManager">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:HTTAPI.ViewModels.HealthTrackViewModel">
@@ -1940,6 +1945,11 @@
         <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.EmployeeId">
             <summary>
             created by user id
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.Employee">
+            <summary>
+            
             </summary>
         </member>
         <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.HealthTrackSymptoms">
@@ -1998,6 +2008,46 @@
             </summary>
         </member>
         <member name="P:HTTAPI.ViewModels.UserLoginViewModel.Password">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.UserSignUpViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.Id">
+            <summary>
+             Primary Key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.Email">
+            <summary>
+            Email
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.Password">
+            <summary>
+            Password
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.EmployeeCode">
+            <summary>
+            EmployeeId
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.Status">
+            <summary>
+            Status
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.IsHrManager">
             <summary>
             
             </summary>

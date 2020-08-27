@@ -41,7 +41,7 @@ namespace HTTAPI.Models
         /// <summary>
         /// 
         /// </summary>
-        public bool isHRManager { get; set; }
+        public bool IsHrManager { get; set; }
     }
 
 

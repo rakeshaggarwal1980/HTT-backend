@@ -37,10 +37,10 @@ namespace HTTAPI.Controllers
         [ProducesResponseType(typeof(EmployeeViewModel), (int)HttpStatusCode.PartialContent)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
-        public async Task<ActionResult<IResult>> CreateEmployee([FromBody] EmployeeViewModel employeeViewModel)
+        public async Task<ActionResult<IResult>> CreateEmployee([FromBody] UserSignUpViewModel employeeSignUViewModel)
         {
             _logger.LogInformation("Creating Employee");
-            var result = await _employeeService.CreateEmployee(employeeViewModel);
+            var result = await _employeeService.CreateEmployee(employeeSignUViewModel);
             return StatusCode((int)result.StatusCode, result);
         }
 

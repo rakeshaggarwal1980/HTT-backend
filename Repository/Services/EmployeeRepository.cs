@@ -51,9 +51,13 @@ namespace HTTAPI.Repository.Services
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public async Task<Employee> GetHRDetails()
         {
-            return await _context.Employee.Where(e => e.isHRManager).SingleOrDefaultAsync();
+            return await _context.Employee.Where(e => e.IsHrManager).SingleOrDefaultAsync();
         }
     }
 }

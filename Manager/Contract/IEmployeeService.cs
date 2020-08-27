@@ -12,9 +12,9 @@ namespace HTTAPI.Manager.Contract
         /// <summary>
         ///  Create the CreateEmployee
         /// </summary>
-        /// <param name="employeeViewModel"></param>
+        /// <param name="signUpViewModel"></param>
         /// <returns></returns>
-        Task<IResult> CreateEmployee(EmployeeViewModel employeeViewModel);
+        Task<IResult> CreateEmployee(UserSignUpViewModel signUpViewModel);
 
         /// <summary>
         /// 
