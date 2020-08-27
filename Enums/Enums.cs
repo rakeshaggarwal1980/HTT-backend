@@ -83,16 +83,16 @@
     /// <summary>
     /// Type of mail to send
     /// </summary>
-    public enum MailType
+    public enum MailTemplate
     {
         /// <summary>
         /// TBD
         /// </summary>
-        Proposal = 1,
+        RequestToHR = 1,
 
         /// <summary>
         /// TBD
         /// </summary>
-        Type2 = 2
+        ResponseFromHR = 2
     }
 }

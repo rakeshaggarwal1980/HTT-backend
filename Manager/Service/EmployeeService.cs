@@ -83,7 +83,7 @@ namespace HTTAPI.Manager.Contract
                     employeeModel = await _employeeRepository.CreateEmployee(employeeModel);
 
                     employeeViewModel.MapFromModel(employeeModel);
-                   
+
                     result.Body = employeeViewModel;
                     return result;
                 }

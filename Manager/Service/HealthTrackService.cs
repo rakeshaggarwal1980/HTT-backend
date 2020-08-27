@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -82,7 +81,7 @@ namespace HTTAPI.Manager.Service
                 if (healthTrackViewModel != null)
                 {
                     // check if user already submitted self declaration for a request
-                    var declaration = _healthTrackRepository.GetSelfDeclarationByEmployeeForRequest(healthTrackViewModel.EmployeeId, healthTrackViewModel.RequestNumber);
+                    var declaration = await _healthTrackRepository.GetSelfDeclarationByEmployeeForRequest(healthTrackViewModel.EmployeeId, healthTrackViewModel.RequestNumber);
                     if (declaration == null)
                     {
                         var healthTrackModel = new HealthTrack();

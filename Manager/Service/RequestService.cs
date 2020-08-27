@@ -4,11 +4,14 @@ using HTTAPI.Manager.Contract;
 using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
 using HTTAPI.ViewModels;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -30,10 +33,22 @@ namespace HTTAPI.Manager.Service
         /// 
         /// </summary>
         IRequestRepository _requestRepository;
+
+        IEmployeeRepository _employeeRepository;
         /// <summary>
         /// Claim Identity
         /// </summary>
         private readonly ClaimsPrincipal _principal;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly IWebHostEnvironment _hostingEnvironment;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly IConfiguration _configuration;
 
 
         /// <summary>
@@ -42,12 +57,21 @@ namespace HTTAPI.Manager.Service
         /// <param name="logger"></param>
         /// <param name="principal"></param>
         /// <param name="requestRepository"></param>
+        /// <param name="hostingEnvironment"></param>
+        /// <param name="configuration"></param>
+        /// <param name="employeeRepository"></param>
+
         public RequestService(ILogger<RequestService> logger, IPrincipal principal,
-            IRequestRepository requestRepository)
+            IRequestRepository requestRepository, IWebHostEnvironment hostingEnvironment,
+            IConfiguration configuration,
+            IEmployeeRepository employeeRepository)
         {
             _logger = logger;
             _principal = principal as ClaimsPrincipal;
             _requestRepository = requestRepository;
+            _hostingEnvironment = hostingEnvironment;
+            _configuration = configuration;
+            _employeeRepository = employeeRepository;
 
         }
 
@@ -128,12 +152,38 @@ namespace HTTAPI.Manager.Service
                         //  if request for the same date exists and is declined , then can raise new request
                         //  and if no request matching date exists
                         else if (empRequests.Where(x => x.DateOfRequest.Date == requestViewModel.DateOfRequest.Date && x.IsDeclined).Any()
-                            || empRequests.Where(x=>x.DateOfRequest.Date != requestViewModel.DateOfRequest.Date).Any())
+                            || empRequests.Where(x => x.DateOfRequest.Date != requestViewModel.DateOfRequest.Date).Any())
                         {
-                            
+
                             requesModel.MapFromViewModel(requestViewModel, (ClaimsIdentity)_principal.Identity);
+
                             requesModel = await _requestRepository.CreateRequest(requesModel);
                             requestViewModel.Id = requesModel.Id;
+                            var employeeVm = new EmployeeViewModel();
+                            employeeVm.MapFromModel(requesModel.Employee);
+                            requestViewModel.Employee = employeeVm;
+
+
+                            // send email to HR
+
+                            //List<MailUser> mailUsers = new List<MailUser>();
+                            //var hrEmployee = await _employeeRepository.GetHRDetails();
+                            //if (hrEmployee != null)
+                            //{
+                            //    MailUser user = new MailUser
+                            //    {
+                            //        Email = hrEmployee.Email,
+                            //        Name = hrEmployee.Name
+                            //    };
+                            //    mailUsers.Add(user);
+                            //}
+                            //var emailOptions = PrepareEmailOptions(requestViewModel, MailTemplate.RequestToHR, mailUsers);
+                            //if (!string.IsNullOrEmpty(emailOptions.HtmlBody))
+                            //{
+                            //    AppEmailHelper.SendMail(emailOptions);
+                            //}
+                            SendRequestEmail(requestViewModel);
+
                             result.Body = requestViewModel;
                             return result;
                         }
@@ -151,6 +201,8 @@ namespace HTTAPI.Manager.Service
                         requesModel.MapFromViewModel(requestViewModel, (ClaimsIdentity)_principal.Identity);
                         requesModel = await _requestRepository.CreateRequest(requesModel);
                         requestViewModel.Id = requesModel.Id;
+                        // send emal to HR
+                        SendRequestEmail(requestViewModel);
                         result.Body = requestViewModel;
                         return result;
                     }
@@ -242,6 +294,48 @@ namespace HTTAPI.Manager.Service
             }
             return result;
         }
-    }
 
+        private EmailOptions PrepareEmailOptions(ComeToOfficeRequestViewModel requestViewModel, MailTemplate template, List<MailUser> mailUsers)
+        {
+            var emailOptions = new EmailOptions
+            {
+                Template = template,
+                PlainBody = string.Empty,
+                Attachments = new List<Attachment>()
+            };
+            var msgBody = AppEmailHelper.MailBody(_hostingEnvironment, emailOptions.Template);
+            if (string.IsNullOrEmpty(msgBody)) return emailOptions;
+            var link = $"{ _configuration["AppUrl"]}requests";
+            emailOptions.Subject = "Request for attending Office";
+            emailOptions.ToMailsList = mailUsers;
+            emailOptions.HtmlBody = msgBody.Replace("{RequestNumber}", requestViewModel.RequestNumber).
+                Replace("{HRName}", mailUsers[0].Name).
+                Replace("{DateOfRequest}", requestViewModel.DateOfRequest.ToString("dd-MM-yyyy")).
+                Replace("{EmployeeName}", requestViewModel.Employee.Name).
+                Replace("{link}", link).
+                Replace("{EmployeeCode}", requestViewModel.Employee.EmployeeCode.ToString());
+            return emailOptions;
+        }
+
+        private async void SendRequestEmail(ComeToOfficeRequestViewModel requestViewModel)
+        {
+            List<MailUser> mailUsers = new List<MailUser>();
+            var hrEmployee = await _employeeRepository.GetHRDetails();
+            if (hrEmployee != null)
+            {
+                MailUser user = new MailUser
+                {
+                    Email = hrEmployee.Email,
+                    Name = hrEmployee.Name
+                };
+                mailUsers.Add(user);
+            }
+            var emailOptions = PrepareEmailOptions(requestViewModel, MailTemplate.RequestToHR, mailUsers);
+            if (!string.IsNullOrEmpty(emailOptions.HtmlBody))
+            {
+                AppEmailHelper.SendMailExtended(_configuration, emailOptions);
+            }
+        }
+
+    }
 }

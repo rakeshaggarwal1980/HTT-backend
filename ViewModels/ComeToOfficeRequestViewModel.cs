@@ -1,5 +1,4 @@
-﻿using HTTAPI.Models;
-using System;
+﻿using System;
 
 namespace HTTAPI.ViewModels
 {
@@ -43,7 +42,7 @@ namespace HTTAPI.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        public Employee Employee { get; set; }
+        public EmployeeViewModel Employee { get; set; }
 
         /// <summary>
         /// 

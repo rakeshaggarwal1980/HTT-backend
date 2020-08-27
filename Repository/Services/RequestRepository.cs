@@ -33,6 +33,8 @@ namespace HTTAPI.Repository.Services
         {
             _context.ComeToOfficeRequest.Add(request);
             await _context.SaveChangesAsync();
+
+            _context.Entry(request).Reference(c => c.Employee).Load();
             return request;
         }
 

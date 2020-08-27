@@ -1,132 +1,110 @@
 ﻿using HTTAPI.Enums;
-using HTTAPI.Manager.Contract;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using System.Collections.Generic;
+using System;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
-using System.Threading.Tasks;
 
 namespace HTTAPI.Helpers
 {
     /// <summary>
     /// Email Helper
     /// </summary>
-    public class AppEmailHelper
+    public static class AppEmailHelper
     {
         /// <summary>
         /// Smtp client
         /// </summary>
-        private SmtpClient _client;
-
-        /// <summary>
-        /// view render service initialization
-        /// </summary>
-        private IViewRenderService _viewRenderService;
-
+        private static SmtpClient _client;
         /// <summary>
         /// email settings
         /// </summary>
-        private AppEmailSetting _appEmailSetting;
-
+      //  private static AppEmailSetting _appEmailSetting;
+        /// <summary>
+        /// Configuration
+        /// </summary>
+        public static IConfiguration Configuration { get; set; }
         /// <summary>
         /// Ctor
         /// </summary>
-        public AppEmailHelper()
+        public static AppEmailSetting GetMailSettings(IConfiguration configuration)
         {
-            _appEmailSetting = AppHelper.Configuration.GetSection("EmailSetting").Get<AppEmailSetting>();
-
-            // Service for View render service
-            _viewRenderService = AppHelper.ServiceProvider.GetRequiredService<IViewRenderService>();
-
+            var appEmailSetting = configuration.GetSection("EmailSetting").Get<AppEmailSetting>();
             // smtp client
-            _client = new SmtpClient(_appEmailSetting.SmtpClient)
+            _client = new SmtpClient(appEmailSetting.SmtpClient)
             {
-                Port = _appEmailSetting.Port,
-                Credentials = new NetworkCredential(_appEmailSetting.NetworkUserName, _appEmailSetting.NetworkPassword),
-                EnableSsl = true
+                EnableSsl = true,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(appEmailSetting.NetworkUserName, appEmailSetting.NetworkPassword),
+                Host = "smtp.gmail.com",
+                Port = appEmailSetting.Port
             };
+
+            return appEmailSetting;
         }
 
         /// <summary>
-        /// Send Email
+        /// 
         /// </summary>
-        public async void InitMailMessage()
+        /// <param name="configuration"></param>
+        /// <param name="emailOptions"></param>
+        public static async void SendMailExtended(IConfiguration configuration, EmailOptions emailOptions)
         {
-            using (var message = new MailMessage())
+            var appEmailSetting = GetMailSettings(configuration);
+            SendMail(appEmailSetting, emailOptions);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public static async void SendMail(AppEmailSetting appEmailSetting, EmailOptions emailOptions)
+        {
+            try
             {
-                if (FromMailAddress == null)
-                    message.From = new MailAddress(_appEmailSetting.FromEmail, _appEmailSetting.FromName);
-                else
-                    message.From = FromMailAddress;
-                ToMailAddresses.ForEach(t => message.To.Add(t));
-                CCMailAddresses.ForEach(t => message.CC.Add(t));
-                BCCMailAddresses.ForEach(t => message.Bcc.Add(t));
-
-                message.Subject = Subject;
-                message.Body = await PrepareMailBody();
+                var message = new MailMessage();
+                message.From = new MailAddress(appEmailSetting.FromEmail, appEmailSetting.FromName);
+                emailOptions.ToMailsList.ForEach(t => message.To.Add(t.Email));
+                emailOptions.ToCcMailList.ForEach(t => message.CC.Add(t.Email));
+                message.Subject = emailOptions.Subject;
+                message.Body = emailOptions.HtmlBody;
                 message.IsBodyHtml = true;
+                await _client.SendMailAsync(message);
+            }
+            catch (Exception e)
+            {
 
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="hostingEnvironment"></param>
+        /// <param name="template"></param>
+        /// <returns></returns>
+        public static string MailBody(IWebHostEnvironment hostingEnvironment, MailTemplate template)
+        {
+            var path = Path.Combine(hostingEnvironment.ContentRootPath, "MailTemplate");
+            var msgBody = string.Empty;
+            switch (template)
+            {
+                case MailTemplate.RequestToHR:
+                    path += "/RequestToHR.html";
+                    break;
+                case MailTemplate.ResponseFromHR:
+                    path += "/ResponseFromHR.html";
+                    break;
+            }
+            if (File.Exists(path))
+            {
+                using (var reader = new StreamReader(path))
                 {
-                    await _client.SendMailAsync(message);
+                    msgBody = reader.ReadToEnd();
                 }
             }
+            return msgBody;
         }
-
-        /// <summary>
-        /// Prepare mail body
-        /// </summary>
-        private async Task<string> PrepareMailBody()
-        {
-            switch (MailType)
-            {
-                case MailType.Proposal:
-                    var result = await _viewRenderService.RenderToStringAsync(EmailTemplatePath.Proposal, MailBodyViewModel);
-                    return result.Body;
-                case MailType.Type2:
-                    var result2 = await _viewRenderService.RenderToStringAsync(EmailTemplatePath.Proposal, MailBodyViewModel);
-                    return result2.Body;
-                default:
-                    var result3 = await _viewRenderService.RenderToStringAsync(EmailTemplatePath.Proposal, MailBodyViewModel);
-                    return result3.Body;
-            }
-        }
-
-        /// <summary>
-        /// To mailing list
-        /// </summary>
-        public List<MailAddress> ToMailAddresses { get; set; } = new List<MailAddress>();
-
-        /// <summary>
-        /// Cc mailing list
-        /// </summary>
-        public List<MailAddress> CCMailAddresses { get; set; } = new List<MailAddress>();
-
-        /// <summary>
-        /// Bcc mailing list
-        /// </summary>
-        public List<MailAddress> BCCMailAddresses { get; set; } = new List<MailAddress>();
-
-        /// <summary>
-        /// From mail address
-        /// </summary>
-        public MailAddress FromMailAddress { get; set; }
-
-        /// <summary>
-        /// Mail Subject
-        /// </summary>
-        public string Subject { get; set; }
-
-        /// <summary>
-        /// Type/Category of mail
-        /// </summary>
-        public MailType MailType { get; set; }
-
-        /// <summary>
-        /// Provide mail body viewmodel to prepare the email body as html template
-        /// </summary>
-        public object MailBodyViewModel { get; set; }
 
     }
 
