@@ -49,7 +49,7 @@ namespace HTT.Manager.Service
         /// <param name="razorViewEngine"></param>
         /// <param name="tempDataProvider"></param>
 
-        public ViewRenderService(ILogger<ViewRenderService> logger, IHttpContextAccessor accessor, 
+        public ViewRenderService(ILogger<ViewRenderService> logger, IHttpContextAccessor accessor,
             IRazorViewEngine razorViewEngine, ITempDataProvider tempDataProvider, IServiceProvider serviceProvider)
         {
             _logger = logger;
@@ -76,8 +76,7 @@ namespace HTT.Manager.Service
 
             try
             {
-               var httpContext = _accessor.HttpContext; // new DefaultHttpContext { RequestServices = this.serviceProvider };
-              //  var httpContext = _accessor.HttpContext ?? new DefaultHttpContext { RequestServices = this._serviceProvider };
+                var httpContext = _accessor.HttpContext; // new DefaultHttpContext { RequestServices = this.serviceProvider };
                 var actionContext = new ActionContext(httpContext, new RouteData(), new ActionDescriptor());
 
                 using (var sw = new StringWriter())

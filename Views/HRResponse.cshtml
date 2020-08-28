@@ -1,15 +1,13 @@
 ﻿@model HTTAPI.ViewModels.ComeToOfficeRequestEmailViewModel
-
 @{
     Layout = null;
 }
 
 <!DOCTYPE html>
+
 <html>
 <head>
-    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title></title>
     <style>
         body {
             width: 850px;
@@ -37,11 +35,10 @@
     </style>
 </head>
 <body>
-    <p>Hi @Html.DisplayFor(model => model.HRName)</p>
+    <p>Dear @Html.DisplayFor(model => model.Employee.Name)</p>
     <p>
-        The following request has been raised for the Coming to office. Below is the summary
+        HR manager has <b>@Html.DisplayFor(model => model.Status)</b> your request to attend office . Below is the summary
     </p>
-
     <div class="summary">
         <h3 class=summary-header>Summary</h3>
         <div>
@@ -56,27 +53,31 @@
             <span class="form-header">Employee Code: </span>
             <span class="form-data">@Html.DisplayFor(model => model.Employee.EmployeeCode)</span>
         </div>
-        <div class="description">
-            <div>
-                <span>I would like to Come to office on</span>
-            </div>
-            <div>
-                <span class="form-header">Date: </span>
-                <span class="form-data">@Html.DisplayFor(model => model.DateOfRequest)</span>
-            </div>
-            <div>
-                @*<a title="Click to view requests" href="">Click to view requests</a>*@
-
-                @Html.ActionLink("Click to view requests", Model.LinkUrl)
-            </div>
+        <div>
+            <span class="form-header">Date of Request: </span>
+            <span class="form-data">@Html.DisplayFor(model => model.DateOfRequest)</span>
         </div>
+        <div>
+            <span class="form-header">Comments: </span>
+            <span class="form-data">@Html.DisplayFor(model => model.HRComments)</span>
+        </div>
+        @if (Model.IsApproved == true)
+        {
+            <div class="description">
+                <div>
+                    <span>Before coming to office, you need to submit the declaration form.</span>
+                </div>
+                <div>
+                    <a title="Click here to open form" href="@Model.LinkUrl">Click to fill the form</a>
+                </div>
+            </div>
+        }
     </div>
     <div class="bye">
         <span class="br">Best Regards</span><br />
-        <span class="thnks">{EmployeeName}</span>
+        <span class="thnks">HR Team</span>
     </div>
+
 </body>
 </html>
-
-
 

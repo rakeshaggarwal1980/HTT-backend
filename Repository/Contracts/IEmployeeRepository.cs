@@ -27,5 +27,18 @@ namespace HTTAPI.Repository.Contracts
         /// </summary>
         /// <returns></returns>
         Task<Employee> GetHRDetails();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        Task<Employee> GetEmployeeByEmail(string email);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="empCode"></param>
+        /// <returns></returns>
+        Task<Employee> GetEmployeeByEmpCode(int empCode);
     }
 }

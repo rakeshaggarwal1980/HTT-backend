@@ -1,12 +1,10 @@
 ﻿using HTTAPI.Enums;
 using HTTAPI.Manager.Contract;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -87,26 +85,6 @@ namespace HTTAPI.Helpers
             };
         }
 
-        //public AppEmailSetting GetMailSettings(IConfiguration configuration)
-        //{
-        //    var appEmailSetting = configuration.GetSection("EmailSetting").Get<AppEmailSetting>();
-        //    // Service for View render service
-        //    _viewRenderService = AppHelper.ServiceProvider.GetRequiredService<IViewRenderService>();
-
-        //    // smtp client
-        //    _client = new SmtpClient(appEmailSetting.SmtpClient)
-        //    {
-        //        EnableSsl = true,
-        //        UseDefaultCredentials = false,
-        //        Credentials = new NetworkCredential(appEmailSetting.NetworkUserName, appEmailSetting.NetworkPassword),
-        //        Host = "smtp.gmail.com",
-        //        Port = appEmailSetting.Port
-        //    };
-
-        //    return appEmailSetting;
-        //}
-
-
         /// <summary>
         /// 
         /// </summary>
@@ -125,20 +103,19 @@ namespace HTTAPI.Helpers
                     return "";
             }
         }
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="configuration"></param>
-        /// <param name="emailOptions"></param>
-        //public void SendMailExtended(IConfiguration configuration, EmailOptions emailOptions)
-        //{
-        //   // var appEmailSetting = GetMailSettings(configuration);
-        //    SendMail(_appEmailSetting, emailOptions);
-        //}
-
-
-        public async void InitMailMessage()
+        /// <returns></returns>
+        public async Task<IResult> InitMailMessage()
         {
+            var result = new Result
+            {
+                Operation = Operation.SendEmail,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
             using (var message = new MailMessage())
             {
                 if (FromMailAddress == null)
@@ -155,104 +132,57 @@ namespace HTTAPI.Helpers
                 try
                 {
                     await _client.SendMailAsync(message);
-                } catch(Exception e)
+                }
+                catch (Exception e)
                 {
-
+                    result.Message = e.Message;
+                    result.StatusCode = HttpStatusCode.InternalServerError;
+                    result.Status = Status.Error;
                 }
             }
+            return result;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        //public async void SendMail(EmailOptions emailOptions)
-        //{
-        //    try
-        //    {
-        //        var message = new MailMessage();
-        //        message.From = new MailAddress(_appEmailSetting.FromEmail, _appEmailSetting.FromName);
-        //        emailOptions.ToMailsList.ForEach(t => message.To.Add(t.Email));
-        //        emailOptions.ToCcMailList.ForEach(t => message.CC.Add(t.Email));
-        //        message.Subject = emailOptions.Subject;
-        //        message.Body = emailOptions.HtmlBody;
-        //        message.IsBodyHtml = true;
-        //        await _client.SendMailAsync(message);
-        //    }
-        //    catch (Exception e)
-        //    {
-
-        //    }
-        //}
 
         /// <summary>
-        /// 
+        /// App email settings
         /// </summary>
-        /// <param name="hostingEnvironment"></param>
-        /// <param name="template"></param>
-        /// <returns></returns>
-        public static string MailBody(IWebHostEnvironment hostingEnvironment, MailTemplate template)
+        public class AppEmailSetting
         {
-            var path = Path.Combine(hostingEnvironment.ContentRootPath, "MailTemplate");
-            var msgBody = string.Empty;
-            switch (template)
-            {
-                case MailTemplate.RequestToHR:
-                    path += "/RequestToHR.html";
-                    break;
-                case MailTemplate.ResponseFromHR:
-                    path += "/ResponseFromHR.html";
-                    break;
-            }
-            if (File.Exists(path))
-            {
-                using (var reader = new StreamReader(path))
-                {
-                    msgBody = reader.ReadToEnd();
-                }
-            }
-            return msgBody;
+            /// <summary>
+            /// smtp client
+            /// </summary>
+            [JsonProperty("smtpClient")]
+            public string SmtpClient { get; set; }
+
+            /// <summary>
+            /// port
+            /// </summary>
+            [JsonProperty("port")]
+            public int Port { get; set; }
+
+            /// <summary>
+            /// network user name
+            /// </summary>
+            [JsonProperty("networkUserName")]
+            public string NetworkUserName { get; set; }
+
+            /// <summary>
+            /// network password
+            /// </summary>
+            [JsonProperty("networkPassword")]
+            public string NetworkPassword { get; set; }
+
+            /// <summary>
+            /// mail sent from address
+            /// </summary>
+            [JsonProperty("fromEmail")]
+            public string FromEmail { get; set; }
+
+            /// <summary>
+            /// Mail sent from address name
+            /// </summary>
+            [JsonProperty("fromName")]
+            public string FromName { get; set; }
         }
-
-    }
-
-    /// <summary>
-    /// App email settings
-    /// </summary>
-    public class AppEmailSetting
-    {
-        /// <summary>
-        /// smtp client
-        /// </summary>
-        [JsonProperty("smtpClient")]
-        public string SmtpClient { get; set; }
-
-        /// <summary>
-        /// port
-        /// </summary>
-        [JsonProperty("port")]
-        public int Port { get; set; }
-
-        /// <summary>
-        /// network user name
-        /// </summary>
-        [JsonProperty("networkUserName")]
-        public string NetworkUserName { get; set; }
-
-        /// <summary>
-        /// network password
-        /// </summary>
-        [JsonProperty("networkPassword")]
-        public string NetworkPassword { get; set; }
-
-        /// <summary>
-        /// mail sent from address
-        /// </summary>
-        [JsonProperty("fromEmail")]
-        public string FromEmail { get; set; }
-
-        /// <summary>
-        /// Mail sent from address name
-        /// </summary>
-        [JsonProperty("fromName")]
-        public string FromName { get; set; }
     }
 }

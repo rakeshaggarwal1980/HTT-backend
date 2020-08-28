@@ -23,7 +23,10 @@ namespace HTTAPI.Manager.Contract
         /// <returns></returns>
         Task<IResult> GetEmployee(UserLoginViewModel loginModel);
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         Task<EmployeeViewModel> GetHRDetails();
     }
 }

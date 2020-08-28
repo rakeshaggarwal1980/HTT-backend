@@ -53,7 +53,7 @@ namespace HTTAPI.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class ComeToOfficeRequestEmailViewModel:ComeToOfficeRequestViewModel
+    public class ComeToOfficeRequestEmailViewModel : ComeToOfficeRequestViewModel
     {
         /// <summary>
         /// 
@@ -63,5 +63,12 @@ namespace HTTAPI.ViewModels
         /// 
         /// </summary>
         public string LinkUrl { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Status { get; set; }
     }
+
+
 }

@@ -1,32 +1,6 @@
 ﻿namespace HTTAPI.Helpers
 {
     /// <summary>
-    /// Common messages
-    /// </summary>
-    public static class CommonErrorMessages
-    {
-        /// <summary>
-        /// UnknownError
-        /// </summary>
-        public const string UnknownError = "Sorry, we have encountered an error.";
-
-        /// <summary>
-        /// BadRequest
-        /// </summary>
-        public const string BadRequest = "Invalid Request";
-
-        /// <summary>
-        /// NoResultFound
-        /// </summary>
-        public const string NoResultFound = "No Result Found";
-
-        /// <summary>
-        /// SomethingWentWrong
-        /// </summary>
-        public const string SomethingWentWrong = "Some thing went wrong";
-    }
-
-    /// <summary>
     /// Application constants
     /// </summary>
     public static class Constants
@@ -58,37 +32,6 @@
 
     }
 
-    /// <summary>
-    /// Control Types
-    /// </summary>
-    public static class ControlTypes
-    {
-        /// <summary>
-        /// Title Type
-        /// </summary>
-        public const string Title = "title";
-
-        /// <summary>
-        /// SubTitle Type
-        /// </summary>
-        public const string SubTitle = "subtitle";
-
-        /// <summary>
-        /// Image Type
-        /// </summary>
-        public const string Image = "img";
-
-        /// <summary>
-        /// TimeLine Type
-        /// </summary>
-        public const string TimeLine = "timeline";
-
-        /// <summary>
-        /// Description Type
-        /// </summary>
-        public const string Description = "desc";
-
-    }
 
     /// <summary>
     /// Email template path
@@ -96,32 +39,13 @@
     public static class EmailTemplatePath
     {
         /// <summary>
-        /// Proposal mail template path
+        /// Request mail template path
         /// </summary>
-        public const string RequestToHR = "~/Views/RequestToHR.cshtml";
-        public const string ResponseFromHR = "~/Views/ResponseFromHR.cshtml";
+        public const string RequestToHR = "Views/RequestHR.cshtml";
+        /// <summary>
+        /// Response mail template path
+        /// </summary>
+        public const string ResponseFromHR = "Views/HRResponse.cshtml";
     }
 
-    /// <summary>
-    /// Messages reslated to file action
-    /// </summary>
-    public static class FileActionMessages
-    {
-        /// <summary>
-        /// FileCoverPhoto key
-        /// </summary>
-        public const string CoverPhotoKey = "cover_Photo";
-
-        /// <summary>
-        /// No file matched during file upload
-        /// </summary>
-        public const string NoFileMatch = "File uploaded does not match image in Proposal Category Control while adding new proposal";
-
-        /// <summary>
-        /// No category found during file upload
-        /// </summary>
-        public const string CategoryNotFound = "Proposal Category could not be found in proposal model while adding new proposal";
-
-
-    }
 }

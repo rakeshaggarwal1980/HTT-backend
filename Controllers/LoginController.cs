@@ -20,17 +20,14 @@ namespace HTTAPI.Controllers
 
         private readonly ILogger<LoginController> _logger;
         readonly IEmployeeService _employeeService;
-        IConfiguration _configuration;
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="configuration"></param>
         /// <param name="logger"></param>
         /// <param name="employeeService"></param>
-        public LoginController(IConfiguration configuration, ILogger<LoginController> logger,
+        public LoginController(ILogger<LoginController> logger,
              IEmployeeService employeeService)
         {
-            _configuration = configuration;
             _logger = logger;
             _employeeService = employeeService;
         }

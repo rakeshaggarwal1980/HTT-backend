@@ -45,11 +45,33 @@ namespace HTTAPI.Repository.Services
         {
 
             var result = await _context.Employee
-                   .Where(e => e.Email == employee.Email && e.Password == employee.Password)
-                   .SingleOrDefaultAsync();
+                   .Where(e => e.Email == employee.Email && e.Password == employee.Password).SingleOrDefaultAsync();
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public async Task<Employee> GetEmployeeByEmail(string email)
+        {
+            var result = await _context.Employee
+                  .Where(e => e.Email == email).SingleOrDefaultAsync();
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="empCode"></param>
+        /// <returns></returns>
+        public async Task<Employee> GetEmployeeByEmpCode(int empCode)
+        {
+            var result = await _context.Employee
+                  .Where(e => e.EmployeeCode == empCode).SingleOrDefaultAsync();
+            return result;
+        }
 
         /// <summary>
         /// 
@@ -59,6 +81,8 @@ namespace HTTAPI.Repository.Services
         {
             return await _context.Employee.Where(e => e.IsHrManager).SingleOrDefaultAsync();
         }
+
+
     }
 }
 

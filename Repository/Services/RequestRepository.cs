@@ -46,18 +46,19 @@ namespace HTTAPI.Repository.Services
         /// <returns></returns>
         public async Task<ComeToOfficeRequest> UpdateRequest(ComeToOfficeRequest request)
         {
-            var officeRequest = _context.ComeToOfficeRequest.FirstOrDefault(req => req.Id == request.Id && req.Status == EntityStatus.Active);
+            var officeRequest = _context.ComeToOfficeRequest.Include(t => t.Employee).FirstOrDefault(req => req.Id == request.Id && req.Status == EntityStatus.Active);
             if (officeRequest == null)
             {
                 throw new ArgumentException("Update failed: No such request found");
             }
+
             // other fields can not be edited
             officeRequest.IsApproved = request.IsApproved;
             officeRequest.IsDeclined = request.IsDeclined;
             officeRequest.Status = request.Status;
             await _context.SaveChangesAsync();
-            _context.Entry(request).Reference(c => c.Employee).Load();
-            return request;
+
+            return officeRequest;
         }
 
 

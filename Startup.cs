@@ -1,8 +1,14 @@
+using HTT.Manager.Service;
 using HTTAPI.Helpers;
+using HTTAPI.Manager.Contract;
+using HTTAPI.Manager.Service;
 using HTTAPI.Repository;
+using HTTAPI.Repository.Contracts;
+using HTTAPI.Repository.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,17 +18,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System;
-using System.Text;
-using Microsoft.Extensions.DependencyInjection;
-using System.Security.Principal;
-using HTTAPI.Manager.Contract;
-using HTT.Manager.Service;
-using Microsoft.AspNetCore.Http;
-using HTTAPI.Manager.Service;
-using HTTAPI.Repository.Contracts;
-using HTTAPI.Repository.Services;
 using System.IO;
 using System.Reflection;
+using System.Security.Principal;
+using System.Text;
 
 namespace HTTAPI
 {
@@ -107,7 +106,7 @@ namespace HTTAPI
 
             #region Repositories
             services.AddTransient<IHealthTrackRepository, HealthTrackRepository>();
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddTransient<IEmployeeRepository, EmployeeRepository>();
             services.AddTransient<IRequestRepository, RequestRepository>();
             services.AddTransient<ISymptomRepository, SymptomRepository>();
             services.AddTransient<IQuestionRepository, QuestionRepository>();
@@ -197,17 +196,7 @@ namespace HTTAPI
                     }
                 });
 
-                // Set the comments path for the Swagger JSON and UI.
-                //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                //options.IncludeXmlComments(xmlPath);
-
-                // add documentation to Swagger api
-                //var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-                //var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".XML";
-                //var commentsFile = Path.Combine(baseDirectory, commentsFileName);
-                //options.IncludeXmlComments(commentsFile
-
+                
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
