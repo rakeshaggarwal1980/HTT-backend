@@ -4,11 +4,13 @@ using HTTAPI.Manager.Contract;
 using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
 using HTTAPI.ViewModels;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -33,12 +35,12 @@ namespace HTTAPI.Manager.Service
         ILocationRepository _locationRepository;
         ISymptomRepository _symptomRepository;
         IQuestionRepository _questionRepository;
-
+        IEmployeeRepository _employeeRepository;
         /// <summary>
         /// Claim Identity
         /// </summary>
         private readonly ClaimsPrincipal _principal;
-
+        private readonly IConfiguration _configuration;
         /// <summary>
         /// HealthTrackService constructor
         /// </summary>
@@ -48,10 +50,13 @@ namespace HTTAPI.Manager.Service
         /// <param name="zoneRepository"></param>
         /// <param name="locationRepository"></param>
         /// <param name="symptomRepository"></param>
-        /// <param name="questionRepository"></param>      
+        /// <param name="questionRepository"></param>
+        /// <param name="employeeRepository"></param>
+        /// <param name="configuration"></param>      
         public HealthTrackService(ILogger<HealthTrackService> logger, IPrincipal principal,
             IHealthTrackRepository healthTrackRepository, IZoneRepository zoneRepository,
-        ILocationRepository locationRepository, ISymptomRepository symptomRepository, IQuestionRepository questionRepository)
+        ILocationRepository locationRepository, ISymptomRepository symptomRepository, IQuestionRepository questionRepository,
+        IEmployeeRepository employeeRepository, IConfiguration configuration)
         {
             _logger = logger;
             _principal = principal as ClaimsPrincipal;
@@ -60,7 +65,8 @@ namespace HTTAPI.Manager.Service
             _symptomRepository = symptomRepository;
             _locationRepository = locationRepository;
             _zoneRepository = zoneRepository;
-
+            _employeeRepository = employeeRepository;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -116,6 +122,11 @@ namespace HTTAPI.Manager.Service
 
                         healthTrackModel = await _healthTrackRepository.CreateHealthTrack(healthTrackModel);
                         healthTrackViewModel.Id = healthTrackModel.Id;
+                        var employeeVm = new EmployeeViewModel();
+                        employeeVm.MapFromModel(healthTrackModel.Employee);
+                        healthTrackViewModel.Employee = employeeVm;
+                        // send email to HR and security
+                        await SendEmail(healthTrackViewModel);
                         result.Body = healthTrackViewModel;
 
                     }
@@ -285,6 +296,25 @@ namespace HTTAPI.Manager.Service
                 result.StatusCode = HttpStatusCode.InternalServerError;
             }
             return result;
+        }
+
+        private async Task SendEmail(HealthTrackViewModel healthViewModel)
+        {
+            var appEmailHelper = new AppEmailHelper();
+            var hrEmployee = await _employeeRepository.GetHRDetails();
+
+            // to do send to security as well
+
+            appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
+
+            appEmailHelper.CCMailAddresses.Add(new MailAddress(healthViewModel.Employee.Email, healthViewModel.Employee.Name));
+            appEmailHelper.MailTemplate = MailTemplate.EmployeeDeclaration;
+            appEmailHelper.Subject = "Self declaration submission";
+            HealthTrackEmailViewModel emailVm = new HealthTrackEmailViewModel();
+            emailVm.MapFromViewModel(healthViewModel);
+            emailVm.LinkUrl = $"{ _configuration["AppUrl"]}declaration/{healthViewModel.RequestNumber}/{healthViewModel.EmployeeId}";
+            appEmailHelper.MailBodyViewModel = emailVm;
+            await appEmailHelper.InitMailMessage();
         }
 
     }

@@ -95,7 +95,12 @@
         /// <summary>
         /// TBD
         /// </summary>
-        ResponseFromHR = 2
+        ResponseFromHR = 2,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        EmployeeDeclaration = 3
     }
 
     /// <summary>

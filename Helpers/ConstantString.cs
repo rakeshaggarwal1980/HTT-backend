@@ -46,6 +46,11 @@
         /// Response mail template path
         /// </summary>
         public const string ResponseFromHR = "Views/HRResponse.cshtml";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string EmployeeDeclaration = "Views/EmployeeDeclaration.cshtml";
     }
 
 }

@@ -99,6 +99,9 @@ namespace HTTAPI.Helpers
                 case MailTemplate.ResponseFromHR:
                     var result2 = await _viewRenderService.RenderToStringAsync(EmailTemplatePath.ResponseFromHR, MailBodyViewModel);
                     return result2.Body;
+                case MailTemplate.EmployeeDeclaration:
+                    var result3 = await _viewRenderService.RenderToStringAsync(EmailTemplatePath.EmployeeDeclaration, MailBodyViewModel);
+                    return result3.Body;
                 default:
                     return "";
             }
