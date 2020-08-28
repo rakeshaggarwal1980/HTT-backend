@@ -156,6 +156,20 @@ namespace HTTAPI.Manager.Contract
                 return result;
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<EmployeeViewModel> GetHRDetails()
+        {
+            var employee = await this._employeeRepository.GetHRDetails();
+            var employeeViewModel = new EmployeeViewModel();
+
+            employeeViewModel.MapFromModel(employee);
+            return employeeViewModel;
+        }
+
+
         #region Private methods
 
         private string GenerateToken(string name, string email)

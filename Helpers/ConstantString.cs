@@ -98,8 +98,8 @@
         /// <summary>
         /// Proposal mail template path
         /// </summary>
-        public const string RequestToHR = "~/MailTemplate/RequestToHR.html";
-        public const string ResponseFromHR = "~/MailTemplate/ResponseFromHR.html";
+        public const string RequestToHR = "~/Views/RequestToHR.cshtml";
+        public const string ResponseFromHR = "~/Views/ResponseFromHR.cshtml";
     }
 
     /// <summary>

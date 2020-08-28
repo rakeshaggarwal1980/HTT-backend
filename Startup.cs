@@ -1,6 +1,9 @@
+using HTTAPI.Helpers;
+using HTTAPI.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,6 +13,16 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using System;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
+using System.Security.Principal;
+using HTTAPI.Manager.Contract;
+using HTT.Manager.Service;
+using Microsoft.AspNetCore.Http;
+using HTTAPI.Manager.Service;
+using HTTAPI.Repository.Contracts;
+using HTTAPI.Repository.Services;
+using System.IO;
+using System.Reflection;
 
 namespace HTTAPI
 {
@@ -33,6 +46,8 @@ namespace HTTAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<Context>(options =>
+                   options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddCors(options =>
             {
@@ -66,7 +81,39 @@ namespace HTTAPI
                 };
 
             });
-            new DependencyInjection().ConfigureRepositories(services, Configuration);
+            //  new DependencyInjection().ConfigureRepositories(services, Configuration);
+            ConfigureDI(services);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        public void ConfigureDI(IServiceCollection services)
+        {
+            services.AddMvc();
+
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IPrincipal>(provider => provider.GetService<IHttpContextAccessor>().HttpContext.User);
+
+            #region Manager
+            services.AddTransient<IHealthTrackService, HealthTrackService>();
+            services.AddTransient<IEmployeeService, EmployeeService>();
+            services.AddTransient<IRequestService, RequestService>();
+            services.AddTransient<IViewRenderService, ViewRenderService>();
+
+            #endregion
+
+            #region Repositories
+            services.AddTransient<IHealthTrackRepository, HealthTrackRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddTransient<IRequestRepository, RequestRepository>();
+            services.AddTransient<ISymptomRepository, SymptomRepository>();
+            services.AddTransient<IQuestionRepository, QuestionRepository>();
+            services.AddTransient<IZoneRepository, ZoneRepository>();
+            services.AddTransient<ILocationRepository, LocationRepository>();
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -95,11 +142,11 @@ namespace HTTAPI
             });
 
             app.UseRouting();
-            // alternative way
-            //app.UseCors(x => x
-            //  .AllowAnyOrigin()
-            //  .AllowAnyMethod()
-            //  .AllowAnyHeader());
+            // For availability of Hosting env in static classes etc..
+            AppHelper.HostingEnvironment = env;
+            AppHelper.Configuration = Configuration;
+            AppHelper.ServiceProvider = app.ApplicationServices;
+
             app.UseCors("AllowAll");
             app.UseHttpsRedirection();
 
@@ -159,7 +206,12 @@ namespace HTTAPI
                 //var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 //var commentsFileName = Assembly.GetExecutingAssembly().GetName().Name + ".XML";
                 //var commentsFile = Path.Combine(baseDirectory, commentsFileName);
-                //options.IncludeXmlComments(commentsFile);
+                //options.IncludeXmlComments(commentsFile
+
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                options.IncludeXmlComments(xmlPath);
             });
 
         }

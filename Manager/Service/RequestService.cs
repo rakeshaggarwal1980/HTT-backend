@@ -50,7 +50,10 @@ namespace HTTAPI.Manager.Service
         /// </summary>
         private readonly IConfiguration _configuration;
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public AppEmailHelper appEmailHelper;
         /// <summary>
         /// 
         /// </summary>
@@ -72,7 +75,6 @@ namespace HTTAPI.Manager.Service
             _hostingEnvironment = hostingEnvironment;
             _configuration = configuration;
             _employeeRepository = employeeRepository;
-
         }
 
 
@@ -160,7 +162,6 @@ namespace HTTAPI.Manager.Service
                         {
 
                             requesModel.MapFromViewModel(requestViewModel, (ClaimsIdentity)_principal.Identity);
-
                             requesModel = await _requestRepository.CreateRequest(requesModel);
                             requestViewModel.Id = requesModel.Id;
                             var employeeVm = new EmployeeViewModel();
@@ -189,7 +190,7 @@ namespace HTTAPI.Manager.Service
                         var employeeVm = new EmployeeViewModel();
                         employeeVm.MapFromModel(requesModel.Employee);
                         requestViewModel.Employee = employeeVm;
-                        // send emal to HR
+                        // send email to HR
                         SendRequestEmail(requestViewModel, MailTemplate.RequestToHR);
                         result.Body = requestViewModel;
                         return result;
@@ -236,7 +237,7 @@ namespace HTTAPI.Manager.Service
                     requestViewModel.Employee = employeeVm;
 
                     // send HR response in email to employee and send link for declaration form to Employee if approved
-                    
+                    SendResponseEmail(requestViewModel, MailTemplate.ResponseFromHR);
                     result.Body = requestViewModel;
                     return result;
                 }
@@ -300,36 +301,94 @@ namespace HTTAPI.Manager.Service
             };
             var msgBody = AppEmailHelper.MailBody(_hostingEnvironment, emailOptions.Template);
             if (string.IsNullOrEmpty(msgBody)) return emailOptions;
-            var link = $"{ _configuration["AppUrl"]}requests";
-            emailOptions.Subject = "Request for attending Office";
+
+            var link = "";
+            if (template == MailTemplate.RequestToHR)
+            {
+                link = $"{ _configuration["AppUrl"]}requests";
+                emailOptions.Subject = "Request for attending Office";
+                emailOptions.HtmlBody = msgBody.Replace("{RequestNumber}", requestViewModel.RequestNumber)
+               .Replace("{HRName}", mailUsers[0].Name)
+               .Replace("{DateOfRequest}", requestViewModel.DateOfRequest.ToString("dd-MM-yyyy"))
+               .Replace("{EmployeeName}", requestViewModel.Employee.Name)
+               .Replace("{link}", link)
+               .Replace("{EmployeeCode}", requestViewModel.Employee.EmployeeCode.ToString());
+            }
+            else if (template == MailTemplate.ResponseFromHR)
+            {
+                var status = "";
+                link = $"{ _configuration["AppUrl"]}declaration/{requestViewModel.RequestNumber}";
+                if (requestViewModel.IsApproved)
+                {
+                    status = "Approved";
+                    emailOptions.Subject = "Request is approved by HR";
+                }
+                else if (requestViewModel.IsDeclined)
+                {
+                    status = "Declined";
+                    emailOptions.Subject = "Request is declined by HR";
+                }
+                emailOptions.HtmlBody = msgBody.Replace("{RequestNumber}", requestViewModel.RequestNumber)
+               .Replace("{DateOfRequest}", requestViewModel.DateOfRequest.ToString("dd-MM-yyyy"))
+               .Replace("{EmployeeName}", requestViewModel.Employee.Name)
+               .Replace("{HRComments}", requestViewModel.HRComments)
+               .Replace("{link}", link)
+               .Replace("{Status}", status)
+               .Replace("{EmployeeCode}", requestViewModel.Employee.EmployeeCode.ToString());
+            }
+
+
+
             emailOptions.ToMailsList = mailUsers;
-            emailOptions.HtmlBody = msgBody.Replace("{RequestNumber}", requestViewModel.RequestNumber).
-                Replace("{HRName}", mailUsers[0].Name).
-                Replace("{DateOfRequest}", requestViewModel.DateOfRequest.ToString("dd-MM-yyyy")).
-                Replace("{EmployeeName}", requestViewModel.Employee.Name).
-                Replace("{link}", link).
-                Replace("{EmployeeCode}", requestViewModel.Employee.EmployeeCode.ToString());
+
+
             return emailOptions;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="requestViewModel"></param>
+        /// <param name="mailTemplate"></param>
+        private void SendResponseEmail(ComeToOfficeRequestViewModel requestViewModel, MailTemplate mailTemplate)
+        {
+            List<MailUser> mailUsers = new List<MailUser>();
+
+            MailUser user = new MailUser
+            {
+                Email = requestViewModel.Employee.Email,
+                Name = requestViewModel.Employee.Name
+            };
+            mailUsers.Add(user);
+
+            var emailOptions = PrepareEmailOptions(requestViewModel, mailTemplate, mailUsers);
+            if (!string.IsNullOrEmpty(emailOptions.HtmlBody))
+            {
+              //  AppEmailHelper.SendMailExtended(_configuration, emailOptions);
+            }
         }
 
         private async void SendRequestEmail(ComeToOfficeRequestViewModel requestViewModel, MailTemplate mailTemplate)
         {
-            List<MailUser> mailUsers = new List<MailUser>();
+            appEmailHelper = new AppEmailHelper();
             var hrEmployee = await _employeeRepository.GetHRDetails();
-            if (hrEmployee != null)
-            {
-                MailUser user = new MailUser
-                {
-                    Email = hrEmployee.Email,
-                    Name = hrEmployee.Name
-                };
-                mailUsers.Add(user);
-            }
-            var emailOptions = PrepareEmailOptions(requestViewModel, mailTemplate, mailUsers);
-            if (!string.IsNullOrEmpty(emailOptions.HtmlBody))
-            {
-                AppEmailHelper.SendMailExtended(_configuration, emailOptions);
-            }
+            appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
+            appEmailHelper.CCMailAddresses.Add(new MailAddress(requestViewModel.Employee.Email, requestViewModel.Employee.Name));
+            appEmailHelper.MailTemplate = mailTemplate;
+            appEmailHelper.Subject = "Request for attending Office";
+            ComeToOfficeRequestEmailViewModel emailVm = new ComeToOfficeRequestEmailViewModel();
+            emailVm.MapFromViewModel(requestViewModel);
+            emailVm.LinkUrl = $"{ _configuration["AppUrl"]}requests";
+            emailVm.HRName = hrEmployee.Name;
+            appEmailHelper.MailBodyViewModel = emailVm;
+
+            appEmailHelper.InitMailMessage();
+
+            //var emailOptions = PrepareEmailOptions(requestViewModel, mailTemplate, mailUsers);
+            //if (!string.IsNullOrEmpty(emailOptions.HtmlBody))
+            //{
+            //    AppEmailHelper.SendMailExtended(_configuration, emailOptions);
+            //}
         }
 
     }
