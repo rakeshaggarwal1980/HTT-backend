@@ -22,5 +22,11 @@ namespace HTTAPI.Manager.Contract
         /// <param name="loginModel"></param>
         /// <returns></returns>
         Task<IResult> GetEmployee(UserLoginViewModel loginModel);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        Task<EmployeeViewModel> GetHRDetails();
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -10,6 +12,21 @@ namespace HTTAPI.Helpers
     /// </summary>
     public static class AppHelper
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public static IWebHostEnvironment HostingEnvironment { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static IConfiguration Configuration { get; set; }
+
+        /// <summary>
+        /// Service provider for geeting injected services
+        /// </summary>
+        public static IServiceProvider ServiceProvider { get; set; }
+
         /// <summary>
         /// Current date time
         /// </summary>

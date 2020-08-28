@@ -40,7 +40,7 @@ namespace HTT.Manager.Service
         /// </summary>
         readonly ITempDataProvider _tempDataProvider;
 
-
+        readonly IServiceProvider _serviceProvider;
         /// <summary>
         /// CTOR
         /// </summary> 
@@ -49,12 +49,14 @@ namespace HTT.Manager.Service
         /// <param name="razorViewEngine"></param>
         /// <param name="tempDataProvider"></param>
 
-        public ViewRenderService(ILogger<ViewRenderService> logger, IHttpContextAccessor accessor, IRazorViewEngine razorViewEngine, ITempDataProvider tempDataProvider)
+        public ViewRenderService(ILogger<ViewRenderService> logger, IHttpContextAccessor accessor,
+            IRazorViewEngine razorViewEngine, ITempDataProvider tempDataProvider, IServiceProvider serviceProvider)
         {
             _logger = logger;
             _accessor = accessor;
             _razorViewEngine = razorViewEngine;
             _tempDataProvider = tempDataProvider;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>

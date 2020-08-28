@@ -49,4 +49,26 @@ namespace HTTAPI.ViewModels
         /// </summary>
         public string HRComments { get; set; }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class ComeToOfficeRequestEmailViewModel : ComeToOfficeRequestViewModel
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string HRName { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string LinkUrl { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Status { get; set; }
+    }
+
+
 }

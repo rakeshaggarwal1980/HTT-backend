@@ -247,67 +247,100 @@
             Smtp client
             </summary>
         </member>
+        <member name="F:HTTAPI.Helpers.AppEmailHelper._viewRenderService">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:HTTAPI.Helpers.AppEmailHelper.Configuration">
             <summary>
             Configuration
             </summary>
         </member>
-        <member name="M:HTTAPI.Helpers.AppEmailHelper.GetMailSettings(Microsoft.Extensions.Configuration.IConfiguration)">
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.ToMailAddresses">
+            <summary>
+            To mailing list
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.CCMailAddresses">
+            <summary>
+            Cc mailing list
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.BCCMailAddresses">
+            <summary>
+            Bcc mailing list
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.FromMailAddress">
+            <summary>
+            From mail address
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.Subject">
+            <summary>
+            Mail Subject
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.MailTemplate">
+            <summary>
+            Type/Category of mail
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.MailBodyViewModel">
+            <summary>
+            Provide mail body viewmodel to prepare the email body as html template
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Helpers.AppEmailHelper.#ctor">
             <summary>
             Ctor
             </summary>
+            
         </member>
-        <member name="M:HTTAPI.Helpers.AppEmailHelper.SendMailExtended(Microsoft.Extensions.Configuration.IConfiguration,HTTAPI.Helpers.EmailOptions)">
+        <member name="M:HTTAPI.Helpers.AppEmailHelper.PrepareMailBody">
             <summary>
             
             </summary>
-            <param name="configuration"></param>
-            <param name="emailOptions"></param>
-        </member>
-        <member name="M:HTTAPI.Helpers.AppEmailHelper.SendMail(HTTAPI.Helpers.AppEmailSetting,HTTAPI.Helpers.EmailOptions)">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:HTTAPI.Helpers.AppEmailHelper.MailBody(Microsoft.AspNetCore.Hosting.IWebHostEnvironment,HTTAPI.Enums.MailTemplate)">
-            <summary>
-            
-            </summary>
-            <param name="hostingEnvironment"></param>
-            <param name="template"></param>
             <returns></returns>
         </member>
-        <member name="T:HTTAPI.Helpers.AppEmailSetting">
+        <member name="M:HTTAPI.Helpers.AppEmailHelper.InitMailMessage">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Helpers.AppEmailHelper.AppEmailSetting">
             <summary>
             App email settings
             </summary>
         </member>
-        <member name="P:HTTAPI.Helpers.AppEmailSetting.SmtpClient">
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.AppEmailSetting.SmtpClient">
             <summary>
             smtp client
             </summary>
         </member>
-        <member name="P:HTTAPI.Helpers.AppEmailSetting.Port">
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.AppEmailSetting.Port">
             <summary>
             port
             </summary>
         </member>
-        <member name="P:HTTAPI.Helpers.AppEmailSetting.NetworkUserName">
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.AppEmailSetting.NetworkUserName">
             <summary>
             network user name
             </summary>
         </member>
-        <member name="P:HTTAPI.Helpers.AppEmailSetting.NetworkPassword">
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.AppEmailSetting.NetworkPassword">
             <summary>
             network password
             </summary>
         </member>
-        <member name="P:HTTAPI.Helpers.AppEmailSetting.FromEmail">
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.AppEmailSetting.FromEmail">
             <summary>
             mail sent from address
             </summary>
         </member>
-        <member name="P:HTTAPI.Helpers.AppEmailSetting.FromName">
+        <member name="P:HTTAPI.Helpers.AppEmailHelper.AppEmailSetting.FromName">
             <summary>
             Mail sent from address name
             </summary>
@@ -315,6 +348,21 @@
         <member name="T:HTTAPI.Helpers.AppHelper">
             <summary>
             Application helper methods
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppHelper.HostingEnvironment">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppHelper.Configuration">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Helpers.AppHelper.ServiceProvider">
+            <summary>
+            Service provider for geeting injected services
             </summary>
         </member>
         <member name="P:HTTAPI.Helpers.AppHelper.CurrentDate">
@@ -444,7 +492,12 @@
         </member>
         <member name="F:HTTAPI.Helpers.EmailTemplatePath.RequestToHR">
             <summary>
-            Proposal mail template path
+            Request mail template path
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.EmailTemplatePath.ResponseFromHR">
+            <summary>
+            Response mail template path
             </summary>
         </member>
         <member name="T:HTTAPI.Helpers.FileActionMessages">
@@ -797,6 +850,12 @@
             <param name="loginModel"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetHRDetails">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Manager.Service.HealthTrackService">
             <summary>
             use in with HealthController to manage HealthTrack entity
@@ -878,6 +937,11 @@
             
             </summary>
         </member>
+        <member name="F:HTTAPI.Manager.Service.RequestService.appEmailHelper">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:HTTAPI.Manager.Service.RequestService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Service.RequestService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IRequestRepository,Microsoft.AspNetCore.Hosting.IWebHostEnvironment,Microsoft.Extensions.Configuration.IConfiguration,HTTAPI.Repository.Contracts.IEmployeeRepository)">
             <summary>
             
@@ -915,6 +979,13 @@
             </summary>
             <param name="requestId"></param>
             <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.RequestService.SendResponseEmail(HTTAPI.ViewModels.ComeToOfficeRequestViewModel,HTTAPI.Enums.MailTemplate)">
+            <summary>
+            
+            </summary>
+            <param name="requestViewModel"></param>
+            <param name="mailTemplate"></param>
         </member>
         <member name="T:HTTAPI.Models.BaseEntity">
             <summary>
@@ -1462,6 +1533,20 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetEmployeeByEmail(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetEmployeeByEmpCode(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="empCode"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Contracts.IHealthTrackRepository">
             <summary>
             HealthTrackRepository 
@@ -1632,6 +1717,20 @@
             <param name="employee"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetEmployeeByEmail(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetEmployeeByEmpCode(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="empCode"></param>
+            <returns></returns>
+        </member>
         <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetHRDetails">
             <summary>
             
@@ -1786,6 +1885,13 @@
             Environment
             </summary>
         </member>
+        <member name="M:HTTAPI.Startup.ConfigureDI(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+        </member>
         <member name="M:HTTAPI.Startup.ConfigureSwagger(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
             <summary>
             swagger configuration
@@ -1833,6 +1939,26 @@
             </summary>
         </member>
         <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.HRComments">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.ComeToOfficeRequestEmailViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestEmailViewModel.HRName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestEmailViewModel.LinkUrl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestEmailViewModel.Status">
             <summary>
             
             </summary>
@@ -2112,7 +2238,7 @@
             temp data initializer
             </summary>
         </member>
-        <member name="M:HTT.Manager.Service.ViewRenderService.#ctor(Microsoft.Extensions.Logging.ILogger{HTT.Manager.Service.ViewRenderService},Microsoft.AspNetCore.Http.IHttpContextAccessor,Microsoft.AspNetCore.Mvc.Razor.IRazorViewEngine,Microsoft.AspNetCore.Mvc.ViewFeatures.ITempDataProvider)">
+        <member name="M:HTT.Manager.Service.ViewRenderService.#ctor(Microsoft.Extensions.Logging.ILogger{HTT.Manager.Service.ViewRenderService},Microsoft.AspNetCore.Http.IHttpContextAccessor,Microsoft.AspNetCore.Mvc.Razor.IRazorViewEngine,Microsoft.AspNetCore.Mvc.ViewFeatures.ITempDataProvider,System.IServiceProvider)">
             <summary>
             CTOR
             </summary> 

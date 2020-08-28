@@ -76,10 +76,27 @@ namespace HTTAPI.Manager.Contract
                 var employeeViewModel = new EmployeeViewModel();
                 if (signUpViewModel != null)
                 {
-                    var employeeModel = new Employee();
-                    // To map employee detail
-                    employeeModel.MapFromViewModel(signUpViewModel);
+                    // email and employee code should be unique
+                    var employee1 = await _employeeRepository.GetEmployeeByEmail(signUpViewModel.Email);
+                    if (employee1 != null)
+                    {
+                        result.Status = Status.Fail;
+                        result.StatusCode = HttpStatusCode.NotAcceptable;
+                        result.Message = "Employee Email Id already exists";
+                        return result;
+                    }
 
+                    var employee2 = await _employeeRepository.GetEmployeeByEmpCode(signUpViewModel.EmployeeCode);
+                    if (employee2 != null)
+                    {
+                        result.Status = Status.Fail;
+                        result.StatusCode = HttpStatusCode.NotAcceptable;
+                        result.Message = "Employee Code already exists";
+                        return result;
+                    }
+
+                    var employeeModel = new Employee();
+                    employeeModel.MapFromViewModel(signUpViewModel);
                     employeeModel = await _employeeRepository.CreateEmployee(employeeModel);
 
                     employeeViewModel.MapFromModel(employeeModel);
@@ -156,6 +173,20 @@ namespace HTTAPI.Manager.Contract
                 return result;
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<EmployeeViewModel> GetHRDetails()
+        {
+            var employee = await this._employeeRepository.GetHRDetails();
+            var employeeViewModel = new EmployeeViewModel();
+
+            employeeViewModel.MapFromModel(employee);
+            return employeeViewModel;
+        }
+
+
         #region Private methods
 
         private string GenerateToken(string name, string email)

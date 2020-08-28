@@ -1,4 +1,5 @@
-﻿using HTTAPI.Manager.Contract;
+﻿using HTT.Manager.Service;
+using HTTAPI.Manager.Contract;
 using HTTAPI.Manager.Service;
 using HTTAPI.Repository;
 using HTTAPI.Repository.Contracts;
@@ -30,6 +31,7 @@ namespace HTTAPI
             services.AddTransient<IHealthTrackService, HealthTrackService>();
             services.AddTransient<IEmployeeService, EmployeeService>();
             services.AddTransient<IRequestService, RequestService>();
+            services.AddTransient<IViewRenderService, ViewRenderService>();
 
             #endregion
 

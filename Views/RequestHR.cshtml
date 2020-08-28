@@ -1,9 +1,13 @@
-﻿
+﻿@model HTTAPI.ViewModels.ComeToOfficeRequestEmailViewModel
+@{
+    Layout = null;
+}
+
 <!DOCTYPE html>
+
 <html>
 <head>
-    <meta charset="utf-8" />
-    <title></title>
+    <meta name="viewport" content="width=device-width" />
     <style>
         body {
             width: 850px;
@@ -31,7 +35,7 @@
     </style>
 </head>
 <body>
-    <p>Hi {HRName}</p>
+    <p>Hi @Html.DisplayFor(model => model.HRName)</p>
     <p>
         The following request has been raised for the Coming to office. Below is the summary
     </p>
@@ -40,15 +44,15 @@
         <h3 class=summary-header>Summary</h3>
         <div>
             <span class="form-header">Request Number: </span>
-            <span class="form-data">{RequestNumber}</span>
+            <span class="form-data">@Html.DisplayFor(model => model.RequestNumber)</span>
         </div>
         <div>
             <span class="form-header">Name: </span>
-            <span class="form-data">{EmployeeName}</span>
+            <span class="form-data">@Html.DisplayFor(model => model.Employee.Name)</span>
         </div>
         <div>
             <span class="form-header">Employee Code: </span>
-            <span class="form-data">{EmployeeCode}</span>
+            <span class="form-data">@Html.DisplayFor(model => model.Employee.EmployeeCode)</span>
         </div>
         <div class="description">
             <div>
@@ -56,19 +60,17 @@
             </div>
             <div>
                 <span class="form-header">Date: </span>
-                <span class="form-data">{DateOfRequest}</span>
+                <span class="form-data">@Html.DisplayFor(model => model.DateOfRequest)</span>
             </div>
             <div>
-                <a title="Click to view requests" href="{link}">Click to view requests</a>
+                <a title="Click to view requests" href="@Model.LinkUrl">Click to view requests</a>
             </div>
         </div>
     </div>
     <div class="bye">
         <span class="br">Best Regards</span><br />
-        <span class="thnks">{EmployeeName}</span>
+        <span class="thnks">@Html.DisplayFor(model => model.Employee.Name)</span>
     </div>
+
 </body>
 </html>
-
-
-

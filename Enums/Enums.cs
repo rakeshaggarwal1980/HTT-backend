@@ -77,7 +77,9 @@
         /// <summary>
         /// Delete
         /// </summary>
-        Delete = 4
+        Delete = 4,
+
+        SendEmail = 5
     }
 
     /// <summary>
@@ -94,5 +96,15 @@
         /// TBD
         /// </summary>
         ResponseFromHR = 2
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public enum Role
+    {
+        HRManager=1,
+        SecurityManager=2,
+        Employee=3
     }
 }
