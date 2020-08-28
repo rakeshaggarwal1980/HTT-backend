@@ -1,0 +1,59 @@
+﻿@model HTTAPI.ViewModels.HealthTrackEmailViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <style>
+        body {
+            width: 850px;
+        }
+
+        h3.summary-header {
+            font-weight: bold;
+        }
+
+        span.form-header {
+            font-weight: bold;
+        }
+
+        .summary {
+            margin-left: 15px;
+        }
+
+        .description {
+            margin-top: 25px;
+        }
+
+        .bye {
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+    <p>Hello</p>
+    <p>
+        I have submitted declaration form for the Request Number <b>@Html.DisplayFor(model => model.RequestNumber)</b>
+    </p>
+    <div class="summary">
+        <div class="description">
+           
+            <div>
+                <a title="Click here to view my declaration" href="@Model.LinkUrl">Click here to view my declaration</a>
+            </div>
+        </div>
+
+    </div>
+    <div class="bye">
+        <span class="br">Best Regards</span><br />
+        <span class="thnks">@Html.DisplayFor(model => model.Employee.Name)</span>
+    </div>
+
+</body>
+</html>
+
+

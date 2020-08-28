@@ -57,11 +57,10 @@
             
             </summary>
         </member>
-        <member name="M:HTTAPI.Controllers.LoginController.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.Extensions.Logging.ILogger{HTTAPI.Controllers.LoginController},HTTAPI.Manager.Contract.IEmployeeService)">
+        <member name="M:HTTAPI.Controllers.LoginController.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Controllers.LoginController},HTTAPI.Manager.Contract.IEmployeeService)">
             <summary>
             
             </summary>
-            <param name="configuration"></param>
             <param name="logger"></param>
             <param name="employeeService"></param>
         </member>
@@ -205,6 +204,16 @@
         <member name="F:HTTAPI.Enums.MailTemplate.ResponseFromHR">
             <summary>
             TBD
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.MailTemplate.EmployeeDeclaration">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Enums.Role">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:HTTAPI.FilterTypes.PagingFilter">
@@ -400,31 +409,6 @@
             <param name="model">The model.</param>
             <param name="identity"></param>
         </member>
-        <member name="T:HTTAPI.Helpers.CommonErrorMessages">
-            <summary>
-            Common messages
-            </summary>
-        </member>
-        <member name="F:HTTAPI.Helpers.CommonErrorMessages.UnknownError">
-            <summary>
-            UnknownError
-            </summary>
-        </member>
-        <member name="F:HTTAPI.Helpers.CommonErrorMessages.BadRequest">
-            <summary>
-            BadRequest
-            </summary>
-        </member>
-        <member name="F:HTTAPI.Helpers.CommonErrorMessages.NoResultFound">
-            <summary>
-            NoResultFound
-            </summary>
-        </member>
-        <member name="F:HTTAPI.Helpers.CommonErrorMessages.SomethingWentWrong">
-            <summary>
-            SomethingWentWrong
-            </summary>
-        </member>
         <member name="T:HTTAPI.Helpers.Constants">
             <summary>
             Application constants
@@ -455,36 +439,6 @@
             limited collaborator to be shown
             </summary>
         </member>
-        <member name="T:HTTAPI.Helpers.ControlTypes">
-            <summary>
-            Control Types
-            </summary>
-        </member>
-        <member name="F:HTTAPI.Helpers.ControlTypes.Title">
-            <summary>
-            Title Type
-            </summary>
-        </member>
-        <member name="F:HTTAPI.Helpers.ControlTypes.SubTitle">
-            <summary>
-            SubTitle Type
-            </summary>
-        </member>
-        <member name="F:HTTAPI.Helpers.ControlTypes.Image">
-            <summary>
-            Image Type
-            </summary>
-        </member>
-        <member name="F:HTTAPI.Helpers.ControlTypes.TimeLine">
-            <summary>
-            TimeLine Type
-            </summary>
-        </member>
-        <member name="F:HTTAPI.Helpers.ControlTypes.Description">
-            <summary>
-            Description Type
-            </summary>
-        </member>
         <member name="T:HTTAPI.Helpers.EmailTemplatePath">
             <summary>
             Email template path
@@ -500,42 +454,7 @@
             Response mail template path
             </summary>
         </member>
-        <member name="T:HTTAPI.Helpers.FileActionMessages">
-            <summary>
-            Messages reslated to file action
-            </summary>
-        </member>
-        <member name="F:HTTAPI.Helpers.FileActionMessages.CoverPhotoKey">
-            <summary>
-            FileCoverPhoto key
-            </summary>
-        </member>
-        <member name="F:HTTAPI.Helpers.FileActionMessages.NoFileMatch">
-            <summary>
-            No file matched during file upload
-            </summary>
-        </member>
-        <member name="F:HTTAPI.Helpers.FileActionMessages.CategoryNotFound">
-            <summary>
-            No category found during file upload
-            </summary>
-        </member>
-        <member name="T:HTTAPI.Helpers.EmailOptions">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="T:HTTAPI.Helpers.MailUser">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:HTTAPI.Helpers.MailUser.Email">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:HTTAPI.Helpers.MailUser.Name">
+        <member name="F:HTTAPI.Helpers.EmailTemplatePath.EmployeeDeclaration">
             <summary>
             
             </summary>
@@ -731,6 +650,12 @@
             <param name="loginModel"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.GetHRDetails">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Manager.Contract.IHealthTrackService">
             <summary>
             interface for ContentDetailService 
@@ -876,7 +801,7 @@
             Claim Identity
             </summary>
         </member>
-        <member name="M:HTTAPI.Manager.Service.HealthTrackService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Service.HealthTrackService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IHealthTrackRepository,HTTAPI.Repository.Contracts.IZoneRepository,HTTAPI.Repository.Contracts.ILocationRepository,HTTAPI.Repository.Contracts.ISymptomRepository,HTTAPI.Repository.Contracts.IQuestionRepository)">
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Service.HealthTrackService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IHealthTrackRepository,HTTAPI.Repository.Contracts.IZoneRepository,HTTAPI.Repository.Contracts.ILocationRepository,HTTAPI.Repository.Contracts.ISymptomRepository,HTTAPI.Repository.Contracts.IQuestionRepository,HTTAPI.Repository.Contracts.IEmployeeRepository,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             HealthTrackService constructor
             </summary>
@@ -886,7 +811,9 @@
             <param name="zoneRepository"></param>
             <param name="locationRepository"></param>
             <param name="symptomRepository"></param>
-            <param name="questionRepository"></param>      
+            <param name="questionRepository"></param>
+            <param name="employeeRepository"></param>
+            <param name="configuration"></param>      
         </member>
         <member name="M:HTTAPI.Manager.Service.HealthTrackService.CreateHealthTrack(HTTAPI.ViewModels.HealthTrackViewModel)">
             <summary>
@@ -2094,6 +2021,16 @@
             </summary>
         </member>
         <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.RequestNumber">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.HealthTrackEmailViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackEmailViewModel.LinkUrl">
             <summary>
             
             </summary>

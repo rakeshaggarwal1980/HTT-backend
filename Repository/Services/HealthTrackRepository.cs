@@ -32,6 +32,7 @@ namespace HTTAPI.Repository.Services
         {
             _context.HealthTrack.Add(healthTrack);
             await _context.SaveChangesAsync();
+            _context.Entry(healthTrack).Reference(c => c.Employee).Load();
             return healthTrack;
         }
 
