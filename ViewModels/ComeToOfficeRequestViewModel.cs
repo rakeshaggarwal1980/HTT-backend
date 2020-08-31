@@ -19,9 +19,14 @@ namespace HTTAPI.ViewModels
 
 
         /// <summary>
-        ///  DateOfRequest
+        ///  FromDate
         /// </summary>
-        public DateTime DateOfRequest { get; set; }
+        public DateTime FromDate { get; set; }
+
+        /// <summary>
+        /// ToDate
+        /// </summary>
+        public DateTime ToDate { get; set; }
 
 
         /// <summary>

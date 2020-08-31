@@ -73,6 +73,16 @@ namespace HTTAPI.Repository.Services
             return await _context.ComeToOfficeRequest.Include("Employee").Where(x => x.Status == EntityStatus.Active).ToListAsync();
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<ComeToOfficeRequest>> GetRequestsListByUserId(int userId)
+        {
+            return await _context.ComeToOfficeRequest.Include("Employee").Where(x => x.EmployeeId == userId).ToListAsync();
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -93,7 +103,8 @@ namespace HTTAPI.Repository.Services
         {
             return await _context.ComeToOfficeRequest.Where(x => x.EmployeeId == employeeId
                                                             && x.Status == EntityStatus.Active
-                                                            && x.DateOfRequest.Date >= DateTime.Now.Date).ToListAsync();
+                                                            && x.ToDate.Date >= DateTime.Now.Date).ToListAsync();
+
         }
     }
 

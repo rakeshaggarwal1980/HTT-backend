@@ -16,6 +16,14 @@ namespace HTTAPI.Manager.Contract
         /// <returns></returns>
         Task<IResult> GetRequestsList();
 
+
+        /// <summary>
+        /// Get requests by UserId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<IResult> GetRequestsListByUserId(int userId);
+
         /// <summary>
         /// 
         /// </summary>

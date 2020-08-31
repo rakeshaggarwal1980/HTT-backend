@@ -99,6 +99,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Controllers.RequestController.GetAllRequestsByUserId(System.Int32)">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:HTTAPI.Controllers.RequestController.GetRequestDetail(System.Int32)">
             <summary>
              Returns request detail
@@ -693,6 +699,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.IRequestService.GetRequestsListByUserId(System.Int32)">
+            <summary>
+            Get requests by UserId
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
         <member name="M:HTTAPI.Manager.Contract.IRequestService.CreateRequest(HTTAPI.ViewModels.ComeToOfficeRequestViewModel)">
             <summary>
             
@@ -886,6 +899,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Service.RequestService.GetRequestsListByUserId(System.Int32)">
+            <summary>
+            Get Requests by UserId
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
         <member name="M:HTTAPI.Manager.Service.RequestService.CreateRequest(HTTAPI.ViewModels.ComeToOfficeRequestViewModel)">
             <summary>
             
@@ -959,14 +979,19 @@
             Random generated request Number
             </summary>
         </member>
-        <member name="P:HTTAPI.Models.ComeToOfficeRequest.DateOfRequest">
-            <summary>
-             DateOfRequest
-            </summary>
-        </member>
         <member name="P:HTTAPI.Models.ComeToOfficeRequest.IsApproved">
             <summary>
             IsApproved
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.ComeToOfficeRequest.FromDate">
+            <summary>
+            FromDate
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.ComeToOfficeRequest.ToDate">
+            <summary>
+            ToDate
             </summary>
         </member>
         <member name="P:HTTAPI.Models.ComeToOfficeRequest.IsDeclined">
@@ -1541,6 +1566,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestsListByUserId(System.Int32)">
+            <summary>
+             Get Requests of a user
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestById(System.Int32)">
             <summary>
              Get Request detail
@@ -1757,6 +1788,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestsListByUserId(System.Int32)">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestById(System.Int32)">
             <summary>
             
@@ -1840,9 +1877,14 @@
             Random generated request Number
             </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.DateOfRequest">
+        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.FromDate">
             <summary>
-             DateOfRequest
+             FromDate
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.ToDate">
+            <summary>
+            ToDate
             </summary>
         </member>
         <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestViewModel.IsApproved">

@@ -21,12 +21,6 @@ namespace HTTAPI.Models
         [Required, Column(TypeName = "VARCHAR(50)")]
         public string RequestNumber { get; set; }
 
-        /// <summary>
-        ///  DateOfRequest
-        /// </summary>
-        [Required]
-        public DateTime DateOfRequest { get; set; }
-
 
         /// <summary>
         /// IsApproved
@@ -34,6 +28,15 @@ namespace HTTAPI.Models
         [Required]
         public bool IsApproved { get; set; }
 
+        /// <summary>
+        /// FromDate
+        /// </summary>
+        public DateTime FromDate { get; set; }
+
+        /// <summary>
+        /// ToDate
+        /// </summary>
+        public DateTime ToDate { get; set; }
 
         /// <summary>
         /// IsDeclined

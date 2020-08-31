@@ -2,6 +2,7 @@
 using HTTAPI.Manager.Contract;
 using HTTAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Net;
@@ -72,6 +73,22 @@ namespace HTTAPI.Controllers
         {
             _logger.LogInformation("Get all requests");
             var result = await _requestService.GetRequestsList();
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("requests/{userId}")]
+        [ProducesResponseType(typeof(List<ComeToOfficeRequestViewModel>), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public async Task<ActionResult<IResult>> GetAllRequestsByUserId(int userId)
+        {
+            _logger.LogInformation("Get all requests by userId");
+            var result = await _requestService.GetRequestsListByUserId(userId);
             return StatusCode((int)result.StatusCode, result);
         }
 

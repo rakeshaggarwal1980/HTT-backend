@@ -126,6 +126,54 @@ namespace HTTAPI.Manager.Service
 
 
         /// <summary>
+        /// Get Requests by UserId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public async Task<IResult> GetRequestsListByUserId(int userId)
+        {
+            var requestViewModels = new List<ComeToOfficeRequestViewModel>();
+            var result = new Result
+            {
+                Operation = Operation.Read,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                var requests = await _requestRepository.GetRequestsListByUserId(userId);
+                if (requests.Any())
+                {
+                    requestViewModels = requests.Select(t =>
+                    {
+                        var requestViewModel = new ComeToOfficeRequestViewModel();
+                        requestViewModel.MapFromModel(t);
+                        var employeeVm = new EmployeeViewModel();
+                        employeeVm.MapFromModel(t.Employee);
+                        requestViewModel.Employee = employeeVm;
+
+                        return requestViewModel;
+                    }).ToList();
+                }
+                else
+                {
+                    result.Message = "No records found";
+                }
+                result.Body = requestViewModels;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                result.Status = Status.Error;
+                result.Message = ex.Message;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
+            return result;
+        }
+
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="requestViewModel"></param>
@@ -148,7 +196,7 @@ namespace HTTAPI.Manager.Service
                     if (empRequests.Count() > 0)
                     {
                         //  if request for the same date exists and is approved , then can not raise new request
-                        if (empRequests.Where(x => x.DateOfRequest.Date == requestViewModel.DateOfRequest.Date && x.IsApproved).Any())
+                        if (empRequests.Where(x => x.ToDate.Date >= requestViewModel.ToDate.Date && x.IsApproved).Any())
                         {
                             result.Status = Status.Fail;
                             result.StatusCode = HttpStatusCode.NotAcceptable;
@@ -157,8 +205,8 @@ namespace HTTAPI.Manager.Service
                         }
                         //  if request for the same date exists and is declined , then can raise new request
                         //  and if no request matching date exists
-                        else if (empRequests.Where(x => x.DateOfRequest.Date == requestViewModel.DateOfRequest.Date && x.IsDeclined).Any()
-                            || empRequests.Where(x => x.DateOfRequest.Date != requestViewModel.DateOfRequest.Date).Any())
+                        else if (empRequests.Where(x => x.ToDate.Date >= requestViewModel.ToDate.Date && x.IsDeclined).Any()
+                            || empRequests.Where(x => x.ToDate.Date < requestViewModel.ToDate.Date).Any())
                         {
 
                             requesModel.MapFromViewModel(requestViewModel, (ClaimsIdentity)_principal.Identity);
@@ -173,7 +221,7 @@ namespace HTTAPI.Manager.Service
                             result.Body = requestViewModel;
                             return result;
                         }
-                        else if (empRequests.Where(x => x.DateOfRequest.Date == requestViewModel.DateOfRequest.Date && !x.IsDeclined && !x.IsApproved).Any())
+                        else if (empRequests.Where(x => x.ToDate.Date == requestViewModel.ToDate.Date && !x.IsDeclined && !x.IsApproved).Any())
                         {
                             result.Status = Status.Fail;
                             result.StatusCode = HttpStatusCode.NotAcceptable;

@@ -30,6 +30,14 @@ namespace HTTAPI.Repository.Contracts
         /// <returns></returns>
         Task<List<ComeToOfficeRequest>> GetRequestsList();
 
+
+        /// <summary>
+        ///  Get Requests of a user
+        /// </summary>
+        /// <returns></returns>
+        Task<List<ComeToOfficeRequest>> GetRequestsListByUserId(int userId);
+
+
         /// <summary>
         ///  Get Request detail
         /// </summary>
