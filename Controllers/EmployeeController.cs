@@ -12,7 +12,6 @@ namespace HTTAPI.Controllers
     /// Employee Controller
     /// </summary>
     [Produces("application/json")]
-    [Route("api/employee")]
     [ApiController]
     public class EmployeeController : Controller
     {
@@ -33,7 +32,7 @@ namespace HTTAPI.Controllers
         /// Registers an employee
         /// </summary>
         /// <returns></returns>
-        [HttpPost("employee")]
+        [HttpPost("api/employee")]
         [ProducesResponseType(typeof(EmployeeViewModel), (int)HttpStatusCode.PartialContent)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
@@ -41,6 +40,22 @@ namespace HTTAPI.Controllers
         {
             _logger.LogInformation("Creating Employee");
             var result = await _employeeService.CreateEmployee(employeeSignUViewModel);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+
+        /// <summary>
+        /// Get an employee
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("api/employee/{email}")]
+        [ProducesResponseType(typeof(EmployeeViewModel), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public async Task<ActionResult<IResult>> GetEmployee(string email)
+        {
+            _logger.LogInformation("get Employee by email");
+            var result = await _employeeService.GetEmployeeByEmail(email);
             return StatusCode((int)result.StatusCode, result);
         }
 

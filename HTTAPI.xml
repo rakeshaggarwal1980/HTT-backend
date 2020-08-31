@@ -22,6 +22,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Controllers.EmployeeController.GetEmployee(System.String)">
+            <summary>
+            Get an employee
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Controllers.HealthTrackController">
             <summary>
             
@@ -676,7 +682,7 @@
             <param name="loginModel"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.GetEmployeeDetailsByRole(System.String)">
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.GetEmployeeByEmail(System.String)">
             <summary>
             
             </summary>
@@ -800,10 +806,11 @@
             <param name="loginModel"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetEmployeeDetailsByRole(System.String)">
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetEmployeeByEmail(System.String)">
             <summary>
             
             </summary>
+            <param name="email"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Manager.Service.HealthTrackService">
