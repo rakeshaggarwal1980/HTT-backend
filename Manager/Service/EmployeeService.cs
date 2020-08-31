@@ -99,6 +99,45 @@ namespace HTTAPI.Manager.Contract
 
         }
 
+
+        /// <summary>
+        /// Update Employee
+        /// </summary>
+        /// <param name="employeeViewModel"></param>
+        /// <returns></returns>
+        public async Task<IResult> UpdateEmployee(EmployeeViewModel employeeViewModel)
+        {
+            var result = new Result
+            {
+                Operation = Operation.Update,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                if (employeeViewModel != null)
+                {
+                    var employeeModel = new Employee();
+                    employeeModel.MapFromViewModel(employeeViewModel);
+                    employeeModel = await _employeeRepository.UpdateEmployee(employeeModel);
+                    
+                    employeeViewModel.MapFromModel(employeeModel);
+                    result.Body = employeeViewModel;
+                    return result;
+                }
+                result.Status = Status.Fail;
+                result.StatusCode = HttpStatusCode.BadRequest;
+                return result;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+                result.Status = Status.Error;
+                return result;
+            }
+
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -157,18 +196,53 @@ namespace HTTAPI.Manager.Contract
                 return result;
             }
         }
+
+
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="email"></param>
         /// <returns></returns>
-        public async Task<EmployeeViewModel> GetEmployeeDetailsByRole(string roleName)
+        public async Task<IResult> GetEmployeeByEmail(string email)
         {
-            var employee = await _employeeRepository.GetEmployeeDetailsByRole(roleName);
-            var employeeViewModel = new EmployeeViewModel();
-            employeeViewModel.MapFromModel(employee);
-            return employeeViewModel;
+            var result = new Result
+            {
+                Operation = Operation.Read,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                if (!string.IsNullOrEmpty(email))
+                {
+                    var employeeVm = new EmployeeViewModel();
+                    var employeeModel = await _employeeRepository.GetEmployeeByEmail(email);
+                    if (employeeModel != null)
+                    {
+                        employeeVm.MapFromModel(employeeModel);
+                        result.Body = employeeVm;
+                    }
+                    else
+                    {
+                        result.Body = null;
+                        result.Message = "Email Id does not exists";
+                        result.Status = Status.Fail;
+                        result.StatusCode = HttpStatusCode.NotFound;
+                    }
+                    return result;
+                }
+                result.Status = Status.Fail;
+                result.StatusCode = HttpStatusCode.BadRequest;
+                return result;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+                result.Status = Status.Error;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+                return result;
+            }
         }
-
 
         #region Private methods
 

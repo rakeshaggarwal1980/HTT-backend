@@ -22,6 +22,18 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Controllers.EmployeeController.UpdateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+            <summary>
+            Updates an employee
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.EmployeeController.GetEmployee(System.String)">
+            <summary>
+            Get an employee
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Controllers.HealthTrackController">
             <summary>
             
@@ -676,10 +688,17 @@
             <param name="loginModel"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.GetEmployeeDetailsByRole(System.String)">
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.GetEmployeeByEmail(System.String)">
             <summary>
             
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.UpdateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="employeeViewModel"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Manager.Contract.IHealthTrackService">
@@ -793,6 +812,13 @@
             <param name="signUpViewModel"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.UpdateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+            <summary>
+            Update Employee
+            </summary>
+            <param name="employeeViewModel"></param>
+            <returns></returns>
+        </member>
         <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetEmployee(HTTAPI.ViewModels.UserLoginViewModel)">
             <summary>
             
@@ -800,10 +826,11 @@
             <param name="loginModel"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetEmployeeDetailsByRole(System.String)">
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetEmployeeByEmail(System.String)">
             <summary>
             
             </summary>
+            <param name="email"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Manager.Service.HealthTrackService">
@@ -1520,6 +1547,13 @@
             <param name="employee"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.UpdateEmployee(HTTAPI.Models.Employee)">
+            <summary>
+            
+            </summary>
+            <param name="employee"></param>
+            <returns></returns>
+        </member>
         <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetEmployee(HTTAPI.Models.Employee)">
             <summary>
             
@@ -1545,6 +1579,13 @@
             
             </summary>
             <param name="empCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetEmployeeById(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="empId"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Contracts.IHealthTrackRepository">
@@ -1725,6 +1766,20 @@
             <param name="context"></param>
         </member>
         <member name="M:HTTAPI.Repository.Services.EmployeeRepository.CreateEmployee(HTTAPI.Models.Employee)">
+            <summary>
+            
+            </summary>
+            <param name="employee"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetEmployeeById(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="empId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.UpdateEmployee(HTTAPI.Models.Employee)">
             <summary>
             
             </summary>

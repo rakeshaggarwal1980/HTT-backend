@@ -27,6 +27,14 @@ namespace HTTAPI.Manager.Contract
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<EmployeeViewModel> GetEmployeeDetailsByRole(string roleName);
+        Task<IResult> GetEmployeeByEmail(string email);
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeeViewModel"></param>
+        /// <returns></returns>
+        Task<IResult> UpdateEmployee(EmployeeViewModel employeeViewModel);
     }
 }

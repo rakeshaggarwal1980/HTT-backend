@@ -12,7 +12,6 @@ namespace HTTAPI.Controllers
     /// Employee Controller
     /// </summary>
     [Produces("application/json")]
-    [Route("api/employee")]
     [ApiController]
     public class EmployeeController : Controller
     {
@@ -33,17 +32,46 @@ namespace HTTAPI.Controllers
         /// Registers an employee
         /// </summary>
         /// <returns></returns>
-        [HttpPost("employee")]
+        [HttpPost("api/employee")]
         [ProducesResponseType(typeof(EmployeeViewModel), (int)HttpStatusCode.PartialContent)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
-        public async Task<ActionResult<IResult>> CreateEmployee([FromBody] UserSignUpViewModel employeeSignUViewModel)
+        public async Task<ActionResult<IResult>> CreateEmployee([FromBody] UserSignUpViewModel employeeSignUpViewModel)
         {
             _logger.LogInformation("Creating Employee");
-            var result = await _employeeService.CreateEmployee(employeeSignUViewModel);
+            var result = await _employeeService.CreateEmployee(employeeSignUpViewModel);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+        /// <summary>
+        /// Updates an employee
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut("api/employee")]
+        [ProducesResponseType(typeof(EmployeeViewModel), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public async Task<ActionResult<IResult>> UpdateEmployee([FromBody] EmployeeViewModel employeeViewModel)
+        {
+            _logger.LogInformation("updating Employee");
+            var result = await _employeeService.UpdateEmployee(employeeViewModel);
             return StatusCode((int)result.StatusCode, result);
         }
 
 
+        /// <summary>
+        /// Get an employee
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("api/employee/{email}")]
+        [ProducesResponseType(typeof(EmployeeViewModel), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public async Task<ActionResult<IResult>> GetEmployee(string email)
+        {
+            _logger.LogInformation("get Employee by email");
+            var result = await _employeeService.GetEmployeeByEmail(email);
+            return StatusCode((int)result.StatusCode, result);
+        }
     }
 }
