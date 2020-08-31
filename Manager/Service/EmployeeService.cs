@@ -99,6 +99,45 @@ namespace HTTAPI.Manager.Contract
 
         }
 
+
+        /// <summary>
+        /// Update Employee
+        /// </summary>
+        /// <param name="employeeViewModel"></param>
+        /// <returns></returns>
+        public async Task<IResult> UpdateEmployee(EmployeeViewModel employeeViewModel)
+        {
+            var result = new Result
+            {
+                Operation = Operation.Update,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                if (employeeViewModel != null)
+                {
+                    var employeeModel = new Employee();
+                    employeeModel.MapFromViewModel(employeeViewModel);
+                    employeeModel = await _employeeRepository.UpdateEmployee(employeeModel);
+                    
+                    employeeViewModel.MapFromModel(employeeModel);
+                    result.Body = employeeViewModel;
+                    return result;
+                }
+                result.Status = Status.Fail;
+                result.StatusCode = HttpStatusCode.BadRequest;
+                return result;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+                result.Status = Status.Error;
+                return result;
+            }
+
+        }
+
         /// <summary>
         /// 
         /// </summary>

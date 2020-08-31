@@ -36,9 +36,5 @@ namespace HTTAPI.ViewModels
         /// Emloyee Role Id
         /// </summary>
         public int RoleId { get; set; }
-        ///// <summary>
-        ///// Employee role
-        ///// </summary>
-        //public RoleViewModel Role { get; set; }
     }
 }
