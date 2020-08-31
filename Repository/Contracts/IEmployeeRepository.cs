@@ -26,7 +26,7 @@ namespace HTTAPI.Repository.Contracts
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<Employee> GetHRDetails();
+        Task<Employee> GetEmployeeDetailsByRole(string roleName);
 
         /// <summary>
         /// 

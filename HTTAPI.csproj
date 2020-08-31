@@ -11,6 +11,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200820104700_added-employeeFK-to-request.cs" />
     <Compile Remove="Migrations\20200820104700_added-employeeFK-to-request.Designer.cs" />
+    <Compile Remove="Migrations\20200831064727_add-roles.cs" />
+    <Compile Remove="Migrations\20200831064727_add-roles.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

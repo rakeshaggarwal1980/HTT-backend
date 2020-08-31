@@ -36,7 +36,10 @@ namespace HTTAPI.Repository
         public DbSet<Question> Question { get; set; }
 
 
-
+        /// <summary>
+        /// Employee roles
+        /// </summary>
+        public DbSet<Role> Role { get; set; }
         #endregion
 
         /// <summary>
@@ -63,7 +66,5 @@ namespace HTTAPI.Repository
         /// Come to office request 
         /// </summary>
         public DbSet<ComeToOfficeRequest> ComeToOfficeRequest { get; set; }
-
-
     }
 }

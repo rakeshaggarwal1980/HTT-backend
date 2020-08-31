@@ -4,13 +4,11 @@ using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
 using HTTAPI.ViewModels;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,11 +19,6 @@ namespace HTTAPI.Manager.Contract
     /// </summary>
     public class EmployeeService : IEmployeeService
     {
-
-        /// <summary>
-        /// logger EmployeeService
-        /// </summary>
-        readonly ILogger<EmployeeService> _logger;
         /// <summary>
         /// 
         /// </summary>
@@ -35,24 +28,13 @@ namespace HTTAPI.Manager.Contract
         /// </summary>
         IEmployeeRepository _employeeRepository;
 
-
-        /// <summary>
-        /// Claim Identity
-        /// </summary>
-        private readonly ClaimsPrincipal _principal;
-
         /// <summary>
         /// EmployeeService constructor
         /// </summary>
-        /// <param name="logger"></param>
-        /// <param name="principal"></param>
         /// <param name="employeeRepository"></param>
         /// <param name="configuration"></param>      
-        public EmployeeService(ILogger<EmployeeService> logger, IPrincipal principal,
-            IEmployeeRepository employeeRepository, IConfiguration configuration)
+        public EmployeeService(IEmployeeRepository employeeRepository, IConfiguration configuration)
         {
-            _logger = logger;
-            _principal = principal as ClaimsPrincipal;
             _employeeRepository = employeeRepository;
             _configuration = configuration;
 
@@ -141,14 +123,16 @@ namespace HTTAPI.Manager.Contract
                     employeeModel = await _employeeRepository.GetEmployee(employeeModel);
                     if (employeeModel != null && employeeModel.Id != 0)
                     {
-                        // employee exists
+                        RoleViewModel roleVM = new RoleViewModel();
+                        roleVM.MapFromModel(employeeModel.Role);
                         UserViewModel userView = new UserViewModel()
                         {
                             Email = employeeModel.Email,
                             EmployeeCode = employeeModel.EmployeeCode,
                             Name = employeeModel.Name,
                             UserId = employeeModel.Id,
-                            Token = GenerateToken(employeeModel.Name, employeeModel.Email)
+                            Token = GenerateToken(employeeModel.Name, employeeModel.Email, employeeModel.Role.Name),
+                            Role = roleVM
                         };
 
                         result.Body = userView;
@@ -156,7 +140,7 @@ namespace HTTAPI.Manager.Contract
                     else
                     {
                         result.Body = null;
-                        result.Message = "No Employee exists";
+                        result.Message = "Wrong Email or password";
                         result.Status = Status.Fail;
                         result.StatusCode = HttpStatusCode.Unauthorized;
                     }
@@ -177,11 +161,10 @@ namespace HTTAPI.Manager.Contract
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<EmployeeViewModel> GetHRDetails()
+        public async Task<EmployeeViewModel> GetEmployeeDetailsByRole(string roleName)
         {
-            var employee = await this._employeeRepository.GetHRDetails();
+            var employee = await _employeeRepository.GetEmployeeDetailsByRole(roleName);
             var employeeViewModel = new EmployeeViewModel();
-
             employeeViewModel.MapFromModel(employee);
             return employeeViewModel;
         }
@@ -189,12 +172,13 @@ namespace HTTAPI.Manager.Contract
 
         #region Private methods
 
-        private string GenerateToken(string name, string email)
+        private string GenerateToken(string name, string email, string roleName)
         {
             var claims = new Claim[]
             {
                 new Claim("Name", name),
                 new Claim(ClaimTypes.Email,email),
+                new Claim(ClaimTypes.Role,roleName),
                 new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
                 new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
             };

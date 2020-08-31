@@ -302,7 +302,7 @@ namespace HTTAPI.Manager.Service
         private async Task SendResponseEmail(ComeToOfficeRequestViewModel requestViewModel, MailTemplate mailTemplate)
         {
             appEmailHelper = new AppEmailHelper();
-            var hrEmployee = await _employeeRepository.GetHRDetails();
+            var hrEmployee = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRoles.HRManager.ToString());
             if (hrEmployee != null)
             {
                 appEmailHelper.FromMailAddress = new MailAddress(hrEmployee.Email, hrEmployee.Name);
@@ -331,7 +331,7 @@ namespace HTTAPI.Manager.Service
         private async Task SendRequestEmail(ComeToOfficeRequestViewModel requestViewModel, MailTemplate mailTemplate)
         {
             appEmailHelper = new AppEmailHelper();
-            var hrEmployee = await _employeeRepository.GetHRDetails();
+            var hrEmployee = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRoles.HRManager.ToString());
             appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
             appEmailHelper.CCMailAddresses.Add(new MailAddress(requestViewModel.Employee.Email, requestViewModel.Employee.Name));
             appEmailHelper.MailTemplate = mailTemplate;

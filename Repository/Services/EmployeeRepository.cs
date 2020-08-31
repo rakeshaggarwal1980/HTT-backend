@@ -1,4 +1,5 @@
-﻿using HTTAPI.Models;
+﻿using HTTAPI.Enums;
+using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -45,7 +46,8 @@ namespace HTTAPI.Repository.Services
         {
 
             var result = await _context.Employee
-                   .Where(e => e.Email == employee.Email && e.Password == employee.Password).SingleOrDefaultAsync();
+                   .Where(e => e.Email == employee.Email && e.Password == employee.Password).Include(e=>e.Role)
+                   .SingleOrDefaultAsync();
             return result;
         }
 
@@ -77,9 +79,9 @@ namespace HTTAPI.Repository.Services
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<Employee> GetHRDetails()
+        public async Task<Employee> GetEmployeeDetailsByRole(string roleName)
         {
-            return await _context.Employee.Where(e => e.IsHrManager).SingleOrDefaultAsync();
+            return await _context.Employee.Where(e => e.Role.Name == roleName).SingleOrDefaultAsync();
         }
 
 

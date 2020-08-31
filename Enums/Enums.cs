@@ -88,28 +88,38 @@
     public enum MailTemplate
     {
         /// <summary>
-        /// TBD
+        ///  Come to office request template
         /// </summary>
         RequestToHR = 1,
 
         /// <summary>
-        /// TBD
+        ///  HR response to request
         /// </summary>
         ResponseFromHR = 2,
 
         /// <summary>
-        /// 
+        /// Employee self declaration
         /// </summary>
         EmployeeDeclaration = 3
     }
 
     /// <summary>
-    /// 
+    /// Employee Roles
     /// </summary>
-    public enum Role
+    public enum EmployeeRoles
     {
-        HRManager=1,
-        SecurityManager=2,
-        Employee=3
+        /// <summary>
+        /// 
+        /// </summary>
+        HRManager,
+        /// <summary>
+        /// Security
+        /// </summary>
+        SecurityManager,
+
+        /// <summary>
+        /// Employee
+        /// </summary>
+        Employee
     }
 }

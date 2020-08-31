@@ -301,7 +301,7 @@ namespace HTTAPI.Manager.Service
         private async Task SendEmail(HealthTrackViewModel healthViewModel)
         {
             var appEmailHelper = new AppEmailHelper();
-            var hrEmployee = await _employeeRepository.GetHRDetails();
+            var hrEmployee = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRoles.HRManager.ToString());
 
             // to do send to security as well
 
