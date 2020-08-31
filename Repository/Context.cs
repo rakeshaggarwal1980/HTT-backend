@@ -39,7 +39,7 @@ namespace HTTAPI.Repository
             modelBuilder.ApplyConfiguration(new ZoneConfiguration());
             modelBuilder.ApplyConfiguration(new QuestionConfiguration());
             modelBuilder.ApplyConfiguration(new SymptomConfiguration());
-
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
         }
 
         /// <summary>

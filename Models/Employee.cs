@@ -39,9 +39,15 @@ namespace HTTAPI.Models
         public int EmployeeCode { get; set; }
 
         /// <summary>
+        /// Role ForeignKey
+        /// </summary>
+        [ForeignKey("RoleId")] public int RoleId { get; set; }
+
+        /// <summary>
         /// 
         /// </summary>
-        public bool IsHrManager { get; set; }
+        public Role Role { get; set; }
+
     }
 
 

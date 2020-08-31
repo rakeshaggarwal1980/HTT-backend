@@ -81,9 +81,9 @@ namespace HTTAPI.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class HealthTrackEmailViewModel:HealthTrackViewModel
+    public class HealthTrackEmailViewModel : HealthTrackViewModel
     {
-         /// <summary>
+        /// <summary>
         /// 
         /// </summary>
         public string LinkUrl { get; set; }

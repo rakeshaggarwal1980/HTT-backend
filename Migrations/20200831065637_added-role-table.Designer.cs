@@ -4,14 +4,16 @@ using HTTAPI.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HTTAPI.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20200831065637_added-role-table")]
+    partial class addedroletable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,6 +84,9 @@ namespace HTTAPI.Migrations
                     b.Property<int>("EmployeeCode")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsHrManager")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("VARCHAR(50)");
@@ -90,12 +95,7 @@ namespace HTTAPI.Migrations
                         .IsRequired()
                         .HasColumnType("VARCHAR(20)");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Employee");
                 });
@@ -330,23 +330,6 @@ namespace HTTAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "HRManager"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "SecurityManager"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Employee"
-                        });
                 });
 
             modelBuilder.Entity("HTTAPI.Models.Symptom", b =>
@@ -482,15 +465,6 @@ namespace HTTAPI.Migrations
                     b.HasOne("HTTAPI.Models.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("HTTAPI.Models.Employee", b =>
-                {
-                    b.HasOne("HTTAPI.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

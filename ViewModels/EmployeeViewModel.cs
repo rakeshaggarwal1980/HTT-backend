@@ -33,8 +33,12 @@ namespace HTTAPI.ViewModels
         public EntityStatus Status { get; set; }
 
         /// <summary>
-        /// 
+        /// Emloyee Role Id
         /// </summary>
-        public bool IsHrManager { get; set; }
+        public int RoleId { get; set; }
+        ///// <summary>
+        ///// Employee role
+        ///// </summary>
+        //public RoleViewModel Role { get; set; }
     }
 }

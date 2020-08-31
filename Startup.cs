@@ -101,7 +101,7 @@ namespace HTTAPI
             services.AddTransient<IEmployeeService, EmployeeService>();
             services.AddTransient<IRequestService, RequestService>();
             services.AddTransient<IViewRenderService, ViewRenderService>();
-
+            services.AddTransient<IRoleService, RoleService>();
             #endregion
 
             #region Repositories
@@ -112,6 +112,7 @@ namespace HTTAPI
             services.AddTransient<IQuestionRepository, QuestionRepository>();
             services.AddTransient<IZoneRepository, ZoneRepository>();
             services.AddTransient<ILocationRepository, LocationRepository>();
+            services.AddTransient<IRoleRepository, RoleRepository>();
             #endregion
         }
 
@@ -196,7 +197,7 @@ namespace HTTAPI
                     }
                 });
 
-                
+
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
