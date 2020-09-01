@@ -18,11 +18,6 @@
         /// <summary>
         /// 
         /// </summary>
-        public string Password { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public string Email { get; set; }
 
         /// <summary>
@@ -34,5 +29,10 @@
         /// 
         /// </summary>
         public string Token { get; set; }
+
+        /// <summary>
+        /// User Role
+        /// </summary>
+        public RoleViewModel Role { get; set; }
     }
 }

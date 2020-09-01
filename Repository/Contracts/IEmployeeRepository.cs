@@ -20,13 +20,20 @@ namespace HTTAPI.Repository.Contracts
         /// </summary>
         /// <param name="employee"></param>
         /// <returns></returns>
+        Task<Employee> UpdateEmployee(Employee employee);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employee"></param>
+        /// <returns></returns>
         Task<Employee> GetEmployee(Employee employee);
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<Employee> GetHRDetails();
+        Task<Employee> GetEmployeeDetailsByRole(string roleName);
 
         /// <summary>
         /// 
@@ -40,5 +47,12 @@ namespace HTTAPI.Repository.Contracts
         /// <param name="empCode"></param>
         /// <returns></returns>
         Task<Employee> GetEmployeeByEmpCode(int empCode);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="empId"></param>
+        /// <returns></returns>
+        Task<Employee> GetEmployeeById(int empId);
     }
 }

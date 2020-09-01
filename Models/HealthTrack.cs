@@ -74,7 +74,7 @@ namespace HTTAPI.Models
         [ForeignKey("Employee")] public int EmployeeId { get; set; }
 
         /// <summary>
-        /// Zone ForeignKey
+        /// Employee ForeignKey
         /// </summary>
         public Employee Employee { get; set; }
 

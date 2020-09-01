@@ -22,6 +22,18 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Controllers.EmployeeController.UpdateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+            <summary>
+            Updates an employee
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.EmployeeController.GetEmployee(System.String)">
+            <summary>
+            Get an employee
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Controllers.HealthTrackController">
             <summary>
             
@@ -111,10 +123,21 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:HTTAPI.DependencyInjection">
+        <member name="T:HTTAPI.Controllers.RoleController">
             <summary>
             
             </summary>
+        </member>
+        <member name="M:HTTAPI.Controllers.RoleController.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Controllers.RoleController},HTTAPI.Manager.Contract.IRoleService)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Controllers.RoleController.GetAllRoles">
+            <summary>
+            
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:HTTAPI.Enums.EntityStatus">
             <summary>
@@ -204,22 +227,37 @@
         </member>
         <member name="F:HTTAPI.Enums.MailTemplate.RequestToHR">
             <summary>
-            TBD
+             Come to office request template
             </summary>
         </member>
         <member name="F:HTTAPI.Enums.MailTemplate.ResponseFromHR">
             <summary>
-            TBD
+             HR response to request
             </summary>
         </member>
         <member name="F:HTTAPI.Enums.MailTemplate.EmployeeDeclaration">
             <summary>
+            Employee self declaration
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Enums.EmployeeRoles">
+            <summary>
+            Employee Roles
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.EmployeeRoles.HRManager">
+            <summary>
             
             </summary>
         </member>
-        <member name="T:HTTAPI.Enums.Role">
+        <member name="F:HTTAPI.Enums.EmployeeRoles.SecurityManager">
             <summary>
-            
+            Security
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.EmployeeRoles.Employee">
+            <summary>
+            Employee
             </summary>
         </member>
         <member name="T:HTTAPI.FilterTypes.PagingFilter">
@@ -656,10 +694,17 @@
             <param name="loginModel"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.GetHRDetails">
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.GetEmployeeByEmail(System.String)">
             <summary>
             
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.UpdateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="employeeViewModel"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Manager.Contract.IHealthTrackService">
@@ -727,6 +772,17 @@
             <param name="requestId"></param>
             <returns></returns>
         </member>
+        <member name="T:HTTAPI.Manager.Contract.IRoleService">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IRoleService.GetRoles">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Manager.Contract.IViewRenderService">
             <summary>
             View Render Service interface
@@ -745,11 +801,6 @@
             
             </summary>
         </member>
-        <member name="F:HTTAPI.Manager.Contract.EmployeeService._logger">
-            <summary>
-            logger EmployeeService
-            </summary>
-        </member>
         <member name="F:HTTAPI.Manager.Contract.EmployeeService._configuration">
             <summary>
             
@@ -760,17 +811,10 @@
             contract with EmployeeRepository
             </summary>
         </member>
-        <member name="F:HTTAPI.Manager.Contract.EmployeeService._principal">
-            <summary>
-            Claim Identity
-            </summary>
-        </member>
-        <member name="M:HTTAPI.Manager.Contract.EmployeeService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Contract.EmployeeService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IEmployeeRepository,Microsoft.Extensions.Configuration.IConfiguration)">
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.#ctor(HTTAPI.Repository.Contracts.IEmployeeRepository,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             EmployeeService constructor
             </summary>
-            <param name="logger"></param>
-            <param name="principal"></param>
             <param name="employeeRepository"></param>
             <param name="configuration"></param>      
         </member>
@@ -781,6 +825,13 @@
             <param name="signUpViewModel"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.UpdateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
+            <summary>
+            Update Employee
+            </summary>
+            <param name="employeeViewModel"></param>
+            <returns></returns>
+        </member>
         <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetEmployee(HTTAPI.ViewModels.UserLoginViewModel)">
             <summary>
             
@@ -788,10 +839,11 @@
             <param name="loginModel"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetHRDetails">
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetEmployeeByEmail(System.String)">
             <summary>
             
             </summary>
+            <param name="email"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Manager.Service.HealthTrackService">
@@ -934,6 +986,29 @@
             <param name="requestViewModel"></param>
             <param name="mailTemplate"></param>
         </member>
+        <member name="T:HTTAPI.Manager.Service.RoleService">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Manager.Service.RoleService._logger">
+            <summary>
+            logger RoleService
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.RoleService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Service.RoleService},HTTAPI.Repository.Contracts.IRoleRepository)">
+            <summary>
+            constructor
+            </summary>
+            <param name="roleRepository"></param>
+            <param name="logger"></param>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.RoleService.GetRoles">
+            <summary>
+            Returns list of roles
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Models.BaseEntity">
             <summary>
             Base entity for audit columns
@@ -1044,7 +1119,12 @@
             
             </summary>
         </member>
-        <member name="P:HTTAPI.Models.Employee.IsHrManager">
+        <member name="P:HTTAPI.Models.Employee.RoleId">
+            <summary>
+            Role ForeignKey
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Employee.Role">
             <summary>
             
             </summary>
@@ -1132,7 +1212,7 @@
         </member>
         <member name="P:HTTAPI.Models.HealthTrack.Employee">
             <summary>
-            Zone ForeignKey
+            Employee ForeignKey
             </summary>
         </member>
         <member name="P:HTTAPI.Models.HealthTrack.HealthTrackSymptoms">
@@ -1248,6 +1328,21 @@
         <member name="P:HTTAPI.Models.Question.Status">
             <summary>
             Record status
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Models.Role">
+            <summary>
+            Employee Roles
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Role.Id">
+            <summary>
+            primary key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Role.Name">
+            <summary>
+            Location Name
             </summary>
         </member>
         <member name="T:HTTAPI.Models.Symptom">
@@ -1412,6 +1507,11 @@
             Questions
             </summary>
         </member>
+        <member name="P:HTTAPI.Repository.Context.Role">
+            <summary>
+            Employee roles
+            </summary>
+        </member>
         <member name="P:HTTAPI.Repository.Context.Employee">
             <summary>
             Employee
@@ -1472,6 +1572,13 @@
             <param name="employee"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.UpdateEmployee(HTTAPI.Models.Employee)">
+            <summary>
+            
+            </summary>
+            <param name="employee"></param>
+            <returns></returns>
+        </member>
         <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetEmployee(HTTAPI.Models.Employee)">
             <summary>
             
@@ -1479,7 +1586,7 @@
             <param name="employee"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetHRDetails">
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetEmployeeDetailsByRole(System.String)">
             <summary>
             
             </summary>
@@ -1497,6 +1604,13 @@
             
             </summary>
             <param name="empCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetEmployeeById(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="empId"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Contracts.IHealthTrackRepository">
@@ -1586,6 +1700,17 @@
             <param name="employeeId"></param>
             <returns></returns>
         </member>
+        <member name="T:HTTAPI.Repository.Contracts.IRoleRepository">
+            <summary>
+            Role contract
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IRoleRepository.GetRoles">
+            <summary>
+             Returns roles
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Contracts.ISymptomRepository">
             <summary>
             
@@ -1624,6 +1749,16 @@
             </summary>
         </member>
         <member name="M:HTTAPI.Repository.SeedData.QuestionConfiguration.Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{HTTAPI.Models.Question})">
+            <summary>
+            configure master data
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Repository.SeedData.RoleConfiguration">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.SeedData.RoleConfiguration.Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder{HTTAPI.Models.Role})">
             <summary>
             configure master data
             </summary>
@@ -1668,6 +1803,20 @@
             <param name="employee"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetEmployeeById(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="empId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.UpdateEmployee(HTTAPI.Models.Employee)">
+            <summary>
+            
+            </summary>
+            <param name="employee"></param>
+            <returns></returns>
+        </member>
         <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetEmployee(HTTAPI.Models.Employee)">
             <summary>
             
@@ -1689,7 +1838,7 @@
             <param name="empCode"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetHRDetails">
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetEmployeeDetailsByRole(System.String)">
             <summary>
             
             </summary>
@@ -1806,6 +1955,23 @@
             Checks if Employee has already submitted request
             </summary>
             <param name="employeeId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HTTAPI.Repository.Services.RoleRepository">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.RoleRepository.#ctor(HTTAPI.Repository.Context)">
+            <summary>
+             Constructor
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.RoleRepository.GetRoles">
+            <summary>
+            Returns list of roles
+            </summary>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Services.SymptomRepository">
@@ -1987,9 +2153,9 @@
             Status
             </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.IsHrManager">
+        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.RoleId">
             <summary>
-            
+            Emloyee Role Id
             </summary>
         </member>
         <member name="T:HTTAPI.ViewModels.HealthTrackViewModel">
@@ -2102,6 +2268,21 @@
             Symptom position\order
             </summary>
         </member>
+        <member name="T:HTTAPI.ViewModels.RoleViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.RoleViewModel.Id">
+            <summary>
+             Primary Key
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.RoleViewModel.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
         <member name="T:HTTAPI.ViewModels.UserLoginViewModel">
             <summary>
             
@@ -2152,9 +2333,9 @@
             Status
             </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.IsHrManager">
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.RoleId">
             <summary>
-            
+            Role ID
             </summary>
         </member>
         <member name="T:HTTAPI.ViewModels.UserViewModel">
@@ -2172,11 +2353,6 @@
             
             </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.UserViewModel.Password">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="P:HTTAPI.ViewModels.UserViewModel.Email">
             <summary>
             
@@ -2190,6 +2366,11 @@
         <member name="P:HTTAPI.ViewModels.UserViewModel.Token">
             <summary>
             
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserViewModel.Role">
+            <summary>
+            User Role
             </summary>
         </member>
         <member name="T:HTT.Manager.Service.ViewRenderService">

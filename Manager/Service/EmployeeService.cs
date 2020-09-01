@@ -4,13 +4,11 @@ using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
 using HTTAPI.ViewModels;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,11 +19,6 @@ namespace HTTAPI.Manager.Contract
     /// </summary>
     public class EmployeeService : IEmployeeService
     {
-
-        /// <summary>
-        /// logger EmployeeService
-        /// </summary>
-        readonly ILogger<EmployeeService> _logger;
         /// <summary>
         /// 
         /// </summary>
@@ -35,24 +28,13 @@ namespace HTTAPI.Manager.Contract
         /// </summary>
         IEmployeeRepository _employeeRepository;
 
-
-        /// <summary>
-        /// Claim Identity
-        /// </summary>
-        private readonly ClaimsPrincipal _principal;
-
         /// <summary>
         /// EmployeeService constructor
         /// </summary>
-        /// <param name="logger"></param>
-        /// <param name="principal"></param>
         /// <param name="employeeRepository"></param>
         /// <param name="configuration"></param>      
-        public EmployeeService(ILogger<EmployeeService> logger, IPrincipal principal,
-            IEmployeeRepository employeeRepository, IConfiguration configuration)
+        public EmployeeService(IEmployeeRepository employeeRepository, IConfiguration configuration)
         {
-            _logger = logger;
-            _principal = principal as ClaimsPrincipal;
             _employeeRepository = employeeRepository;
             _configuration = configuration;
 
@@ -117,6 +99,45 @@ namespace HTTAPI.Manager.Contract
 
         }
 
+
+        /// <summary>
+        /// Update Employee
+        /// </summary>
+        /// <param name="employeeViewModel"></param>
+        /// <returns></returns>
+        public async Task<IResult> UpdateEmployee(EmployeeViewModel employeeViewModel)
+        {
+            var result = new Result
+            {
+                Operation = Operation.Update,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                if (employeeViewModel != null)
+                {
+                    var employeeModel = new Employee();
+                    employeeModel.MapFromViewModel(employeeViewModel);
+                    employeeModel = await _employeeRepository.UpdateEmployee(employeeModel);
+                    
+                    employeeViewModel.MapFromModel(employeeModel);
+                    result.Body = employeeViewModel;
+                    return result;
+                }
+                result.Status = Status.Fail;
+                result.StatusCode = HttpStatusCode.BadRequest;
+                return result;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+                result.Status = Status.Error;
+                return result;
+            }
+
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -141,14 +162,16 @@ namespace HTTAPI.Manager.Contract
                     employeeModel = await _employeeRepository.GetEmployee(employeeModel);
                     if (employeeModel != null && employeeModel.Id != 0)
                     {
-                        // employee exists
+                        RoleViewModel roleVM = new RoleViewModel();
+                        roleVM.MapFromModel(employeeModel.Role);
                         UserViewModel userView = new UserViewModel()
                         {
                             Email = employeeModel.Email,
                             EmployeeCode = employeeModel.EmployeeCode,
                             Name = employeeModel.Name,
                             UserId = employeeModel.Id,
-                            Token = GenerateToken(employeeModel.Name, employeeModel.Email)
+                            Token = GenerateToken(employeeModel.Name, employeeModel.Email, employeeModel.Role.Name),
+                            Role = roleVM
                         };
 
                         result.Body = userView;
@@ -156,7 +179,7 @@ namespace HTTAPI.Manager.Contract
                     else
                     {
                         result.Body = null;
-                        result.Message = "No Employee exists";
+                        result.Message = "Wrong Email or password";
                         result.Status = Status.Fail;
                         result.StatusCode = HttpStatusCode.Unauthorized;
                     }
@@ -173,28 +196,63 @@ namespace HTTAPI.Manager.Contract
                 return result;
             }
         }
+
+
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="email"></param>
         /// <returns></returns>
-        public async Task<EmployeeViewModel> GetHRDetails()
+        public async Task<IResult> GetEmployeeByEmail(string email)
         {
-            var employee = await this._employeeRepository.GetHRDetails();
-            var employeeViewModel = new EmployeeViewModel();
-
-            employeeViewModel.MapFromModel(employee);
-            return employeeViewModel;
+            var result = new Result
+            {
+                Operation = Operation.Read,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                if (!string.IsNullOrEmpty(email))
+                {
+                    var employeeVm = new EmployeeViewModel();
+                    var employeeModel = await _employeeRepository.GetEmployeeByEmail(email);
+                    if (employeeModel != null)
+                    {
+                        employeeVm.MapFromModel(employeeModel);
+                        result.Body = employeeVm;
+                    }
+                    else
+                    {
+                        result.Body = null;
+                        result.Message = "Email Id does not exists";
+                        result.Status = Status.Fail;
+                        result.StatusCode = HttpStatusCode.NotFound;
+                    }
+                    return result;
+                }
+                result.Status = Status.Fail;
+                result.StatusCode = HttpStatusCode.BadRequest;
+                return result;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+                result.Status = Status.Error;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+                return result;
+            }
         }
-
 
         #region Private methods
 
-        private string GenerateToken(string name, string email)
+        private string GenerateToken(string name, string email, string roleName)
         {
             var claims = new Claim[]
             {
                 new Claim("Name", name),
                 new Claim(ClaimTypes.Email,email),
+                new Claim(ClaimTypes.Role,roleName),
                 new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
                 new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
             };
