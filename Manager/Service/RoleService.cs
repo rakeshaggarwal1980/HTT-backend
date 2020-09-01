@@ -32,8 +32,8 @@ namespace HTTAPI.Manager.Service
         public RoleService(ILogger<RoleService> logger, IRoleRepository roleRepository)
 
         {
-             _logger = logger;
-             _roleRepository = roleRepository;
+            _logger = logger;
+            _roleRepository = roleRepository;
         }
 
         /// <summary>

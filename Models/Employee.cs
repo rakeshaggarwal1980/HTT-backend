@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HTTAPI.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace HTTAPI.Models
 {
@@ -47,6 +48,8 @@ namespace HTTAPI.Models
         /// 
         /// </summary>
         public Role Role { get; set; }
+
+        public EntityStatus Status { get; set; }
 
     }
 

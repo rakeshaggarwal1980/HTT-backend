@@ -2,7 +2,6 @@
 using HTTAPI.Manager.Contract;
 using HTTAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Net;

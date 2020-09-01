@@ -1,4 +1,5 @@
 ﻿using HTTAPI.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HTTAPI.Repository.Contracts
@@ -54,5 +55,11 @@ namespace HTTAPI.Repository.Contracts
         /// <param name="empId"></param>
         /// <returns></returns>
         Task<Employee> GetEmployeeById(int empId);
+
+        /// <summary>
+        ///  Returns list of all employees
+        /// </summary>
+        /// <returns></returns>
+        Task<List<Employee>> GetAllEmployees();
     }
 }

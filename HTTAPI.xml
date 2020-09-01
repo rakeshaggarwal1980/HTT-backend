@@ -24,13 +24,31 @@
         </member>
         <member name="M:HTTAPI.Controllers.EmployeeController.UpdateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
             <summary>
-            Updates an employee
+            Updates an employee detail
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Controllers.EmployeeController.GetEmployee(System.String)">
+        <member name="M:HTTAPI.Controllers.EmployeeController.UpdateAccountStatus(System.Int32,HTTAPI.Enums.EntityStatus)">
             <summary>
-            Get an employee
+            Employee Confirmation
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.EmployeeController.GetEmployeeByEmail(System.String)">
+            <summary>
+            Get an employee by email
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.EmployeeController.GetEmployeeById(System.Int32)">
+            <summary>
+            Get an employee by Id
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.EmployeeController.GetEmployees">
+            <summary>
+            Get all employees
             </summary>
             <returns></returns>
         </member>
@@ -48,19 +66,19 @@
         </member>
         <member name="M:HTTAPI.Controllers.HealthTrackController.GetDeclarationFormData">
             <summary>
-             Form detail
+             Returns declaration form controls details
             </summary>
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Controllers.HealthTrackController.SubmitDeclarationFormData(HTTAPI.ViewModels.HealthTrackViewModel)">
             <summary>
-             Form detail
+             Submit employee self declaration
             </summary>
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Controllers.HealthTrackController.getSelfDeclaration(System.Int32,System.String)">
             <summary>
-             Form detail
+             Returns declaration made by employee
             </summary>
             <returns></returns>
         </member>
@@ -238,6 +256,16 @@
         <member name="F:HTTAPI.Enums.MailTemplate.EmployeeDeclaration">
             <summary>
             Employee self declaration
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.MailTemplate.UserRegisterationRequest">
+            <summary>
+             Registeration request to HR
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.MailTemplate.UserConfirmation">
+            <summary>
+            Approval sent to employee
             </summary>
         </member>
         <member name="T:HTTAPI.Enums.EmployeeRoles">
@@ -503,6 +531,16 @@
             
             </summary>
         </member>
+        <member name="F:HTTAPI.Helpers.EmailTemplatePath.EmployeeConfirmation">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Helpers.EmailTemplatePath.RegisterationRequest">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:HTTAPI.Helpers.EntityMapperExtensions">
             <summary>
             Extension Methods for Entity Mapper.
@@ -700,11 +738,32 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.GetEmployeeById(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="employeeId"></param>
+            <returns></returns>
+        </member>
         <member name="M:HTTAPI.Manager.Contract.IEmployeeService.UpdateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
             <summary>
             
             </summary>
             <param name="employeeViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.GetEmployeeList">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.UpdateAccountStatus(System.Int32,HTTAPI.Enums.EntityStatus)">
+            <summary>
+            
+            </summary>
+            <param name="employeeId"></param>
+            <param name="status"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Manager.Contract.IHealthTrackService">
@@ -825,6 +884,14 @@
             <param name="signUpViewModel"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.UpdateAccountStatus(System.Int32,HTTAPI.Enums.EntityStatus)">
+            <summary>
+            
+            </summary>
+            <param name="employeeId"></param>
+            <param name="status"></param>
+            <returns></returns>
+        </member>
         <member name="M:HTTAPI.Manager.Contract.EmployeeService.UpdateEmployee(HTTAPI.ViewModels.EmployeeViewModel)">
             <summary>
             Update Employee
@@ -844,6 +911,19 @@
             
             </summary>
             <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetEmployeeById(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="employeeId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetEmployeeList">
+            <summary>
+            Returns employees
+            </summary>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Manager.Service.HealthTrackService">
@@ -1613,6 +1693,12 @@
             <param name="empId"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetAllEmployees">
+            <summary>
+             Returns list of all employees
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Contracts.IHealthTrackRepository">
             <summary>
             HealthTrackRepository 
@@ -1808,6 +1894,7 @@
             
             </summary>
             <param name="empId"></param>
+            <param name="includeRole"></param>
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Repository.Services.EmployeeRepository.UpdateEmployee(HTTAPI.Models.Employee)">
@@ -1839,6 +1926,12 @@
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetEmployeeDetailsByRole(System.String)">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetAllEmployees">
             <summary>
             
             </summary>
@@ -2156,6 +2249,26 @@
         <member name="P:HTTAPI.ViewModels.EmployeeViewModel.RoleId">
             <summary>
             Emloyee Role Id
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.RoleName">
+            <summary>
+            Role Name
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.EmployeeRegisterationEmailViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.EmployeeRegisterationEmailViewModel.HRName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.EmployeeRegisterationEmailViewModel.LinkUrl">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:HTTAPI.ViewModels.HealthTrackViewModel">

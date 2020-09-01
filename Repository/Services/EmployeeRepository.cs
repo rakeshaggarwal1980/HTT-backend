@@ -1,8 +1,7 @@
-﻿using HTTAPI.Enums;
-using HTTAPI.Models;
+﻿using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -35,6 +34,7 @@ namespace HTTAPI.Repository.Services
         {
             _context.Employee.Add(employee);
             await _context.SaveChangesAsync();
+            _context.Entry(employee).Reference(c => c.Role).Load();
             return employee;
         }
 
@@ -42,12 +42,12 @@ namespace HTTAPI.Repository.Services
         /// 
         /// </summary>
         /// <param name="empId"></param>
+        /// <param name="includeRole"></param>
         /// <returns></returns>
         public async Task<Employee> GetEmployeeById(int empId)
         {
-            var result = await _context.Employee
-                  .Where(e => e.Id == empId).Include(e => e.Role).SingleOrDefaultAsync();
-            return result;
+            return await _context.Employee
+                    .Where(e => e.Id == empId).Include(e => e.Role).SingleOrDefaultAsync();
         }
 
         /// <summary>
@@ -57,17 +57,9 @@ namespace HTTAPI.Repository.Services
         /// <returns></returns>
         public async Task<Employee> UpdateEmployee(Employee employee)
         {
-            var emp = _context.Employee.Include(t => t.Role).FirstOrDefault(e => e.Id == employee.Id);
-            if (emp == null)
-            {
-                throw new ArgumentException("Update failed: No such request found");
-            }
-            emp.Name = employee.Name;
-            emp.RoleId = employee.RoleId;
-            emp.Email = employee.Email;
-            emp.EmployeeCode = employee.EmployeeCode;
+            _context.Employee.Update(employee);
             await _context.SaveChangesAsync();
-            return emp;
+            return employee;
         }
 
         /// <summary>
@@ -77,7 +69,6 @@ namespace HTTAPI.Repository.Services
         /// <returns></returns>
         public async Task<Employee> GetEmployee(Employee employee)
         {
-
             var result = await _context.Employee
                    .Where(e => e.Email == employee.Email && e.Password == employee.Password).Include(e => e.Role)
                    .SingleOrDefaultAsync();
@@ -92,7 +83,7 @@ namespace HTTAPI.Repository.Services
         public async Task<Employee> GetEmployeeByEmail(string email)
         {
             var result = await _context.Employee
-                  .Where(e => e.Email == email).SingleOrDefaultAsync();
+                  .Where(e => e.Email == email).Include(e => e.Role).SingleOrDefaultAsync();
             return result;
         }
 
@@ -117,7 +108,14 @@ namespace HTTAPI.Repository.Services
             return await _context.Employee.Where(e => e.Role.Name == roleName).SingleOrDefaultAsync();
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<Employee>> GetAllEmployees()
+        {
+            return await _context.Employee.Include(e => e.Role).ToListAsync();
+        }
     }
 }
 

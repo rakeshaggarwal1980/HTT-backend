@@ -51,6 +51,16 @@
         /// 
         /// </summary>
         public const string EmployeeDeclaration = "Views/EmployeeDeclaration.cshtml";
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string EmployeeConfirmation = "Views/EmployeeConfirmation.cshtml";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string RegisterationRequest = "Views/RegisterationRequestToHR .cshtml";
     }
 
 }

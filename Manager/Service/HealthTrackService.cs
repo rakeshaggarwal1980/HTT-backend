@@ -305,7 +305,7 @@ namespace HTTAPI.Manager.Service
 
             // send to security as well
             var securityEmp = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRoles.SecurityManager.ToString());
-           
+
             appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
             appEmailHelper.CCMailAddresses.Add(new MailAddress(securityEmp.Email, securityEmp.Name));
 

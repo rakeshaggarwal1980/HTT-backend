@@ -102,6 +102,12 @@ namespace HTTAPI.Helpers
                 case MailTemplate.EmployeeDeclaration:
                     var result3 = await _viewRenderService.RenderToStringAsync(EmailTemplatePath.EmployeeDeclaration, MailBodyViewModel);
                     return result3.Body;
+                case MailTemplate.UserConfirmation:
+                    var result4 = await _viewRenderService.RenderToStringAsync(EmailTemplatePath.EmployeeConfirmation, MailBodyViewModel);
+                    return result4.Body;
+                case MailTemplate.UserRegisterationRequest:
+                    var result5= await _viewRenderService.RenderToStringAsync(EmailTemplatePath.RegisterationRequest, MailBodyViewModel);
+                    return result5.Body;
                 default:
                     return "";
             }

@@ -6,8 +6,11 @@ using HTTAPI.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +31,7 @@ namespace HTTAPI.Manager.Contract
         /// </summary>
         IEmployeeRepository _employeeRepository;
 
+        public AppEmailHelper appEmailHelper;
         /// <summary>
         /// EmployeeService constructor
         /// </summary>
@@ -82,6 +86,11 @@ namespace HTTAPI.Manager.Contract
                     employeeModel = await _employeeRepository.CreateEmployee(employeeModel);
 
                     employeeViewModel.MapFromModel(employeeModel);
+                    employeeViewModel.RoleId = employeeModel.Role.Id;
+                    employeeViewModel.RoleName = employeeModel.Role.Name;
+
+                    // send email to HR for approval
+                    await SendRegisterationRequestEmail(employeeViewModel, MailTemplate.UserRegisterationRequest);
 
                     result.Body = employeeViewModel;
                     return result;
@@ -99,6 +108,49 @@ namespace HTTAPI.Manager.Contract
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public async Task<IResult> UpdateAccountStatus(int employeeId, EntityStatus status)
+        {
+            var result = new Result
+            {
+                Operation = Operation.Update,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                if (employeeId != 0)
+                {
+                    var employeeVm = new EmployeeViewModel();
+                    var emp = await _employeeRepository.GetEmployeeById(employeeId);
+                    if (emp != null)
+                    {
+                        emp.Status = status;
+                        emp = await _employeeRepository.UpdateEmployee(emp);
+                        employeeVm.MapFromModel(emp);
+                    }
+                    result.Message = emp.Status == EntityStatus.Accept ? "Confirmed" : "Declined";
+                    // send email to employee via hR
+                    await SendAccountStatusEmail(employeeVm, MailTemplate.UserConfirmation);
+                    return result;
+                }
+                result.Status = Status.Fail;
+                result.StatusCode = HttpStatusCode.BadRequest;
+                return result;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+                result.Status = Status.Error;
+                return result;
+            }
+
+        }
 
         /// <summary>
         /// Update Employee
@@ -117,11 +169,16 @@ namespace HTTAPI.Manager.Contract
             {
                 if (employeeViewModel != null)
                 {
-                    var employeeModel = new Employee();
-                    employeeModel.MapFromViewModel(employeeViewModel);
-                    employeeModel = await _employeeRepository.UpdateEmployee(employeeModel);
-                    
-                    employeeViewModel.MapFromModel(employeeModel);
+                    //  var employeeModel = new Employee();
+                    //  employeeModel.MapFromViewModel(employeeViewModel);
+
+                    var emp = await _employeeRepository.GetEmployeeById(employeeViewModel.Id);
+                    if (emp != null)
+                    {
+                        emp.MapFromViewModel(employeeViewModel);
+                        emp = await _employeeRepository.UpdateEmployee(emp);
+                    }
+                    employeeViewModel.MapFromModel(emp);
                     result.Body = employeeViewModel;
                     return result;
                 }
@@ -160,21 +217,38 @@ namespace HTTAPI.Manager.Contract
                     employeeModel.MapFromViewModel(loginModel);
 
                     employeeModel = await _employeeRepository.GetEmployee(employeeModel);
-                    if (employeeModel != null && employeeModel.Id != 0)
+                    if (employeeModel != null)
                     {
-                        RoleViewModel roleVM = new RoleViewModel();
-                        roleVM.MapFromModel(employeeModel.Role);
-                        UserViewModel userView = new UserViewModel()
+                        // check if employee is confirmed or not
+                        if (employeeModel.Status == EntityStatus.Accept)
                         {
-                            Email = employeeModel.Email,
-                            EmployeeCode = employeeModel.EmployeeCode,
-                            Name = employeeModel.Name,
-                            UserId = employeeModel.Id,
-                            Token = GenerateToken(employeeModel.Name, employeeModel.Email, employeeModel.Role.Name),
-                            Role = roleVM
-                        };
-
-                        result.Body = userView;
+                            RoleViewModel roleVM = new RoleViewModel();
+                            roleVM.MapFromModel(employeeModel.Role);
+                            UserViewModel userView = new UserViewModel()
+                            {
+                                Email = employeeModel.Email,
+                                EmployeeCode = employeeModel.EmployeeCode,
+                                Name = employeeModel.Name,
+                                UserId = employeeModel.Id,
+                                Token = GenerateToken(employeeModel.Name, employeeModel.Email, employeeModel.Role.Name),
+                                Role = roleVM
+                            };
+                            result.Body = userView;
+                        }
+                        else if(employeeModel.Status == EntityStatus.Deny)
+                        {
+                            result.Body = null;
+                            result.Message = "Your account has declined by the HR";
+                            result.Status = Status.Fail;
+                            result.StatusCode = HttpStatusCode.Forbidden;
+                        }
+                        else
+                        {
+                            result.Body = null;
+                            result.Message = "Your account has not confirmed yet by the HR";
+                            result.Status = Status.Fail;
+                            result.StatusCode = HttpStatusCode.Unauthorized;
+                        }
                     }
                     else
                     {
@@ -220,6 +294,8 @@ namespace HTTAPI.Manager.Contract
                     if (employeeModel != null)
                     {
                         employeeVm.MapFromModel(employeeModel);
+                        employeeVm.RoleId = employeeModel.Role.Id;
+                        employeeVm.RoleName = employeeModel.Role.Name;
                         result.Body = employeeVm;
                     }
                     else
@@ -244,6 +320,100 @@ namespace HTTAPI.Manager.Contract
             }
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <returns></returns>
+        public async Task<IResult> GetEmployeeById(int employeeId)
+        {
+            var result = new Result
+            {
+                Operation = Operation.Read,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                if (employeeId > 0)
+                {
+                    var employeeVm = new EmployeeViewModel();
+                    var employeeModel = await _employeeRepository.GetEmployeeById(employeeId);
+                    if (employeeModel != null)
+                    {
+                        employeeVm.MapFromModel(employeeModel);
+                        employeeVm.RoleId = employeeModel.Role.Id;
+                        employeeVm.RoleName = employeeModel.Role.Name;
+                        result.Body = employeeVm;
+                    }
+                    else
+                    {
+                        result.Body = null;
+                        result.Message = "Employee Id does not exists";
+                        result.Status = Status.Fail;
+                        result.StatusCode = HttpStatusCode.NotFound;
+                    }
+                    return result;
+                }
+                result.Status = Status.Fail;
+                result.StatusCode = HttpStatusCode.BadRequest;
+                return result;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+                result.Status = Status.Error;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+                return result;
+            }
+        }
+
+
+
+        /// <summary>
+        /// Returns employees
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IResult> GetEmployeeList()
+        {
+            var employeeViewModels = new List<EmployeeViewModel>();
+            var result = new Result
+            {
+                Operation = Operation.Read,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                var employees = await _employeeRepository.GetAllEmployees();
+                if (employees.Any())
+                {
+                    employeeViewModels = employees.Select(t =>
+                    {
+                        var employeeViewModel = new EmployeeViewModel();
+                        employeeViewModel.MapFromModel(t);
+                        employeeViewModel.RoleId = t.Role.Id;
+                        employeeViewModel.RoleName = t.Role.Name;
+                        return employeeViewModel;
+                    }).ToList();
+                }
+                else
+                {
+                    result.Message = "No records found";
+                }
+                result.Body = employeeViewModels;
+
+            }
+            catch (Exception ex)
+            {
+                result.Status = Status.Error;
+                result.Message = ex.Message;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
+            return result;
+        }
+
         #region Private methods
 
         private string GenerateToken(string name, string email, string roleName)
@@ -264,6 +434,50 @@ namespace HTTAPI.Manager.Contract
                 new JwtPayload(claims));
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private async Task SendRegisterationRequestEmail(EmployeeViewModel empViewModel, MailTemplate mailTemplate)
+        {
+            appEmailHelper = new AppEmailHelper();
+            var hrEmployee = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRoles.HRManager.ToString());
+
+            appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
+            appEmailHelper.CCMailAddresses.Add(new MailAddress(empViewModel.Email, empViewModel.Name));
+            appEmailHelper.MailTemplate = mailTemplate;
+            appEmailHelper.Subject = "Request for Registeration";
+            EmployeeRegisterationEmailViewModel emailVm = new EmployeeRegisterationEmailViewModel();
+            emailVm.MapFromViewModel(empViewModel);
+            emailVm.LinkUrl = $"{ _configuration["AppUrl"]}users";
+            emailVm.HRName = hrEmployee.Name;
+            appEmailHelper.MailBodyViewModel = emailVm;
+            await appEmailHelper.InitMailMessage();
+        }
+
+        private async Task SendAccountStatusEmail(EmployeeViewModel empViewModel, MailTemplate mailTemplate)
+        {
+            appEmailHelper = new AppEmailHelper();
+            var hrEmployee = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRoles.HRManager.ToString());
+            if (hrEmployee != null)
+            {
+                appEmailHelper.FromMailAddress = new MailAddress(hrEmployee.Email, hrEmployee.Name);
+            }
+            appEmailHelper.ToMailAddresses.Add(new MailAddress(empViewModel.Email, empViewModel.Name));
+            appEmailHelper.MailTemplate = mailTemplate;
+            EmployeeRegisterationEmailViewModel emailVm = new EmployeeRegisterationEmailViewModel();
+            emailVm.MapFromViewModel(empViewModel);
+            if (empViewModel.Status == EntityStatus.Accept)
+            {
+                appEmailHelper.Subject = "Account confirmation";
+            }
+            else if (empViewModel.Status == EntityStatus.Deny)
+            {
+                appEmailHelper.Subject = "Account not confirmed";
+            }
+
+            emailVm.LinkUrl = $"{ _configuration["AppUrl"]}login";
+            emailVm.HRName = hrEmployee.Name;
+            appEmailHelper.MailBodyViewModel = emailVm;
+            await appEmailHelper.InitMailMessage();
         }
 
         #endregion
