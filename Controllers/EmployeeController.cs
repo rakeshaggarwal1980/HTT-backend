@@ -15,7 +15,6 @@ namespace HTTAPI.Controllers
     /// </summary>
     [Produces("application/json")]
     [ApiController]
-    [Route("api/employee")]
     public class EmployeeController : Controller
     {
         private readonly ILogger<EmployeeController> _logger;
@@ -35,7 +34,7 @@ namespace HTTAPI.Controllers
         /// Registers an employee
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("api/employee")]
         [ProducesResponseType(typeof(EmployeeViewModel), (int)HttpStatusCode.PartialContent)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
@@ -50,7 +49,7 @@ namespace HTTAPI.Controllers
         /// Updates an employee detail
         /// </summary>
         /// <returns></returns>
-        [HttpPut]
+        [HttpPut("api/employee")]
         [ProducesResponseType(typeof(EmployeeViewModel), (int)HttpStatusCode.PartialContent)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
@@ -66,7 +65,7 @@ namespace HTTAPI.Controllers
         /// Employee Confirmation
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/accountstatus/{id}/{value}")]
+        [HttpGet("api/employee/accountstatus/{id}/{value}")]
         [ProducesResponseType(typeof(EmployeeViewModel), (int)HttpStatusCode.PartialContent)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
@@ -82,7 +81,7 @@ namespace HTTAPI.Controllers
         /// Get an employee by email
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/employeebyemail/{email}")]
+        [HttpGet("api/employee/employeebyemail/{email}")]
         [ProducesResponseType(typeof(EmployeeViewModel), (int)HttpStatusCode.PartialContent)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
@@ -97,7 +96,7 @@ namespace HTTAPI.Controllers
         /// Get an employee by Id
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/employeebyid/{id}")]
+        [HttpGet("api/employee/employeebyid/{id}")]
         [ProducesResponseType(typeof(EmployeeViewModel), (int)HttpStatusCode.PartialContent)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
@@ -112,7 +111,7 @@ namespace HTTAPI.Controllers
         /// Get all employees
         /// </summary>
         /// <returns></returns>
-        [HttpGet("/list")]
+        [HttpGet("api/employee/list")]
         [ProducesResponseType(typeof(List<EmployeeViewModel>), (int)HttpStatusCode.PartialContent)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
