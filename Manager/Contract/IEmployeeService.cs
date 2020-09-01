@@ -1,4 +1,5 @@
-﻿using HTTAPI.Helpers;
+﻿using HTTAPI.Enums;
+using HTTAPI.Helpers;
 using HTTAPI.ViewModels;
 using System.Threading.Tasks;
 
@@ -29,12 +30,31 @@ namespace HTTAPI.Manager.Contract
         /// <returns></returns>
         Task<IResult> GetEmployeeByEmail(string email);
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <returns></returns>
+        Task<IResult> GetEmployeeById(int employeeId);
         /// <summary>
         /// 
         /// </summary>
         /// <param name="employeeViewModel"></param>
         /// <returns></returns>
         Task<IResult> UpdateEmployee(EmployeeViewModel employeeViewModel);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        Task<IResult> GetEmployeeList();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        Task<IResult> UpdateAccountStatus(int employeeId, EntityStatus status);
     }
 }

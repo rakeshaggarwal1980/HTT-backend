@@ -29,7 +29,7 @@ namespace HTTAPI.Controllers
         }
 
         /// <summary>
-        ///  Form detail
+        ///  Returns declaration form controls details
         /// </summary>
         /// <returns></returns>
         [HttpGet("declarationData")]
@@ -38,13 +38,13 @@ namespace HTTAPI.Controllers
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
         public async Task<ActionResult<IResult>> GetDeclarationFormData()
         {
-            _logger.LogInformation("Get request detail");
+            _logger.LogInformation("Get declaration data");
             var result = await _healthTrackService.GetDeclarationFormData();
             return StatusCode((int)result.StatusCode, result);
         }
 
         /// <summary>
-        ///  Form detail
+        ///  Submit employee self declaration
         /// </summary>
         /// <returns></returns>
         [HttpPost("declarationData")]
@@ -60,7 +60,7 @@ namespace HTTAPI.Controllers
 
 
         /// <summary>
-        ///  Form detail
+        ///  Returns declaration made by employee
         /// </summary>
         /// <returns></returns>
         [HttpGet("selfDeclaration")]

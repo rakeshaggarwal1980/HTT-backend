@@ -100,7 +100,17 @@
         /// <summary>
         /// Employee self declaration
         /// </summary>
-        EmployeeDeclaration = 3
+        EmployeeDeclaration = 3,
+
+        /// <summary>
+        ///  Registeration request to HR
+        /// </summary>
+        UserRegisterationRequest = 4,
+
+        /// <summary>
+        /// Approval sent to employee
+        /// </summary>
+        UserConfirmation = 5
     }
 
     /// <summary>

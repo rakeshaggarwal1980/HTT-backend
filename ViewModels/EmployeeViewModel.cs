@@ -36,5 +36,25 @@ namespace HTTAPI.ViewModels
         /// Emloyee Role Id
         /// </summary>
         public int RoleId { get; set; }
+
+        /// <summary>
+        /// Role Name
+        /// </summary>
+        public string RoleName { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class EmployeeRegisterationEmailViewModel : EmployeeViewModel
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string HRName { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string LinkUrl { get; set; }
     }
 }

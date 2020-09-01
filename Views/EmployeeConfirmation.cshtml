@@ -1,0 +1,62 @@
+﻿@model HTTAPI.ViewModels.EmployeeRegisterationEmailViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <style>
+        body {
+            width: 850px;
+        }
+
+        h3.summary-header {
+            font-weight: bold;
+        }
+
+        span.form-header {
+            font-weight: bold;
+        }
+
+        .summary {
+            margin-left: 15px;
+        }
+
+        .description {
+            margin-top: 25px;
+        }
+
+        .bye {
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+    <p>Dear @Html.DisplayFor(model => model.Name)</p>
+
+    @if (Model.Status == HTTAPI.Enums.EntityStatus.Accept)
+    {
+        <p>
+            Thank you for registering in the portal. Your new account has been created.
+        </p>
+        <p>
+            Login in to the portal by clicking this link
+            <a title="Click here" href="@Model.LinkUrl">Login</a>
+        </p>
+    }
+    else
+    {
+        <p>Your registeration request has been declined. Please try again.</p>
+    }
+
+
+    <div class="bye">
+        <span class="br">Best Regards</span><br />
+        <span class="thnks">@Html.DisplayFor(model => model.HRName)</span>
+        <span class="thnks">HR Team</span>
+    </div>
+</body>
+</html>
