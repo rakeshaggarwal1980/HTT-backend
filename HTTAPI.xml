@@ -946,7 +946,7 @@
             Claim Identity
             </summary>
         </member>
-        <member name="M:HTTAPI.Manager.Service.HealthTrackService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Service.HealthTrackService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IHealthTrackRepository,HTTAPI.Repository.Contracts.IZoneRepository,HTTAPI.Repository.Contracts.ILocationRepository,HTTAPI.Repository.Contracts.ISymptomRepository,HTTAPI.Repository.Contracts.IQuestionRepository,HTTAPI.Repository.Contracts.IEmployeeRepository,Microsoft.Extensions.Configuration.IConfiguration)">
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Service.HealthTrackService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IHealthTrackRepository,HTTAPI.Repository.Contracts.IZoneRepository,HTTAPI.Repository.Contracts.ILocationRepository,HTTAPI.Repository.Contracts.ISymptomRepository,HTTAPI.Repository.Contracts.IQuestionRepository,HTTAPI.Repository.Contracts.IEmployeeRepository,HTTAPI.Repository.Contracts.IRequestRepository,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             HealthTrackService constructor
             </summary>
@@ -958,6 +958,7 @@
             <param name="symptomRepository"></param>
             <param name="questionRepository"></param>
             <param name="employeeRepository"></param>
+            <param name="requestRepository"></param>
             <param name="configuration"></param>      
         </member>
         <member name="M:HTTAPI.Manager.Service.HealthTrackService.CreateHealthTrack(HTTAPI.ViewModels.HealthTrackViewModel)">
@@ -1786,6 +1787,13 @@
             <param name="employeeId"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestByNumber(System.String)">
+            <summary>
+            Get request by request number
+            </summary>
+            <param name="requestNumber"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Contracts.IRoleRepository">
             <summary>
             Role contract
@@ -2041,6 +2049,13 @@
             
             </summary>
             <param name="requestId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestByNumber(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="requestNumber"></param>
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestsByEmployee(System.Int32)">

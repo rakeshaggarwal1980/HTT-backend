@@ -1,4 +1,5 @@
 ﻿using HTTAPI.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HTTAPI.Repository.Contracts
@@ -22,6 +23,14 @@ namespace HTTAPI.Repository.Contracts
         /// <param name="employeedId"></param>
         /// <param name="requestNumber"></param>
         /// <returns></returns>
-        Task<HealthTrack> GetSelfDeclarationByEmployeeForRequest(int employeedId, string requestNumber);
+        Task<List<HealthTrack>> GetSelfDeclarationByEmployeeForRequest(int employeedId, string requestNumber);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeedId"></param>
+        /// <param name="requestNumber"></param>
+        /// <returns></returns>
+       // Task<ComeToOfficeRequest> GetSelfDeclarationRequestInfo(int employeedId, string requestNumber)
     }
 }
