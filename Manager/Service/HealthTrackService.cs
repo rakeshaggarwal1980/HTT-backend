@@ -134,13 +134,13 @@ namespace HTTAPI.Manager.Service
                 if (healthTrackViewModel != null)
                 {
                     var today = DateTime.Now.Date;
-                    object request = null;
+                    dynamic request = null;
                     if (string.IsNullOrEmpty(healthTrackViewModel.RequestNumber))
                     {
                         // testing pending for this block
                         // find recent approved request
                         var requests = await _requestRepository.GetRequestsListByUserId(healthTrackViewModel.EmployeeId);
-                        requests.OrderBy(x => x.FromDate)
+                       request= requests.OrderBy(x => x.FromDate)
                             .Where(x => x.IsApproved && 
                                    (x.FromDate <= today && x.ToDate >= today)).FirstOrDefault();
                     } else
