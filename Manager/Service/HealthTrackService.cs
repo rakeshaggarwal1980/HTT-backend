@@ -36,6 +36,7 @@ namespace HTTAPI.Manager.Service
         ISymptomRepository _symptomRepository;
         IQuestionRepository _questionRepository;
         IEmployeeRepository _employeeRepository;
+        IRequestRepository _requestRepository;
         /// <summary>
         /// Claim Identity
         /// </summary>
@@ -52,11 +53,12 @@ namespace HTTAPI.Manager.Service
         /// <param name="symptomRepository"></param>
         /// <param name="questionRepository"></param>
         /// <param name="employeeRepository"></param>
+        /// <param name="requestRepository"></param>
         /// <param name="configuration"></param>      
         public HealthTrackService(ILogger<HealthTrackService> logger, IPrincipal principal,
             IHealthTrackRepository healthTrackRepository, IZoneRepository zoneRepository,
         ILocationRepository locationRepository, ISymptomRepository symptomRepository, IQuestionRepository questionRepository,
-        IEmployeeRepository employeeRepository, IConfiguration configuration)
+        IEmployeeRepository employeeRepository, IRequestRepository requestRepository, IConfiguration configuration)
         {
             _logger = logger;
             _principal = principal as ClaimsPrincipal;
@@ -66,7 +68,52 @@ namespace HTTAPI.Manager.Service
             _locationRepository = locationRepository;
             _zoneRepository = zoneRepository;
             _employeeRepository = employeeRepository;
+            _requestRepository = requestRepository;
             _configuration = configuration;
+        }
+
+
+        private async Task<HealthTrackViewModel> SaveHealthTrack(HealthTrackViewModel healthTrackViewModel)
+        {
+            // user can add declaration
+            var healthTrackModel = new HealthTrack();
+            // To map health Track detail
+            healthTrackModel.MapFromViewModel(healthTrackViewModel, (ClaimsIdentity)_principal.Identity);
+            var healthTrackSymptoms = new List<HealthTrackSymptom>();
+
+            if (healthTrackViewModel.HealthTrackSymptoms.Any())
+            {
+                // To map HealthTrack Symptoms
+                healthTrackSymptoms = healthTrackViewModel.HealthTrackSymptoms.Select(t =>
+                {
+                    var symptom = new HealthTrackSymptom();
+                    symptom.MapFromViewModel(t);
+                    return symptom;
+                }).ToList();
+            }
+
+            var healthTrackQuestionAnswer = new List<HealthTrackQuestionAnswer>();
+            if (healthTrackViewModel.HealthTrackQuestionAnswers.Any())
+            {
+                healthTrackQuestionAnswer = healthTrackViewModel.HealthTrackQuestionAnswers.Select(t =>
+                {
+                    var questionAns = new HealthTrackQuestionAnswer();
+                    questionAns.MapFromViewModel(t);
+                    return questionAns;
+                }).ToList();
+            }
+
+            healthTrackModel.HealthTrackSymptoms = healthTrackSymptoms;
+            healthTrackModel.HealthTrackQuestions = healthTrackQuestionAnswer;
+
+            healthTrackModel = await _healthTrackRepository.CreateHealthTrack(healthTrackModel);
+            healthTrackViewModel.Id = healthTrackModel.Id;
+            var employeeVm = new EmployeeViewModel();
+            employeeVm.MapFromModel(healthTrackModel.Employee);
+            healthTrackViewModel.Employee = employeeVm;
+            // send email to HR and security
+            await SendEmail(healthTrackViewModel);
+            return healthTrackViewModel;
         }
 
         /// <summary>
@@ -86,56 +133,59 @@ namespace HTTAPI.Manager.Service
             {
                 if (healthTrackViewModel != null)
                 {
-                    // check if user already submitted self declaration for a request
-                    var declaration = await _healthTrackRepository.GetSelfDeclarationByEmployeeForRequest(healthTrackViewModel.EmployeeId, healthTrackViewModel.RequestNumber);
-                    if (declaration == null)
+                    var today = DateTime.Now.Date;
+                    object request = null;
+                    if (string.IsNullOrEmpty(healthTrackViewModel.RequestNumber))
                     {
-                        var healthTrackModel = new HealthTrack();
-                        // To map health Track detail
-                        healthTrackModel.MapFromViewModel(healthTrackViewModel, (ClaimsIdentity)_principal.Identity);
-                        var healthTrackSymptoms = new List<HealthTrackSymptom>();
+                        // testing pending for this block
+                        // find recent approved request
+                        var requests = await _requestRepository.GetRequestsListByUserId(healthTrackViewModel.EmployeeId);
+                        requests.OrderBy(x => x.FromDate)
+                            .Where(x => x.IsApproved && 
+                                   (x.FromDate <= today && x.ToDate >= today)).FirstOrDefault();
+                    } else
+                    {
+                         request = await _requestRepository.GetRequestByNumber(healthTrackViewModel.RequestNumber);
+                    }
 
-                        if (healthTrackViewModel.HealthTrackSymptoms.Any())
+                    
+                    // check if user has declarations for a request
+                    var declarations = await _healthTrackRepository.GetSelfDeclarationByEmployeeForRequest(healthTrackViewModel.EmployeeId, healthTrackViewModel.RequestNumber);
+                    if (declarations.Any())
+                    {
+                        // if user has already submiited declaration for today
+                        if (declarations.Any(d => d.CreatedDate.Date == today))
                         {
-                            // To map HealthTrack Symptoms
-                            healthTrackSymptoms = healthTrackViewModel.HealthTrackSymptoms.Select(t =>
-                            {
-                                var symptom = new HealthTrackSymptom();
-                                symptom.MapFromViewModel(t);
-                                return symptom;
-                            }).ToList();
+                            result.Status = Status.Fail;
+                            result.StatusCode = HttpStatusCode.NotAcceptable;
+                            result.Message = "You already have submitted declaration for today";
                         }
-
-                        var healthTrackQuestionAnswer = new List<HealthTrackQuestionAnswer>();
-                        if (healthTrackViewModel.HealthTrackQuestionAnswers.Any())
+                        // if request has expired 
+                        else if (today > request.ToDate)
                         {
-                            healthTrackQuestionAnswer = healthTrackViewModel.HealthTrackQuestionAnswers.Select(t =>
-                            {
-                                var questionAns = new HealthTrackQuestionAnswer();
-                                questionAns.MapFromViewModel(t);
-                                return questionAns;
-                            }).ToList();
+                            result.Status = Status.Fail;
+                            result.StatusCode = HttpStatusCode.Forbidden;
+                            result.Message = "Your request has expired. Please raise a new request to submit declaration";
                         }
-
-                        healthTrackModel.HealthTrackSymptoms = healthTrackSymptoms;
-                        healthTrackModel.HealthTrackQuestions = healthTrackQuestionAnswer;
-
-                        healthTrackModel = await _healthTrackRepository.CreateHealthTrack(healthTrackModel);
-                        healthTrackViewModel.Id = healthTrackModel.Id;
-                        var employeeVm = new EmployeeViewModel();
-                        employeeVm.MapFromModel(healthTrackModel.Employee);
-                        healthTrackViewModel.Employee = employeeVm;
-                        // send email to HR and security
-                        await SendEmail(healthTrackViewModel);
-                        result.Body = healthTrackViewModel;
-
+                        else
+                        {
+                            result.Body = await SaveHealthTrack(healthTrackViewModel);
+                        }
                     }
                     else
                     {
-                        result.Status = Status.Fail;
-                        result.StatusCode = HttpStatusCode.AlreadyReported;
-                        result.Message = "You have already submitted self declaration";
-
+                        if (today <= request.ToDate.Date)
+                        {
+                            // now add logic to create declaration
+                            result.Body = await SaveHealthTrack(healthTrackViewModel);
+                        }
+                        else
+                        {
+                            // You have to raise a new request to submit declaration
+                            result.Status = Status.Fail;
+                            result.StatusCode = HttpStatusCode.Forbidden;
+                            result.Message = "Your request has expired. Please raise a new request to submit declaration";
+                        }
                     }
                     return result;
                 }
@@ -239,7 +289,7 @@ namespace HTTAPI.Manager.Service
         /// <returns></returns>
         public async Task<IResult> GetSelfDeclarationByEmployeeForRequest(int employeedId, string requestNumber)
         {
-            var healthViewModel = new HealthTrackViewModel();
+            var healthViewModelList = new List<HealthTrackViewModel>();
             var result = new Result
             {
                 Operation = Operation.Read,
@@ -248,38 +298,43 @@ namespace HTTAPI.Manager.Service
             };
             try
             {
-                var declaration = await _healthTrackRepository.GetSelfDeclarationByEmployeeForRequest(employeedId, requestNumber);
-                if (declaration != null)
+                var declarationList = await _healthTrackRepository.GetSelfDeclarationByEmployeeForRequest(employeedId, requestNumber);
+                if (declarationList.Any())
                 {
-                    healthViewModel.MapFromModel(declaration);
-                    var employeeVm = new EmployeeViewModel();
-                    employeeVm.MapFromModel(declaration.Employee);
-                    healthViewModel.Employee = employeeVm;
-                    var symptoms = new List<HealthTrackSymptomViewModel>();
-                    var questions = new List<HealthTrackQuestionAnswerViewModel>();
-                    if (declaration.HealthTrackQuestions.Any())
+                    healthViewModelList = declarationList.Select(declaration =>
                     {
-                        questions = declaration.HealthTrackQuestions.Select(t =>
+                        var healthViewModel = new HealthTrackViewModel();
+                        healthViewModel.MapFromModel(declaration);
+                        var employeeVm = new EmployeeViewModel();
+                        employeeVm.MapFromModel(declaration.Employee);
+                        healthViewModel.Employee = employeeVm;
+                        var symptoms = new List<HealthTrackSymptomViewModel>();
+                        var questions = new List<HealthTrackQuestionAnswerViewModel>();
+                        if (declaration.HealthTrackQuestions.Any())
                         {
-                            var questions = new HealthTrackQuestionAnswerViewModel();
-                            questions.MapFromModel(t);
-                            return questions;
-                        }).ToList();
-                    }
+                            questions = declaration.HealthTrackQuestions.Select(t =>
+                            {
+                                var questions = new HealthTrackQuestionAnswerViewModel();
+                                questions.MapFromModel(t);
+                                return questions;
+                            }).ToList();
+                        }
 
-                    if (declaration.HealthTrackSymptoms.Any())
-                    {
-                        symptoms = declaration.HealthTrackSymptoms.Select(t =>
+                        if (declaration.HealthTrackSymptoms.Any())
                         {
-                            var symptom = new HealthTrackSymptomViewModel();
-                            symptom.MapFromModel(t);
-                            return symptom;
-                        }).ToList();
-                    }
-                    healthViewModel.HealthTrackSymptoms = symptoms;
-                    healthViewModel.HealthTrackQuestionAnswers = questions;
+                            symptoms = declaration.HealthTrackSymptoms.Select(t =>
+                            {
+                                var symptom = new HealthTrackSymptomViewModel();
+                                symptom.MapFromModel(t);
+                                return symptom;
+                            }).ToList();
+                        }
+                        healthViewModel.HealthTrackSymptoms = symptoms;
+                        healthViewModel.HealthTrackQuestionAnswers = questions;
+                        return healthViewModel;
+                    }).ToList();
 
-                    result.Body = healthViewModel;
+                    result.Body = healthViewModelList;
                 }
                 else
                 {
