@@ -1,4 +1,5 @@
-﻿using HTTAPI.Models;
+﻿using HTTAPI.Helpers;
+using HTTAPI.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -30,5 +31,13 @@ namespace HTTAPI.Repository.Contracts
         /// </summary>
         /// <returns></returns>
         Task<List<HealthTrack>> GetAllDeclarations();
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        List<HealthTrack> GetDeclarations(SearchSortModel search);
     }
 }

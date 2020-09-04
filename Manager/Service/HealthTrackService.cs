@@ -442,7 +442,7 @@ namespace HTTAPI.Manager.Service
         /// <returns></returns>
         public IResult GetDeclarations(SearchSortModel search)
         {
-            var healthViewModel = new HealthTrackViewModel();
+            var healthViewModelList = new List<HealthTrackViewModel>();
             var result = new Result
             {
                 Operation = Operation.Read,
@@ -451,23 +451,42 @@ namespace HTTAPI.Manager.Service
             };
             try
             {
-                var declarations = _healthTrackRepository.GetDeclarations(search);
-                if (declarations != null)
+                var declarationList = _healthTrackRepository.GetDeclarations(search);
+                if (declarationList.Any())
                 {
-                    healthViewModel.MapFromModel(declarations);
-                    var employeeVm = new EmployeeViewModel();
-                    declarations.ForEach(d =>
-                    {   
-                        if (d.Employee.Id > 0)
-                        {
-                            employeeVm.MapFromModel(d.Employee);
-                            healthViewModel.Employee = employeeVm;
-                        }
-                    });
+                    healthViewModelList = declarationList.Select(declaration =>
+                    {
+                        var healthViewModel = new HealthTrackViewModel();
+                        healthViewModel.MapFromModel(declaration);
+                        var employeeVm = new EmployeeViewModel();
+                        employeeVm.MapFromModel(declaration.Employee);
+                        healthViewModel.Employee = employeeVm;
+                        //var symptoms = new List<HealthTrackSymptomViewModel>();
+                        //var questions = new List<HealthTrackQuestionAnswerViewModel>();
+                        //if (declaration.HealthTrackQuestions.Any())
+                        //{
+                        //    questions = declaration.HealthTrackQuestions.Select(t =>
+                        //    {
+                        //        var questions = new HealthTrackQuestionAnswerViewModel();
+                        //        questions.MapFromModel(t);
+                        //        return questions;
+                        //    }).ToList();
+                        //}
 
-
-
-                    result.Body = healthViewModel;
+                        //if (declaration.HealthTrackSymptoms.Any())
+                        //{
+                        //    symptoms = declaration.HealthTrackSymptoms.Select(t =>
+                        //    {
+                        //        var symptom = new HealthTrackSymptomViewModel();
+                        //        symptom.MapFromModel(t);
+                        //        return symptom;
+                        //    }).ToList();
+                        //}
+                        //healthViewModel.HealthTrackSymptoms = symptoms;
+                        //healthViewModel.HealthTrackQuestionAnswers = questions;
+                        return healthViewModel;
+                    }).ToList();
+                    result.Body = healthViewModelList;
                 }
                 else
                 {
