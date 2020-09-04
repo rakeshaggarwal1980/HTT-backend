@@ -110,7 +110,9 @@
         /// <summary>
         /// Approval sent to employee
         /// </summary>
-        UserConfirmation = 5
+        UserConfirmation = 5,
+
+        PasswordReset = 6
     }
 
     /// <summary>

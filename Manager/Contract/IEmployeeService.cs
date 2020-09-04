@@ -56,5 +56,19 @@ namespace HTTAPI.Manager.Contract
         /// <param name="status"></param>
         /// <returns></returns>
         Task<IResult> UpdateAccountStatus(int employeeId, EntityStatus status);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<IResult> ForgotPassword(ForgotPasswordViewModel model);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        Task<IResult> ResetPassword(ResetPasswordViewModel model);
     }
 }

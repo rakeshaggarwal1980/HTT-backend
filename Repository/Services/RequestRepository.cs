@@ -100,7 +100,7 @@ namespace HTTAPI.Repository.Services
         /// <returns></returns>
         public async Task<ComeToOfficeRequest> GetRequestByNumber(string requestNumber)
         {
-            return await _context.ComeToOfficeRequest.Include("Employee").Where(x => x.RequestNumber==requestNumber).SingleOrDefaultAsync();
+            return await _context.ComeToOfficeRequest.Include("Employee").Where(x => x.RequestNumber == requestNumber).SingleOrDefaultAsync();
         }
 
 

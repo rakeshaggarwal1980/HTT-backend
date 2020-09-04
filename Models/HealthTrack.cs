@@ -38,10 +38,6 @@ namespace HTTAPI.Models
         /// </summary>
         public bool TravelOustSideInLast15Days { get; set; }
 
-        /// <summary>
-        /// TravelOustSideInLast15Days
-        /// </summary>
-        public DateTime DateOfTravel { get; set; }
 
         /// <summary>
         /// 
