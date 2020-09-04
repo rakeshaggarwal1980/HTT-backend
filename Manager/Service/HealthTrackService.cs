@@ -133,7 +133,7 @@ namespace HTTAPI.Manager.Service
             {
                 if (healthTrackViewModel != null)
                 {
-                    var today = DateTime.Now.Date;
+                    var todayDate = DateTime.Now.Date;
                     dynamic request = null;
                     if (string.IsNullOrEmpty(healthTrackViewModel.RequestNumber))
                     {
@@ -142,7 +142,7 @@ namespace HTTAPI.Manager.Service
                         var requests = await _requestRepository.GetRequestsListByUserId(healthTrackViewModel.EmployeeId);
                        request= requests.OrderBy(x => x.FromDate)
                             .Where(x => x.IsApproved && 
-                                   (x.FromDate <= today && x.ToDate >= today)).FirstOrDefault();
+                                   (x.FromDate.Date <= todayDate && x.ToDate.Date>= todayDate)).FirstOrDefault();
 
                         healthTrackViewModel.RequestNumber = request.RequestNumber;
                     } else
@@ -163,14 +163,14 @@ namespace HTTAPI.Manager.Service
                     if (declarations.Any())
                     {
                         // if user has already submiited declaration for today
-                        if (declarations.Any(d => d.CreatedDate.Date == today))
+                        if (declarations.Any(d => d.CreatedDate.Date == todayDate))
                         {
                             result.Status = Status.Fail;
                             result.StatusCode = HttpStatusCode.NotAcceptable;
                             result.Message = "You already have submitted declaration for today";
                         }
                         // if request has expired 
-                        else if (today > request.ToDate)
+                        else if (todayDate > request.ToDate.Date)
                         {
                             result.Status = Status.Fail;
                             result.StatusCode = HttpStatusCode.Forbidden;
@@ -183,7 +183,7 @@ namespace HTTAPI.Manager.Service
                     }
                     else
                     {
-                        if (today <= request.ToDate.Date)
+                        if (todayDate <= request.ToDate.Date)
                         {
                             // now add logic to create declaration
                             result.Body = await SaveHealthTrack(healthTrackViewModel);

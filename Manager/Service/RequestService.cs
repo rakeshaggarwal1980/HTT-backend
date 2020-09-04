@@ -192,7 +192,7 @@ namespace HTTAPI.Manager.Service
                 if (requestViewModel != null)
                 {
                     // restrict past date requests
-                    if (requestViewModel.ToDate < DateTime.Now.Date)
+                    if (requestViewModel.ToDate.Date < DateTime.Now.Date)
                     {
                         result.Status = Status.Fail;
                         result.StatusCode = HttpStatusCode.NotAcceptable;
