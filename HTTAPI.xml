@@ -82,6 +82,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Controllers.HealthTrackController.GetAllDeclarations">
+            <summary>
+             Returns declaration made by employee
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Controllers.LoginController">
             <summary>
             
@@ -792,6 +798,12 @@
             <param name="requestNumber"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.IHealthTrackService.GetAllDeclarations">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Manager.Contract.IRequestService">
             <summary>
              Contract for Come to office request
@@ -975,6 +987,12 @@
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Manager.Service.HealthTrackService.GetSelfDeclarationByEmployeeForRequest(System.Int32,System.String)">
+            <summary>
+             Returns data to bind on declaration form
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.GetAllDeclarations">
             <summary>
              Returns data to bind on declaration form
             </summary>
@@ -1720,6 +1738,12 @@
             <param name="requestNumber"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Contracts.IHealthTrackRepository.GetAllDeclarations">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Contracts.ILocationRepository">
             <summary>
             
@@ -1969,6 +1993,12 @@
             </summary>
             <param name="employeedId"></param>
             <param name="requestNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.HealthTrackRepository.GetAllDeclarations">
+            <summary>
+            
+            </summary>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Services.LocationRepository">

@@ -191,6 +191,14 @@ namespace HTTAPI.Manager.Service
                 var requesModel = new ComeToOfficeRequest();
                 if (requestViewModel != null)
                 {
+                    // restrict past date requests
+                    if (requestViewModel.ToDate < DateTime.Now.Date)
+                    {
+                        result.Status = Status.Fail;
+                        result.StatusCode = HttpStatusCode.NotAcceptable;
+                        result.Message = "You can not add request for the past dates";
+                        return result;
+                    }
                     // check if employee already has active request for current and next days
                     var empRequests = await _requestRepository.GetRequestsByEmployee(requestViewModel.EmployeeId);
                     if (empRequests.Count() > 0)

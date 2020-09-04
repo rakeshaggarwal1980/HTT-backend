@@ -55,22 +55,11 @@ namespace HTTAPI.Repository.Services
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="employeedId"></param>
-        /// <param name="requestNumber"></param>
         /// <returns></returns>
-        //public async  Task<ComeToOfficeRequest> GetEmployeeDeclarationsRequestInfo(int employeedId, string requestNumber)
-        //{
-        //    var request = await (from ht in _context.HealthTrack
-        //                  join cr in _context.ComeToOfficeRequest
-        //                  on ht.RequestNumber equals cr.RequestNumber
-        //                  where (ht.EmployeeId == employeedId) &&
-        //                        (ht.Status == EntityStatus.Active) &&
-        //                        (ht.RequestNumber == requestNumber)
-        //                  select cr).ToListAsync();
-        //    return request;
-       
-        //}
-
+        public async Task<List<HealthTrack>> GetAllDeclarations()
+        {
+            return await _context.HealthTrack.Include("Employee").Include("HealthTrackSymptoms").Include("HealthTrackQuestions").ToListAsync();
+        }
 
     }
 }

@@ -30,6 +30,12 @@ namespace HTTAPI.Manager.Contract
         /// <param name="requestNumber"></param>
         /// <returns></returns>
         Task<IResult> GetSelfDeclarationByEmployeeForRequest(int employeedId, string requestNumber);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        Task<IResult> GetAllDeclarations();
     }
 
 }

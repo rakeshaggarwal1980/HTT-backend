@@ -3,6 +3,7 @@ using HTTAPI.Manager.Contract;
 using HTTAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -64,13 +65,29 @@ namespace HTTAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("selfDeclaration")]
-        [ProducesResponseType(typeof(HealthTrackViewModel), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(List<HealthTrackViewModel>), (int)HttpStatusCode.PartialContent)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
         public async Task<ActionResult<IResult>> getSelfDeclaration(int employeeId, string requestNumber)
         {
             _logger.LogInformation("get employee declaration detail");
             var result = await _healthTrackService.GetSelfDeclarationByEmployeeForRequest(employeeId, requestNumber);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+
+        /// <summary>
+        ///  Returns declaration made by employee
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("declarationList")]
+        [ProducesResponseType(typeof(List<HealthTrackViewModel>), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public async Task<ActionResult<IResult>> GetAllDeclarations()
+        {
+            _logger.LogInformation("get all declarations");
+            var result = await _healthTrackService.GetAllDeclarations();
             return StatusCode((int)result.StatusCode, result);
         }
 

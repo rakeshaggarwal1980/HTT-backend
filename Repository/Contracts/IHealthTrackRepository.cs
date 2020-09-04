@@ -28,9 +28,7 @@ namespace HTTAPI.Repository.Contracts
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="employeedId"></param>
-        /// <param name="requestNumber"></param>
         /// <returns></returns>
-       // Task<ComeToOfficeRequest> GetSelfDeclarationRequestInfo(int employeedId, string requestNumber)
+        Task<List<HealthTrack>> GetAllDeclarations();
     }
 }
