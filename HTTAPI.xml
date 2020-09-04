@@ -4,6 +4,32 @@
         <name>HTTAPI</name>
     </assembly>
     <members>
+        <member name="T:HTTAPI.Controllers.AccountController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Controllers.AccountController.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Controllers.AccountController},HTTAPI.Manager.Contract.IEmployeeService)">
+            <summary>
+            
+            </summary>
+            <param name="logger"></param>
+            <param name="employeeService"></param>
+        </member>
+        <member name="M:HTTAPI.Controllers.AccountController.ForgotPassword(HTTAPI.ViewModels.ForgotPasswordViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.AccountController.ResetPassword(HTTAPI.ViewModels.ResetPasswordViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Controllers.EmployeeController">
             <summary>
             Employee Controller
@@ -82,11 +108,10 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Controllers.HealthTrackController.GetDeclarations(HTTAPI.Helpers.SearchSortModel)">
+        <member name="M:HTTAPI.Controllers.HealthTrackController.GetAllDeclarations">
             <summary>
-             Get Declarations
+             Returns declaration made by employee
             </summary>
-            <param name="search"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Controllers.LoginController">
@@ -548,6 +573,11 @@
             
             </summary>
         </member>
+        <member name="F:HTTAPI.Helpers.EmailTemplatePath.PasswordResetEmail">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:HTTAPI.Helpers.EntityMapperExtensions">
             <summary>
             Extension Methods for Entity Mapper.
@@ -627,33 +657,6 @@
             <param name="app"></param>
             <param name="logger"></param>
         </member>
-        <member name="M:HTTAPI.Helpers.ExpressionBuilder.GetExpression``1(System.Collections.Generic.IList{HTTAPI.Helpers.Filter})">
-            <summary>
-            Create search expression
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="filters"></param>
-            <returns></returns>
-        </member>
-        <member name="M:HTTAPI.Helpers.ExpressionBuilder.GetExpression``1(System.Linq.Expressions.ParameterExpression,HTTAPI.Helpers.Filter)">
-            <summary>
-            Get Expression
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="param"></param>
-            <param name="filter"></param>
-            <returns></returns>
-        </member>
-        <member name="M:HTTAPI.Helpers.ExpressionBuilder.GetExpression``1(System.Linq.Expressions.ParameterExpression,HTTAPI.Helpers.Filter,HTTAPI.Helpers.Filter)">
-            <summary>
-            Get Joined expression
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="param"></param>
-            <param name="filter1"></param>
-            <param name="filter2"></param>
-            <returns></returns>
-        </member>
         <member name="T:HTTAPI.Helpers.IResult">
             <summary>
             IResult data return type
@@ -732,22 +735,6 @@
             <param name="webHost"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Helpers.PagingExtensions.Page``1(System.Linq.IQueryable{``0},System.Int32,System.Int32)">
-             <summary>
-             Pages a LINQ query to return just the subset of rows from the database. Use as follows:
-             
-             var query = from s in _context.Table
-                         orderby s.Id ascending
-                         select s;
-            
-             return _myRepository.Find(query, page, pageSize).ToList();
-             </summary>
-             <typeparam name="TSource">Entity</typeparam>
-             <param name="source">LINQ query</param>
-             <param name="page">Page Index</param>
-             <param name="pageSize">Number of Rows</param>
-             <returns>IQueryable</returns>
-        </member>
         <member name="T:HTTAPI.Helpers.UserClaim">
             <summary>
             Logged user claim
@@ -816,6 +803,20 @@
             <param name="status"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.ForgotPassword(HTTAPI.ViewModels.ForgotPasswordViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.ResetPassword(HTTAPI.ViewModels.ResetPasswordViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Manager.Contract.IHealthTrackService">
             <summary>
             interface for ContentDetailService 
@@ -842,11 +843,10 @@
             <param name="requestNumber"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.IHealthTrackService.GetDeclarations(HTTAPI.Helpers.SearchSortModel)">
+        <member name="M:HTTAPI.Manager.Contract.IHealthTrackService.GetAllDeclarations">
             <summary>
             
             </summary>
-            <param name="search"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Manager.Contract.IRequestService">
@@ -983,6 +983,20 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.ForgotPassword(HTTAPI.ViewModels.ForgotPasswordViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.ResetPassword(HTTAPI.ViewModels.ResetPasswordViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Manager.Service.HealthTrackService">
             <summary>
             use in with HealthController to manage HealthTrack entity
@@ -1003,7 +1017,7 @@
             Claim Identity
             </summary>
         </member>
-        <member name="M:HTTAPI.Manager.Service.HealthTrackService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Service.HealthTrackService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IHealthTrackRepository,HTTAPI.Repository.Contracts.IZoneRepository,HTTAPI.Repository.Contracts.ILocationRepository,HTTAPI.Repository.Contracts.ISymptomRepository,HTTAPI.Repository.Contracts.IQuestionRepository,HTTAPI.Repository.Contracts.IEmployeeRepository,Microsoft.Extensions.Configuration.IConfiguration)">
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Manager.Service.HealthTrackService},System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IHealthTrackRepository,HTTAPI.Repository.Contracts.IZoneRepository,HTTAPI.Repository.Contracts.ILocationRepository,HTTAPI.Repository.Contracts.ISymptomRepository,HTTAPI.Repository.Contracts.IQuestionRepository,HTTAPI.Repository.Contracts.IEmployeeRepository,HTTAPI.Repository.Contracts.IRequestRepository,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             HealthTrackService constructor
             </summary>
@@ -1015,6 +1029,7 @@
             <param name="symptomRepository"></param>
             <param name="questionRepository"></param>
             <param name="employeeRepository"></param>
+            <param name="requestRepository"></param>
             <param name="configuration"></param>      
         </member>
         <member name="M:HTTAPI.Manager.Service.HealthTrackService.CreateHealthTrack(HTTAPI.ViewModels.HealthTrackViewModel)">
@@ -1036,11 +1051,10 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Manager.Service.HealthTrackService.GetDeclarations(HTTAPI.Helpers.SearchSortModel)">
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.GetAllDeclarations">
             <summary>
-            
+             Returns data to bind on declaration form
             </summary>
-            <param name="search"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Manager.Service.RequestService">
@@ -1315,11 +1329,6 @@
             </summary>
         </member>
         <member name="P:HTTAPI.Models.HealthTrack.TravelOustSideInLast15Days">
-            <summary>
-            TravelOustSideInLast15Days
-            </summary>
-        </member>
-        <member name="P:HTTAPI.Models.HealthTrack.DateOfTravel">
             <summary>
             TravelOustSideInLast15Days
             </summary>
@@ -1763,6 +1772,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetEmployeeByToken(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Contracts.IHealthTrackRepository">
             <summary>
             HealthTrackRepository 
@@ -1783,11 +1799,10 @@
             <param name="requestNumber"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Repository.Contracts.IHealthTrackRepository.GetDeclarations(HTTAPI.Helpers.SearchSortModel)">
+        <member name="M:HTTAPI.Repository.Contracts.IHealthTrackRepository.GetAllDeclarations">
             <summary>
             
             </summary>
-            <param name="search"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Contracts.ILocationRepository">
@@ -1855,6 +1870,13 @@
             
             </summary>
             <param name="employeeId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestByNumber(System.String)">
+            <summary>
+            Get request by request number
+            </summary>
+            <param name="requestNumber"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Contracts.IRoleRepository">
@@ -2034,11 +2056,10 @@
             <param name="requestNumber"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Repository.Services.HealthTrackRepository.GetDeclarations(HTTAPI.Helpers.SearchSortModel)">
+        <member name="M:HTTAPI.Repository.Services.HealthTrackRepository.GetAllDeclarations">
             <summary>
             
             </summary>
-            <param name="search"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Services.LocationRepository">
@@ -2119,6 +2140,13 @@
             
             </summary>
             <param name="requestId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestByNumber(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="requestNumber"></param>
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestsByEmployee(System.Int32)">
@@ -2349,6 +2377,26 @@
             
             </summary>
         </member>
+        <member name="T:HTTAPI.ViewModels.EmployeePasswordResetEmailViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.EmployeePasswordResetEmailViewModel.ResetUrl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.ForgotPasswordViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ForgotPasswordViewModel.Email">
+            <summary>
+            User email
+            </summary>
+        </member>
         <member name="T:HTTAPI.ViewModels.HealthTrackViewModel">
             <summary>
             Health Track View Model
@@ -2377,11 +2425,6 @@
         <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.TravelOustSideInLast15Days">
             <summary>
             TravelOustSideInLast15Days
-            </summary>
-        </member>
-        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.DateOfTravel">
-            <summary>
-            DateOfTravel
             </summary>
         </member>
         <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.LocationId">
@@ -2457,6 +2500,26 @@
         <member name="P:HTTAPI.ViewModels.OptionsViewModel.Order">
             <summary>
             Symptom position\order
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.ResetPasswordViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ResetPasswordViewModel.Token">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ResetPasswordViewModel.Password">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ResetPasswordViewModel.ConfirmPassword">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:HTTAPI.ViewModels.RoleViewModel">

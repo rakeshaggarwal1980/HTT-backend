@@ -34,9 +34,8 @@ namespace HTTAPI.Manager.Contract
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="search"></param>
         /// <returns></returns>
-        IResult GetDeclarations(SearchSortModel search);
+        Task<IResult> GetAllDeclarations();
     }
 
 }

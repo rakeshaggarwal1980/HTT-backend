@@ -61,5 +61,12 @@ namespace HTTAPI.Repository.Contracts
         /// </summary>
         /// <returns></returns>
         Task<List<Employee>> GetAllEmployees();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        Task<Employee> GetEmployeeByToken(string token);
     }
 }

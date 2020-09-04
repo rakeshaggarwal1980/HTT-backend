@@ -93,6 +93,16 @@ namespace HTTAPI.Repository.Services
             return await _context.ComeToOfficeRequest.Include("Employee").Where(x => x.Id == requestId).SingleOrDefaultAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="requestNumber"></param>
+        /// <returns></returns>
+        public async Task<ComeToOfficeRequest> GetRequestByNumber(string requestNumber)
+        {
+            return await _context.ComeToOfficeRequest.Include("Employee").Where(x => x.RequestNumber == requestNumber).SingleOrDefaultAsync();
+        }
+
 
         /// <summary>
         /// Checks if Employee has already submitted request

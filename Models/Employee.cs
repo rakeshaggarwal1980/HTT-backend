@@ -1,4 +1,5 @@
 ﻿using HTTAPI.Enums;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace HTTAPI.Models
@@ -51,6 +52,8 @@ namespace HTTAPI.Models
 
         public EntityStatus Status { get; set; }
 
+        public string ResetToken { get; set; }
+        public DateTime? ResetTokenExpires { get; set; }
     }
 
 

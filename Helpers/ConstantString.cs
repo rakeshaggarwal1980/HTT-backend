@@ -51,8 +51,6 @@
         /// 
         /// </summary>
         public const string EmployeeDeclaration = "Views/EmployeeDeclaration.cshtml";
-
-
         /// <summary>
         /// 
         /// </summary>
@@ -60,7 +58,11 @@
         /// <summary>
         /// 
         /// </summary>
-        public const string RegisterationRequest = "Views/RegisterationRequestToHR .cshtml";
+        public const string RegisterationRequest = "Views/RegisterationRequestToHR.cshtml";
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string PasswordResetEmail = "Views/PasswordReset.cshtml";
     }
 
 }

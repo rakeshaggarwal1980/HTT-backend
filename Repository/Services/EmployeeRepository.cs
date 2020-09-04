@@ -1,6 +1,7 @@
 ﻿using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -115,6 +116,12 @@ namespace HTTAPI.Repository.Services
         public async Task<List<Employee>> GetAllEmployees()
         {
             return await _context.Employee.Include(e => e.Role).ToListAsync();
+        }
+
+        public async Task<Employee> GetEmployeeByToken(string token)
+        {
+            return await _context.Employee.SingleOrDefaultAsync(x =>
+               x.ResetToken == token && x.ResetTokenExpires > DateTime.UtcNow);
         }
     }
 }
