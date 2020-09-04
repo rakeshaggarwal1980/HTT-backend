@@ -4,6 +4,32 @@
         <name>HTTAPI</name>
     </assembly>
     <members>
+        <member name="T:HTTAPI.Controllers.AccountController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Controllers.AccountController.#ctor(Microsoft.Extensions.Logging.ILogger{HTTAPI.Controllers.AccountController},HTTAPI.Manager.Contract.IEmployeeService)">
+            <summary>
+            
+            </summary>
+            <param name="logger"></param>
+            <param name="employeeService"></param>
+        </member>
+        <member name="M:HTTAPI.Controllers.AccountController.ForgotPassword(HTTAPI.ViewModels.ForgotPasswordViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.AccountController.ResetPassword(HTTAPI.ViewModels.ResetPasswordViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Controllers.EmployeeController">
             <summary>
             Employee Controller
@@ -547,6 +573,11 @@
             
             </summary>
         </member>
+        <member name="F:HTTAPI.Helpers.EmailTemplatePath.PasswordResetEmail">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:HTTAPI.Helpers.EntityMapperExtensions">
             <summary>
             Extension Methods for Entity Mapper.
@@ -772,6 +803,20 @@
             <param name="status"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.ForgotPassword(HTTAPI.ViewModels.ForgotPasswordViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.ResetPassword(HTTAPI.ViewModels.ResetPasswordViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Manager.Contract.IHealthTrackService">
             <summary>
             interface for ContentDetailService 
@@ -936,6 +981,20 @@
             <summary>
             Returns employees
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.ForgotPassword(HTTAPI.ViewModels.ForgotPasswordViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.ResetPassword(HTTAPI.ViewModels.ResetPasswordViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Manager.Service.HealthTrackService">
@@ -1270,11 +1329,6 @@
             </summary>
         </member>
         <member name="P:HTTAPI.Models.HealthTrack.TravelOustSideInLast15Days">
-            <summary>
-            TravelOustSideInLast15Days
-            </summary>
-        </member>
-        <member name="P:HTTAPI.Models.HealthTrack.DateOfTravel">
             <summary>
             TravelOustSideInLast15Days
             </summary>
@@ -1716,6 +1770,13 @@
             <summary>
              Returns list of all employees
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetEmployeeByToken(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="token"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Contracts.IHealthTrackRepository">
@@ -2316,6 +2377,26 @@
             
             </summary>
         </member>
+        <member name="T:HTTAPI.ViewModels.EmployeePasswordResetEmailViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.EmployeePasswordResetEmailViewModel.ResetUrl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.ForgotPasswordViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ForgotPasswordViewModel.Email">
+            <summary>
+            User email
+            </summary>
+        </member>
         <member name="T:HTTAPI.ViewModels.HealthTrackViewModel">
             <summary>
             Health Track View Model
@@ -2344,11 +2425,6 @@
         <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.TravelOustSideInLast15Days">
             <summary>
             TravelOustSideInLast15Days
-            </summary>
-        </member>
-        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.DateOfTravel">
-            <summary>
-            DateOfTravel
             </summary>
         </member>
         <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.LocationId">
@@ -2424,6 +2500,26 @@
         <member name="P:HTTAPI.ViewModels.OptionsViewModel.Order">
             <summary>
             Symptom position\order
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.ResetPasswordViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ResetPasswordViewModel.Token">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ResetPasswordViewModel.Password">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.ResetPasswordViewModel.ConfirmPassword">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:HTTAPI.ViewModels.RoleViewModel">

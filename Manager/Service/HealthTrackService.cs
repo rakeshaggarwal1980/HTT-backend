@@ -140,14 +140,15 @@ namespace HTTAPI.Manager.Service
                         // testing pending for this block
                         // find recent approved request
                         var requests = await _requestRepository.GetRequestsListByUserId(healthTrackViewModel.EmployeeId);
-                       request= requests.OrderBy(x => x.FromDate)
-                            .Where(x => x.IsApproved && 
-                                   (x.FromDate.Date <= todayDate && x.ToDate.Date>= todayDate)).FirstOrDefault();
+                        request = requests.OrderBy(x => x.FromDate)
+                             .Where(x => x.IsApproved &&
+                                    (x.FromDate.Date <= todayDate && x.ToDate.Date >= todayDate)).FirstOrDefault();
 
                         healthTrackViewModel.RequestNumber = request.RequestNumber;
-                    } else
+                    }
+                    else
                     {
-                         request = await _requestRepository.GetRequestByNumber(healthTrackViewModel.RequestNumber);
+                        request = await _requestRepository.GetRequestByNumber(healthTrackViewModel.RequestNumber);
                         if (request.IsDeclined)
                         {
                             result.Status = Status.Fail;
@@ -157,7 +158,7 @@ namespace HTTAPI.Manager.Service
                         }
                     }
 
-                    
+
                     // check if user has declarations for a request
                     var declarations = await _healthTrackRepository.GetSelfDeclarationByEmployeeForRequest(healthTrackViewModel.EmployeeId, healthTrackViewModel.RequestNumber);
                     if (declarations.Any())

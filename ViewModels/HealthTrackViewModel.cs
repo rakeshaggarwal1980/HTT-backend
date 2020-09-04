@@ -33,10 +33,6 @@ namespace HTTAPI.ViewModels
         /// </summary>
         public bool TravelOustSideInLast15Days { get; set; }
 
-        /// <summary>
-        /// DateOfTravel
-        /// </summary>
-        public DateTime DateOfTravel { get; set; }
 
         /// <summary>
         /// LocationId

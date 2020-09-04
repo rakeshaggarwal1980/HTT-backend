@@ -57,4 +57,15 @@ namespace HTTAPI.ViewModels
         /// </summary>
         public string LinkUrl { get; set; }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class EmployeePasswordResetEmailViewModel : EmployeeViewModel
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ResetUrl { get; set; }
+    }
 }

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -169,9 +170,6 @@ namespace HTTAPI.Manager.Contract
             {
                 if (employeeViewModel != null)
                 {
-                    //  var employeeModel = new Employee();
-                    //  employeeModel.MapFromViewModel(employeeViewModel);
-
                     var emp = await _employeeRepository.GetEmployeeById(employeeViewModel.Id);
                     if (emp != null)
                     {
@@ -235,7 +233,7 @@ namespace HTTAPI.Manager.Contract
                             };
                             result.Body = userView;
                         }
-                        else if(employeeModel.Status == EntityStatus.Deny)
+                        else if (employeeModel.Status == EntityStatus.Deny)
                         {
                             result.Body = null;
                             result.Message = "Your account has declined by the HR";
@@ -414,6 +412,92 @@ namespace HTTAPI.Manager.Contract
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<IResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            var result = new Result
+            {
+                Operation = Operation.Read,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                var employee = await _employeeRepository.GetEmployeeByEmail(model.Email);
+                if (employee == null)
+                {
+                    result.Body = null;
+                    result.Message = "Employee email does not exists";
+                    result.Status = Status.Fail;
+                    result.StatusCode = HttpStatusCode.NotFound;
+                    return result;
+                }
+                // create reset token that expires after 1 day
+                employee.ResetToken = randomTokenString();
+                employee.ResetTokenExpires = DateTime.Now.AddDays(1);
+                employee = await _employeeRepository.UpdateEmployee(employee);
+
+                await SendPasswordResetEmail(employee);
+                result.Message = "Please check your email for password reset instructions";
+
+            }
+            catch (Exception ex)
+            {
+                result.Status = Status.Error;
+                result.Message = ex.Message;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<IResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            var result = new Result
+            {
+                Operation = Operation.Read,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                var employee = await _employeeRepository.GetEmployeeByToken(model.Token);
+                if (employee == null)
+                {
+                    result.Body = null;
+                    result.Message = "Invalid token";
+                    result.Status = Status.Fail;
+                    result.StatusCode = HttpStatusCode.BadRequest;
+                    return result;
+                }
+
+                // update password and remove reset token
+                employee.Password = model.Password;
+                employee.ResetToken = null;
+                employee.ResetTokenExpires = null;
+                employee = await _employeeRepository.UpdateEmployee(employee);
+                result.Message = "Password changed successfully.";
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                result.Status = Status.Error;
+                result.Message = ex.Message;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
+            return result;
+           
+        }
+
         #region Private methods
 
         private string GenerateToken(string name, string email, string roleName)
@@ -478,6 +562,31 @@ namespace HTTAPI.Manager.Contract
             emailVm.HRName = hrEmployee.Name;
             appEmailHelper.MailBodyViewModel = emailVm;
             await appEmailHelper.InitMailMessage();
+        }
+
+        private string randomTokenString()
+        {
+            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+            var randomBytes = new byte[40];
+            rngCryptoServiceProvider.GetBytes(randomBytes);
+            // convert random bytes to hex string
+            return BitConverter.ToString(randomBytes).Replace("-", "");
+        }
+
+
+        private async Task SendPasswordResetEmail(Employee emp)
+        {
+            appEmailHelper = new AppEmailHelper();
+            appEmailHelper.ToMailAddresses.Add(new MailAddress(emp.Email, emp.Name));
+            appEmailHelper.MailTemplate = MailTemplate.PasswordReset;
+
+            EmployeePasswordResetEmailViewModel emailVm = new EmployeePasswordResetEmailViewModel();
+            emailVm.Name = emp.Name;
+            emailVm.ResetUrl = $"{ _configuration["AppUrl"]}account/resetpassword?token={emp.ResetToken}";
+            appEmailHelper.Subject = "Reset Password";
+            appEmailHelper.MailBodyViewModel = emailVm;
+            await appEmailHelper.InitMailMessage();
+
         }
 
         #endregion
