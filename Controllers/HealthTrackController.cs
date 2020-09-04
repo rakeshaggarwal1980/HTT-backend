@@ -74,5 +74,22 @@ namespace HTTAPI.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
+
+        /// <summary>
+        ///  Get Declarations
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        [HttpPost("declarations")]
+        [ProducesResponseType(typeof(HealthTrackViewModel), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public ActionResult<IResult> GetDeclarations([FromBody] SearchSortModel search)
+        {
+            _logger.LogInformation("get all declarations");
+            var result = _healthTrackService.GetDeclarations(search);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
     }
 }

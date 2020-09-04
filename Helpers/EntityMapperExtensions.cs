@@ -104,4 +104,5 @@ namespace HTTAPI.Helpers
             if (ignoreProperties != null) { _ignoreProperties = ignoreProperties.Split(';'); }
         }
     }
+
 }

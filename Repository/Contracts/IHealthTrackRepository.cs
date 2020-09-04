@@ -1,4 +1,6 @@
-﻿using HTTAPI.Models;
+﻿using HTTAPI.Helpers;
+using HTTAPI.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace HTTAPI.Repository.Contracts
@@ -23,5 +25,12 @@ namespace HTTAPI.Repository.Contracts
         /// <param name="requestNumber"></param>
         /// <returns></returns>
         Task<HealthTrack> GetSelfDeclarationByEmployeeForRequest(int employeedId, string requestNumber);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        List<HealthTrack> GetDeclarations(SearchSortModel search);
     }
 }

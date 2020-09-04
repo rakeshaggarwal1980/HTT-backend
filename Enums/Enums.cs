@@ -132,4 +132,21 @@
         /// </summary>
         Employee
     }
+
+    public enum SortDirection
+    {
+        Asc, Desc
+    }
+
+    public enum ExpressionOperation
+    {
+        Equals,
+        GreaterThan,
+        LessThan,
+        GreaterThanOrEqual,
+        LessThanOrEqual,
+        Contains,
+        StartsWith,
+        EndsWith
+    }
 }

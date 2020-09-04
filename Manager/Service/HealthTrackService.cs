@@ -298,6 +298,58 @@ namespace HTTAPI.Manager.Service
             return result;
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        public IResult GetDeclarations(SearchSortModel search)
+        {
+            var healthViewModel = new HealthTrackViewModel();
+            var result = new Result
+            {
+                Operation = Operation.Read,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                var declarations = _healthTrackRepository.GetDeclarations(search);
+                if (declarations != null)
+                {
+                    healthViewModel.MapFromModel(declarations);
+                    var employeeVm = new EmployeeViewModel();
+                    declarations.ForEach(d =>
+                    {   
+                        if (d.Employee.Id > 0)
+                        {
+                            employeeVm.MapFromModel(d.Employee);
+                            healthViewModel.Employee = employeeVm;
+                        }
+                    });
+
+
+
+                    result.Body = healthViewModel;
+                }
+                else
+                {
+                    result.Status = Status.Fail;
+                    result.StatusCode = HttpStatusCode.NotFound;
+                    result.Message = "No declaration exists";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                result.Status = Status.Error;
+                result.Message = ex.Message;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
+            return result;
+        }
+
         private async Task SendEmail(HealthTrackViewModel healthViewModel)
         {
             var appEmailHelper = new AppEmailHelper();
