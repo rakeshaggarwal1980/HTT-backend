@@ -31,7 +31,7 @@ namespace HTTAPI.Models
         /// <summary>
         /// 
         /// </summary>
-        [Required, Column(TypeName = "VARCHAR(20)")]
+        [Required, Column(TypeName = "VARCHAR(500)")]
         public string Password { get; set; }
 
         /// <summary>
