@@ -1,4 +1,5 @@
 ﻿using HTTAPI.Enums;
+using BC = BCrypt.Net.BCrypt;
 using HTTAPI.Helpers;
 using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
@@ -84,6 +85,7 @@ namespace HTTAPI.Manager.Contract
 
                     var employeeModel = new Employee();
                     employeeModel.MapFromViewModel(signUpViewModel);
+                    employeeModel.Password = BC.HashPassword(signUpViewModel.Password);
                     employeeModel = await _employeeRepository.CreateEmployee(employeeModel);
 
                     employeeViewModel.MapFromModel(employeeModel);
@@ -210,13 +212,25 @@ namespace HTTAPI.Manager.Contract
             {
                 if (loginModel != null)
                 {
-                    var employeeModel = new Employee();
-                    // To map employee detail
-                    employeeModel.MapFromViewModel(loginModel);
-
-                    employeeModel = await _employeeRepository.GetEmployee(employeeModel);
-                    if (employeeModel != null)
+                    var employeeModel = await _employeeRepository.GetEmployeeByEmail(loginModel.Email);
+                    if (employeeModel == null)
                     {
+                        result.Body = null;
+                        result.Message = "Account with " + loginModel.Email + " does not exists.";
+                        result.Status = Status.Fail;
+                        result.StatusCode = HttpStatusCode.NotFound;
+                        return result;
+                    }
+                    else
+                    {
+                        if (!BC.Verify(loginModel.Password, employeeModel.Password))
+                        {
+                            result.Body = null;
+                            result.Message = "Password is incorrect";
+                            result.Status = Status.Fail;
+                            result.StatusCode = HttpStatusCode.Forbidden;
+                            return result;
+                        }
                         // check if employee is confirmed or not
                         if (employeeModel.Status == EntityStatus.Accept)
                         {
@@ -248,18 +262,14 @@ namespace HTTAPI.Manager.Contract
                             result.StatusCode = HttpStatusCode.Unauthorized;
                         }
                     }
-                    else
-                    {
-                        result.Body = null;
-                        result.Message = "Wrong Email or password";
-                        result.Status = Status.Fail;
-                        result.StatusCode = HttpStatusCode.Unauthorized;
-                    }
                     return result;
                 }
-                result.Status = Status.Fail;
-                result.StatusCode = HttpStatusCode.BadRequest;
-                return result;
+                else
+                {
+                    result.Status = Status.Fail;
+                    result.StatusCode = HttpStatusCode.BadRequest;
+                    return result;
+                }
             }
             catch (Exception e)
             {
@@ -480,7 +490,7 @@ namespace HTTAPI.Manager.Contract
                 }
 
                 // update password and remove reset token
-                employee.Password = model.Password;
+                employee.Password = BC.HashPassword(model.Password);
                 employee.ResetToken = null;
                 employee.ResetTokenExpires = null;
                 employee = await _employeeRepository.UpdateEmployee(employee);
@@ -495,7 +505,7 @@ namespace HTTAPI.Manager.Contract
                 result.StatusCode = HttpStatusCode.InternalServerError;
             }
             return result;
-           
+
         }
 
         #region Private methods
