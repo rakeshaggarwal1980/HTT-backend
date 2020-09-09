@@ -10,7 +10,6 @@ namespace HTTAPI.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        [Required]
         public string Token { get; set; }
 
         /// <summary>
@@ -26,5 +25,10 @@ namespace HTTAPI.ViewModels
         [Required]
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string email { get; set; }
     }
 }

@@ -2605,6 +2605,11 @@
             
             </summary>
         </member>
+        <member name="P:HTTAPI.ViewModels.ResetPasswordViewModel.email">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:HTTAPI.ViewModels.RoleViewModel">
             <summary>
             

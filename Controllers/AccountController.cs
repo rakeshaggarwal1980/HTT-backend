@@ -35,7 +35,7 @@ namespace HTTAPI.Controllers
         [HttpPost("forgotpassword")]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
-        public async Task<ActionResult<IResult>> ForgotPassword(ForgotPasswordViewModel model)
+        public async Task<ActionResult<IResult>> ForgotPassword([FromBody] ForgotPasswordViewModel model)
         {
             var result = await _employeeService.ForgotPassword(model);
             return StatusCode((int)result.StatusCode, result);

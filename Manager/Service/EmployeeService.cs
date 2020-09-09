@@ -479,11 +479,22 @@ namespace HTTAPI.Manager.Contract
             };
             try
             {
-                var employee = await _employeeRepository.GetEmployeeByToken(model.Token);
+                // in case of change pwd , will recieve email
+                // in case of reseting pwd by forgot email, will recieve token
+                var employee = new Employee();
+                if (!string.IsNullOrEmpty(model.email))
+                {
+                    employee = await _employeeRepository.GetEmployeeByEmail(model.email);
+                }
+                else if (!string.IsNullOrEmpty(model.Token))
+                {
+                    employee = await _employeeRepository.GetEmployeeByToken(model.Token);
+                }
+
                 if (employee == null)
                 {
                     result.Body = null;
-                    result.Message = "Invalid token";
+                    result.Message = "Invalid Request";
                     result.Status = Status.Fail;
                     result.StatusCode = HttpStatusCode.BadRequest;
                     return result;
