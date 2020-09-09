@@ -71,6 +71,11 @@ namespace HTTAPI.ViewModels
         /// 
         /// </summary>
         public string RequestNumber { get; set; }
+
+        /// <summary>
+        ///CreatedDate
+        /// </summary>
+        public DateTime CreatedDate { get; set; }
     }
 
 

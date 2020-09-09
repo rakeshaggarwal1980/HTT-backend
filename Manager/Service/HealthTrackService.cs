@@ -397,6 +397,7 @@ namespace HTTAPI.Manager.Service
                             {
                                 var questions = new HealthTrackQuestionAnswerViewModel();
                                 questions.MapFromModel(t);
+                                questions.Question = t.Question.Name;
                                 return questions;
                             }).ToList();
                         }
@@ -407,6 +408,7 @@ namespace HTTAPI.Manager.Service
                             {
                                 var symptom = new HealthTrackSymptomViewModel();
                                 symptom.MapFromModel(t);
+                                symptom.Name = t.Symptom.Name;
                                 return symptom;
                             }).ToList();
                         }
@@ -461,32 +463,11 @@ namespace HTTAPI.Manager.Service
                         var employeeVm = new EmployeeViewModel();
                         employeeVm.MapFromModel(declaration.Employee);
                         healthViewModel.Employee = employeeVm;
-                        //var symptoms = new List<HealthTrackSymptomViewModel>();
-                        //var questions = new List<HealthTrackQuestionAnswerViewModel>();
-                        //if (declaration.HealthTrackQuestions.Any())
-                        //{
-                        //    questions = declaration.HealthTrackQuestions.Select(t =>
-                        //    {
-                        //        var questions = new HealthTrackQuestionAnswerViewModel();
-                        //        questions.MapFromModel(t);
-                        //        return questions;
-                        //    }).ToList();
-                        //}
-
-                        //if (declaration.HealthTrackSymptoms.Any())
-                        //{
-                        //    symptoms = declaration.HealthTrackSymptoms.Select(t =>
-                        //    {
-                        //        var symptom = new HealthTrackSymptomViewModel();
-                        //        symptom.MapFromModel(t);
-                        //        return symptom;
-                        //    }).ToList();
-                        //}
-                        //healthViewModel.HealthTrackSymptoms = symptoms;
-                        //healthViewModel.HealthTrackQuestionAnswers = questions;
                         return healthViewModel;
                     }).ToList();
-                    result.Body = healthViewModelList;
+
+                    search.SearchResult = healthViewModelList;
+                    result.Body = search;
                 }
                 else
                 {

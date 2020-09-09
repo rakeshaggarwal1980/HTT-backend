@@ -2545,6 +2545,11 @@
             
             </summary>
         </member>
+        <member name="P:HTTAPI.ViewModels.HealthTrackViewModel.CreatedDate">
+             <summary>
+            CreatedDate
+             </summary>
+        </member>
         <member name="T:HTTAPI.ViewModels.HealthTrackEmailViewModel">
             <summary>
             

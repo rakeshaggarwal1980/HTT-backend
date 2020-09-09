@@ -60,7 +60,8 @@ namespace HTTAPI.Repository.Services
         /// <returns></returns>
         public async Task<List<HealthTrack>> GetAllDeclarations()
         {
-            return await _context.HealthTrack.Include("Employee").Include("HealthTrackSymptoms").Include("HealthTrackQuestions").ToListAsync();
+            return await _context.HealthTrack.Include("Employee").Include(hs=>hs.HealthTrackSymptoms).ThenInclude(s=>s.Symptom)
+                .Include(s=>s.HealthTrackQuestions).ThenInclude(s=>s.Question).ToListAsync();
         }
 
         /// <summary>
@@ -93,10 +94,34 @@ namespace HTTAPI.Repository.Services
             switch (search.SortDirection.ToString().ToLower())
             {
                 case "asc":
-                    query = query.OrderBy(dec => dec.Id);
+                    if (search.SortColumn == "id")
+                    {
+                        query = query.OrderBy(dec => dec.Id);
+                    }
+                    else if(search.SortColumn == "employeename")
+                    {
+                        query = query.OrderBy(dec => dec.Employee.Name);
+                    }
+                    else
+                    {
+                        query = query.OrderBy(dec => dec.CreatedDate);
+
+                    }
                     break;
                 default:
-                    query = query.OrderByDescending(dec => dec.Id);
+                    if (search.SortColumn == "id")
+                    {
+                        query = query.OrderByDescending(dec => dec.Id);
+                    }
+                    else if (search.SortColumn == "employeename")
+                    {
+                        query = query.OrderByDescending(dec => dec.Employee.Name);
+                    }
+                    else
+                    {
+                        query = query.OrderByDescending(dec => dec.CreatedDate);
+
+                    }
                     break;
             }
 
@@ -112,6 +137,7 @@ namespace HTTAPI.Repository.Services
                     TravelOustSideInLast15Days = declaration.TravelOustSideInLast15Days,
                     RequestNumber = declaration.RequestNumber,
                     LocationId = declaration.LocationId,
+                    CreatedDate = declaration.CreatedDate,
                     ZoneId = declaration.ZoneId,
                     EmployeeId = declaration.EmployeeId,
                     Employee = declaration.Employee
