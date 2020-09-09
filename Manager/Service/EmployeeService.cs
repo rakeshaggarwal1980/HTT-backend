@@ -451,8 +451,8 @@ namespace HTTAPI.Manager.Contract
                 employee.ResetTokenExpires = DateTime.Now.AddDays(1);
                 employee = await _employeeRepository.UpdateEmployee(employee);
 
-                await SendPasswordResetEmail(employee);
-                result.Message = "Please check your email for password reset instructions";
+                await SendForgotPasswordEmail(employee);
+                result.Message = "Password has been sent to your email.";
 
             }
             catch (Exception ex)
@@ -584,7 +584,7 @@ namespace HTTAPI.Manager.Contract
         }
 
 
-        private async Task SendPasswordResetEmail(Employee emp)
+        private async Task SendForgotPasswordEmail(Employee emp)
         {
             appEmailHelper = new AppEmailHelper();
             appEmailHelper.ToMailAddresses.Add(new MailAddress(emp.Email, emp.Name));
@@ -592,13 +592,33 @@ namespace HTTAPI.Manager.Contract
 
             EmployeePasswordResetEmailViewModel emailVm = new EmployeePasswordResetEmailViewModel();
             emailVm.Name = emp.Name;
-            emailVm.ResetUrl = $"{ _configuration["AppUrl"]}account/resetpassword?token={emp.ResetToken}";
-            appEmailHelper.Subject = "Reset Password";
+            string password = GeneratePassword();
+            emailVm.Password = password;
+            appEmailHelper.Subject = "New Password";
             appEmailHelper.MailBodyViewModel = emailVm;
             await appEmailHelper.InitMailMessage();
 
         }
 
         #endregion
+
+        private string GeneratePassword()
+        {
+            string allowedChars = "";
+            allowedChars = "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,";
+            allowedChars += "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,";
+            allowedChars += "1,2,3,4,5,6,7,8,9,0,!,@,#,$,%,&,?";
+            char[] sep = { ',' };
+            string[] arr = allowedChars.Split(sep);
+            string passwordString = "";
+            Random rand = new Random();
+            string temp = "";
+            for (int i = 0; i < Convert.ToInt32(9); i++)
+            {
+                temp = arr[rand.Next(0, arr.Length)];
+                passwordString += temp;
+            }
+            return passwordString;
+        }
     }
 }

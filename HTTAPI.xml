@@ -2460,7 +2460,7 @@
             
             </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.EmployeePasswordResetEmailViewModel.ResetUrl">
+        <member name="P:HTTAPI.ViewModels.EmployeePasswordResetEmailViewModel.Password">
             <summary>
             
             </summary>

@@ -66,6 +66,6 @@ namespace HTTAPI.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        public string ResetUrl { get; set; }
+        public string Password { get; set; }
     }
 }
