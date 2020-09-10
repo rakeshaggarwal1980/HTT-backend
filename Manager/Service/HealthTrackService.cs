@@ -137,7 +137,6 @@ namespace HTTAPI.Manager.Service
                     dynamic request = null;
                     if (string.IsNullOrEmpty(healthTrackViewModel.RequestNumber))
                     {
-                        // testing pending for this block
                         // find recent approved request
                         var requests = await _requestRepository.GetRequestsListByUserId(healthTrackViewModel.EmployeeId);
                         request = requests.OrderBy(x => x.FromDate)
@@ -498,13 +497,27 @@ namespace HTTAPI.Manager.Service
         private async Task SendEmail(HealthTrackViewModel healthViewModel)
         {
             var appEmailHelper = new AppEmailHelper();
-            var hrEmployee = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRoles.HRManager.ToString());
+            var hrEmployeeList = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRolesEnum.HRManager.ToString());
+            if (hrEmployeeList.Count > 0)
+            {
+                foreach (var hrEmployee in hrEmployeeList)
+                {
+                    appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
+                }
+            }
+
 
             // send to security as well
-            var securityEmp = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRoles.SecurityManager.ToString());
-
-            appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
-            appEmailHelper.CCMailAddresses.Add(new MailAddress(securityEmp.Email, securityEmp.Name));
+            var securityEmpList = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRolesEnum.SecurityManager.ToString());
+            if (securityEmpList.Count > 0)
+            {
+                foreach (var securityEmp in securityEmpList)
+                {
+                    appEmailHelper.ToMailAddresses.Add(new MailAddress(securityEmp.Email, securityEmp.Name));
+                }
+            }
+            // appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
+            // appEmailHelper.CCMailAddresses.Add(new MailAddress(securityEmp.Email, securityEmp.Name));
 
             appEmailHelper.MailTemplate = MailTemplate.EmployeeDeclaration;
             appEmailHelper.Subject = "Self declaration submission";

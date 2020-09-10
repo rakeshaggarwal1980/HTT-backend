@@ -60,8 +60,8 @@ namespace HTTAPI.Repository.Services
         /// <returns></returns>
         public async Task<List<HealthTrack>> GetAllDeclarations()
         {
-            return await _context.HealthTrack.Include("Employee").Include(hs=>hs.HealthTrackSymptoms).ThenInclude(s=>s.Symptom)
-                .Include(s=>s.HealthTrackQuestions).ThenInclude(s=>s.Question).ToListAsync();
+            return await _context.HealthTrack.Include("Employee").Include(hs => hs.HealthTrackSymptoms).ThenInclude(s => s.Symptom)
+                .Include(s => s.HealthTrackQuestions).ThenInclude(s => s.Question).ToListAsync();
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace HTTAPI.Repository.Services
                     {
                         query = query.OrderBy(dec => dec.Id);
                     }
-                    else if(search.SortColumn == "employeename")
+                    else if (search.SortColumn == "employeename")
                     {
                         query = query.OrderBy(dec => dec.Employee.Name);
                     }

@@ -14,5 +14,12 @@ namespace HTTAPI.Repository.Contracts
         /// </summary>
         /// <returns></returns>
         Task<List<Role>> GetRoles();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        Task<Role> GetRoleByName(string name);
     }
 }

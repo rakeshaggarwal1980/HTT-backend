@@ -1,5 +1,5 @@
 ﻿using HTTAPI.Enums;
-using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace HTTAPI.Models
@@ -41,19 +41,27 @@ namespace HTTAPI.Models
         public int EmployeeCode { get; set; }
 
         /// <summary>
-        /// Role ForeignKey
+        /// 
         /// </summary>
-        [ForeignKey("RoleId")] public int RoleId { get; set; }
+        public EntityStatus Status { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public Role Role { get; set; }
+        [Required]
+        public string CurrentResidentialAddress { get; set; }
 
-        public EntityStatus Status { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        [Required]
+        public string PermanentResidentialAddress { get; set; }
 
-        public string ResetToken { get; set; }
-        public DateTime? ResetTokenExpires { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public IList<EmployeeRole> EmployeeRoles { get; set; }
+
     }
 
 

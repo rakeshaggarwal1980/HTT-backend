@@ -35,7 +35,7 @@
     </style>
 </head>
 <body>
-    <p>Hi @Html.DisplayFor(model => model.HRName)</p>
+    <p>Hi Sir/Madam</p>
     <p>
         I would like to register in the portal. Below is the summary
     </p>
@@ -56,7 +56,15 @@
         </div>
         <div>
             <span class="form-header">Role Name: </span>
-            <span class="form-data">@Html.DisplayFor(model => model.RoleName)</span>
+            <span class="form-data">Employee</span>
+        </div>
+        <div>
+            <span class="form-header">Current Address: </span>
+            <span class="form-data">@Html.DisplayFor(model => model.CurrentResidentialAddress)</span>
+        </div>
+        <div>
+            <span class="form-header">Permanent Address: </span>
+            <span class="form-data">@Html.DisplayFor(model => model.PermanentResidentialAddress)</span>
         </div>
         <div class="description">
             <div>

@@ -44,8 +44,6 @@ namespace HTTAPI.Controllers
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
         public async Task<ActionResult<IResult>> LoginUser([FromBody] UserLoginViewModel loginViewModel)
         {
-            _logger.LogInformation("Log in Employee");
-            var xx = EmployeeRoles.HRManager.ToString();
             var result = await _employeeService.GetEmployee(loginViewModel);
             return StatusCode((int)result.StatusCode, result);
         }

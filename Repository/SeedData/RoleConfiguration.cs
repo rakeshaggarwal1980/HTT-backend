@@ -30,7 +30,12 @@ namespace HTTAPI.Repository.SeedData
                      {
                          Id = 3,
                          Name = "Employee"
-                     }
+                     },
+                      new Role
+                      {
+                          Id = 4,
+                          Name = "SuperAdmin"
+                      }
                  );
         }
     }

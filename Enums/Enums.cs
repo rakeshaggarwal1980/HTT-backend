@@ -112,13 +112,16 @@
         /// </summary>
         UserConfirmation = 5,
 
+        /// <summary>
+        /// 
+        /// </summary>
         PasswordReset = 6
     }
 
     /// <summary>
     /// Employee Roles
     /// </summary>
-    public enum EmployeeRoles
+    public enum EmployeeRolesEnum
     {
         /// <summary>
         /// 
@@ -132,7 +135,11 @@
         /// <summary>
         /// Employee
         /// </summary>
-        Employee
+        Employee,
+        /// <summary>
+        /// 
+        /// </summary>
+        SuperAdmin
     }
 
     public enum SortDirection
