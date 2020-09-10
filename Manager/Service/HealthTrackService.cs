@@ -143,8 +143,17 @@ namespace HTTAPI.Manager.Service
                         request = requests.OrderBy(x => x.FromDate)
                              .Where(x => x.IsApproved &&
                                     (x.FromDate.Date <= todayDate && x.ToDate.Date >= todayDate)).FirstOrDefault();
-
-                        healthTrackViewModel.RequestNumber = request.RequestNumber;
+                        if (request != null)
+                        {
+                            healthTrackViewModel.RequestNumber = request.RequestNumber;
+                        }
+                        else
+                        {
+                            result.Status = Status.Fail;
+                            result.StatusCode = HttpStatusCode.NotFound;
+                            result.Message = "Either you do not have any approved request or you can not declare prior to the request From date";
+                            return result;
+                        }
                     }
                     else
                     {
