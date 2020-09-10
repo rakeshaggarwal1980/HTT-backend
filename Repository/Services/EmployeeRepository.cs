@@ -1,7 +1,6 @@
 ﻿using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,7 +34,6 @@ namespace HTTAPI.Repository.Services
         {
             _context.Employee.Add(employee);
             await _context.SaveChangesAsync();
-            _context.Entry(employee).Reference(c => c.Role).Load();
             return employee;
         }
 
@@ -48,7 +46,7 @@ namespace HTTAPI.Repository.Services
         public async Task<Employee> GetEmployeeById(int empId)
         {
             return await _context.Employee
-                    .Where(e => e.Id == empId).Include(e => e.Role).SingleOrDefaultAsync();
+                    .Where(e => e.Id == empId).Include(e => e.EmployeeRoles).ThenInclude(e=>e.Role).SingleOrDefaultAsync();
         }
 
         /// <summary>
@@ -71,7 +69,7 @@ namespace HTTAPI.Repository.Services
         public async Task<Employee> GetEmployee(Employee employee)
         {
             var result = await _context.Employee
-                   .Where(e => e.Email == employee.Email && e.Password == employee.Password).Include(e => e.Role)
+                   .Where(e => e.Email == employee.Email && e.Password == employee.Password).Include(e => e.EmployeeRoles)
                    .SingleOrDefaultAsync();
             return result;
         }
@@ -84,7 +82,7 @@ namespace HTTAPI.Repository.Services
         public async Task<Employee> GetEmployeeByEmail(string email)
         {
             var result = await _context.Employee
-                  .Where(e => e.Email == email).Include(e => e.Role).SingleOrDefaultAsync();
+                  .Where(e => e.Email == email).Include(e => e.EmployeeRoles).ThenInclude(e => e.Role).SingleOrDefaultAsync();
             return result;
         }
 
@@ -104,9 +102,10 @@ namespace HTTAPI.Repository.Services
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<Employee> GetEmployeeDetailsByRole(string roleName)
+        public async Task<List<Employee>> GetEmployeeDetailsByRole(string roleName)
         {
-            return await _context.Employee.Where(e => e.Role.Name == roleName).SingleOrDefaultAsync();
+            var filteredEmployees = _context.Employee.Where(e => e.EmployeeRoles.Any(r => r.Role.Name == roleName));
+            return await filteredEmployees.ToListAsync();
         }
 
         /// <summary>
@@ -115,14 +114,14 @@ namespace HTTAPI.Repository.Services
         /// <returns></returns>
         public async Task<List<Employee>> GetAllEmployees()
         {
-            return await _context.Employee.Include(e => e.Role).ToListAsync();
+            return await _context.Employee.Include(e => e.EmployeeRoles).ThenInclude(e=>e.Role).ToListAsync();
         }
 
-        public async Task<Employee> GetEmployeeByToken(string token)
-        {
-            return await _context.Employee.SingleOrDefaultAsync(x =>
-               x.ResetToken == token && x.ResetTokenExpires > DateTime.UtcNow);
-        }
+        //public async Task<Employee> GetEmployeeByToken(string token)
+        //{
+        //    return await _context.Employee.SingleOrDefaultAsync(x =>
+        //       x.ResetToken == token && x.ResetTokenExpires > DateTime.UtcNow);
+        //}
     }
 }
 

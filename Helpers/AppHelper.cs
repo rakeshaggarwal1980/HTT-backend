@@ -57,6 +57,36 @@ namespace HTTAPI.Helpers
             return userClaim;
         }
 
+
+        /// <summary>
+        /// Get the email of request user
+        /// </summary>
+        /// <param name="identity"></param>
+        /// <returns></returns>
+        public static string GetActiveUserEmailId(this ClaimsIdentity identity)
+        {
+            var emailClaim = identity.FindFirst(ClaimTypes.Email) ?? identity.FindFirst(ClaimTypes.Upn);
+            return emailClaim != null ? emailClaim.Value : string.Empty;
+        }
+
+        /// <summary>
+        /// Get the Name of request user
+        /// </summary>
+        /// <param name="identity"></param>
+        /// <returns></returns>
+        public static string GetActiveUserName(this ClaimsIdentity identity)
+        {
+            if (identity != null)
+            {
+                if (identity.Claims.Any())
+                {
+                    var name = identity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Name);
+                    return name != null ? name.Value : string.Empty;
+                }
+            }
+            return string.Empty;
+        }
+
         /// <summary>
         /// Gets the column value.
         /// </summary>

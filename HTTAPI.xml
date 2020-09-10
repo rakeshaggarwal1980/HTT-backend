@@ -307,24 +307,34 @@
             Approval sent to employee
             </summary>
         </member>
-        <member name="T:HTTAPI.Enums.EmployeeRoles">
-            <summary>
-            Employee Roles
-            </summary>
-        </member>
-        <member name="F:HTTAPI.Enums.EmployeeRoles.HRManager">
+        <member name="F:HTTAPI.Enums.MailTemplate.PasswordReset">
             <summary>
             
             </summary>
         </member>
-        <member name="F:HTTAPI.Enums.EmployeeRoles.SecurityManager">
+        <member name="T:HTTAPI.Enums.EmployeeRolesEnum">
+            <summary>
+            Employee Roles
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.EmployeeRolesEnum.HRManager">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.EmployeeRolesEnum.SecurityManager">
             <summary>
             Security
             </summary>
         </member>
-        <member name="F:HTTAPI.Enums.EmployeeRoles.Employee">
+        <member name="F:HTTAPI.Enums.EmployeeRolesEnum.Employee">
             <summary>
             Employee
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.EmployeeRolesEnum.SuperAdmin">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:HTTAPI.FilterTypes.PagingFilter">
@@ -493,6 +503,20 @@
         <member name="M:HTTAPI.Helpers.AppHelper.GetUserClaimDetails(System.Security.Claims.ClaimsIdentity)">
             <summary>
             Get logged user claims
+            </summary>
+            <param name="identity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Helpers.AppHelper.GetActiveUserEmailId(System.Security.Claims.ClaimsIdentity)">
+            <summary>
+            Get the email of request user
+            </summary>
+            <param name="identity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Helpers.AppHelper.GetActiveUserName(System.Security.Claims.ClaimsIdentity)">
+            <summary>
+            Get the Name of request user
             </summary>
             <param name="identity"></param>
             <returns></returns>
@@ -984,7 +1008,17 @@
             contract with EmployeeRepository
             </summary>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.EmployeeService.#ctor(HTTAPI.Repository.Contracts.IEmployeeRepository,Microsoft.Extensions.Configuration.IConfiguration)">
+        <member name="F:HTTAPI.Manager.Contract.EmployeeService.appEmailHelper">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Manager.Contract.EmployeeService._principal">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.#ctor(HTTAPI.Repository.Contracts.IEmployeeRepository,Microsoft.Extensions.Configuration.IConfiguration,System.Security.Principal.IPrincipal,HTTAPI.Repository.Contracts.IRoleRepository)">
             <summary>
             EmployeeService constructor
             </summary>
@@ -1341,12 +1375,47 @@
             
             </summary>
         </member>
-        <member name="P:HTTAPI.Models.Employee.RoleId">
+        <member name="P:HTTAPI.Models.Employee.Status">
             <summary>
-            Role ForeignKey
+            
             </summary>
         </member>
-        <member name="P:HTTAPI.Models.Employee.Role">
+        <member name="P:HTTAPI.Models.Employee.CurrentResidentialAddress">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Employee.PermanentResidentialAddress">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.Employee.EmployeeRoles">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.EmployeeRole.Id">
+            <summary>
+            Primary key of entity
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.EmployeeRole.RoleId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.EmployeeRole.Role">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.EmployeeRole.EmployeeId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.EmployeeRole.Employee">
             <summary>
             
             </summary>
@@ -1562,6 +1631,11 @@
             Location Name
             </summary>
         </member>
+        <member name="P:HTTAPI.Models.Role.EmployeeRoles">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:HTTAPI.Models.Symptom">
             <summary>
             Symptom
@@ -1754,6 +1828,11 @@
             Come to office request 
             </summary>
         </member>
+        <member name="P:HTTAPI.Repository.Context.EmployeeRole">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:HTTAPI.Repository.ModelBuilderExtensions.Seed(HTTAPI.Repository.Context)">
             <summary>
             Get set data on db creation
@@ -1834,13 +1913,6 @@
             <summary>
              Returns list of all employees
             </summary>
-            <returns></returns>
-        </member>
-        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetEmployeeByToken(System.String)">
-            <summary>
-            
-            </summary>
-            <param name="token"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Contracts.IHealthTrackRepository">
@@ -1959,6 +2031,13 @@
             <summary>
              Returns roles
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IRoleRepository.GetRoleByName(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Contracts.ISymptomRepository">
@@ -2251,6 +2330,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Services.RoleRepository.GetRoleByName(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Services.SymptomRepository">
             <summary>
             
@@ -2430,14 +2516,19 @@
             Status
             </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.RoleId">
+        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.Roles">
             <summary>
-            Emloyee Role Id
+            Emloyee Roles
             </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.RoleName">
+        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.CurrentResidentialAddress">
             <summary>
-            Role Name
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.EmployeeViewModel.PermanentResidentialAddress">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:HTTAPI.ViewModels.EmployeeRegisterationEmailViewModel">
@@ -2590,11 +2681,6 @@
             
             </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.ResetPasswordViewModel.Token">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="P:HTTAPI.ViewModels.ResetPasswordViewModel.Password">
             <summary>
             
@@ -2675,9 +2761,14 @@
             Status
             </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.RoleId">
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.CurrentResidentialAddress">
             <summary>
-            Role ID
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserSignUpViewModel.PermanentResidentialAddress">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:HTTAPI.ViewModels.UserViewModel">
@@ -2710,7 +2801,7 @@
             
             </summary>
         </member>
-        <member name="P:HTTAPI.ViewModels.UserViewModel.Role">
+        <member name="P:HTTAPI.ViewModels.UserViewModel.Roles">
             <summary>
             User Role
             </summary>

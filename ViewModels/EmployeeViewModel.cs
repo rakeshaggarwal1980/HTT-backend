@@ -1,4 +1,6 @@
 ﻿using HTTAPI.Enums;
+using HTTAPI.Models;
+using System.Collections.Generic;
 
 namespace HTTAPI.ViewModels
 {
@@ -33,14 +35,19 @@ namespace HTTAPI.ViewModels
         public EntityStatus Status { get; set; }
 
         /// <summary>
-        /// Emloyee Role Id
+        /// Emloyee Roles
         /// </summary>
-        public int RoleId { get; set; }
+        
+        public List<RoleViewModel> Roles { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public string CurrentResidentialAddress { get; set; }
 
         /// <summary>
-        /// Role Name
+        /// 
         /// </summary>
-        public string RoleName { get; set; }
+        public string PermanentResidentialAddress { get; set; }
     }
 
     /// <summary>

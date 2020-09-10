@@ -66,5 +66,10 @@ namespace HTTAPI.Repository
         /// Come to office request 
         /// </summary>
         public DbSet<ComeToOfficeRequest> ComeToOfficeRequest { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DbSet<EmployeeRole> EmployeeRole { get; set; }
     }
 }

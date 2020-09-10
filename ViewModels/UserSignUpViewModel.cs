@@ -37,8 +37,13 @@ namespace HTTAPI.ViewModels
         public EntityStatus Status { get; set; }
 
         /// <summary>
-        /// Role ID
+        /// 
         /// </summary>
-        public int RoleId { get; set; }
+        public string CurrentResidentialAddress { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string PermanentResidentialAddress { get; set; }
     }
 }

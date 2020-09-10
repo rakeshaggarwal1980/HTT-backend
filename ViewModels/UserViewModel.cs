@@ -1,4 +1,6 @@
-﻿namespace HTTAPI.ViewModels
+﻿using System.Collections.Generic;
+
+namespace HTTAPI.ViewModels
 {
     /// <summary>
     /// 
@@ -33,6 +35,6 @@
         /// <summary>
         /// User Role
         /// </summary>
-        public RoleViewModel Role { get; set; }
+        public List<RoleViewModel> Roles { get; set; }
     }
 }

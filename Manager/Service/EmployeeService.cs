@@ -1,5 +1,4 @@
 ﻿using HTTAPI.Enums;
-using BC = BCrypt.Net.BCrypt;
 using HTTAPI.Helpers;
 using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
@@ -14,8 +13,10 @@ using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using BC = BCrypt.Net.BCrypt;
 
 namespace HTTAPI.Manager.Contract
 {
@@ -33,16 +34,28 @@ namespace HTTAPI.Manager.Contract
         /// </summary>
         IEmployeeRepository _employeeRepository;
 
+        IRoleRepository _roleRepository;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public AppEmailHelper appEmailHelper;
+        /// <summary>
+        /// 
+        /// </summary>
+        private readonly ClaimsPrincipal _principal;
         /// <summary>
         /// EmployeeService constructor
         /// </summary>
         /// <param name="employeeRepository"></param>
         /// <param name="configuration"></param>      
-        public EmployeeService(IEmployeeRepository employeeRepository, IConfiguration configuration)
+        public EmployeeService(IEmployeeRepository employeeRepository, IConfiguration configuration, IPrincipal principal,
+            IRoleRepository roleRepository)
         {
             _employeeRepository = employeeRepository;
             _configuration = configuration;
+            _principal = principal as ClaimsPrincipal;
+            _roleRepository = roleRepository;
 
         }
 
@@ -61,6 +74,7 @@ namespace HTTAPI.Manager.Contract
             };
             try
             {
+
                 var employeeViewModel = new EmployeeViewModel();
                 if (signUpViewModel != null)
                 {
@@ -86,15 +100,25 @@ namespace HTTAPI.Manager.Contract
                     var employeeModel = new Employee();
                     employeeModel.MapFromViewModel(signUpViewModel);
                     employeeModel.Password = BC.HashPassword(signUpViewModel.Password);
+                    // by default user registers as employee
+                    var role = await _roleRepository.GetRoleByName(EmployeeRolesEnum.Employee.ToString());
+                    employeeModel.EmployeeRoles = new List<EmployeeRole>{
+                        new EmployeeRole {  Employee = employeeModel,  Role = role }};
                     employeeModel = await _employeeRepository.CreateEmployee(employeeModel);
-
                     employeeViewModel.MapFromModel(employeeModel);
-                    employeeViewModel.RoleId = employeeModel.Role.Id;
-                    employeeViewModel.RoleName = employeeModel.Role.Name;
+
+                    // uncomment if required
+                    //var roles = new List<RoleViewModel>();
+                    //employeeViewModel.Roles = employeeModel.EmployeeRoles.Select(t =>
+                    //{
+                    //    var role = new RoleViewModel();
+                    //    role.Id = t.RoleId;
+                    //    role.Name = t.Role.Name;
+                    //    return role;
+                    //}).ToList();
 
                     // send email to HR for approval
                     await SendRegisterationRequestEmail(employeeViewModel, MailTemplate.UserRegisterationRequest);
-
                     result.Body = employeeViewModel;
                     return result;
                 }
@@ -234,16 +258,23 @@ namespace HTTAPI.Manager.Contract
                         // check if employee is confirmed or not
                         if (employeeModel.Status == EntityStatus.Accept)
                         {
-                            RoleViewModel roleVM = new RoleViewModel();
-                            roleVM.MapFromModel(employeeModel.Role);
+                            var roles = new List<RoleViewModel>();
+                            roles = employeeModel.EmployeeRoles.Select(t =>
+                            {
+                                var role = new RoleViewModel();
+                                role.Id = t.RoleId;
+                                role.Name = t.Role.Name;
+                                return role;
+                            }).ToList();
+
                             UserViewModel userView = new UserViewModel()
                             {
                                 Email = employeeModel.Email,
                                 EmployeeCode = employeeModel.EmployeeCode,
                                 Name = employeeModel.Name,
                                 UserId = employeeModel.Id,
-                                Token = GenerateToken(employeeModel.Name, employeeModel.Email, employeeModel.Role.Name),
-                                Role = roleVM
+                                Token = GenerateToken(employeeModel.Name, employeeModel.Email),
+                                Roles = roles
                             };
                             result.Body = userView;
                         }
@@ -302,8 +333,15 @@ namespace HTTAPI.Manager.Contract
                     if (employeeModel != null)
                     {
                         employeeVm.MapFromModel(employeeModel);
-                        employeeVm.RoleId = employeeModel.Role.Id;
-                        employeeVm.RoleName = employeeModel.Role.Name;
+                        var roles = new List<RoleViewModel>();
+                        roles = employeeModel.EmployeeRoles.Select(t =>
+                        {
+                            var role = new RoleViewModel();
+                            role.Id = t.RoleId;
+                            role.Name = t.Role.Name;
+                            return role;
+                        }).ToList();
+                        employeeVm.Roles = roles;
                         result.Body = employeeVm;
                     }
                     else
@@ -351,8 +389,15 @@ namespace HTTAPI.Manager.Contract
                     if (employeeModel != null)
                     {
                         employeeVm.MapFromModel(employeeModel);
-                        employeeVm.RoleId = employeeModel.Role.Id;
-                        employeeVm.RoleName = employeeModel.Role.Name;
+                        var roles = new List<RoleViewModel>();
+                        roles = employeeModel.EmployeeRoles.Select(t =>
+                        {
+                            var role = new RoleViewModel();
+                            role.Id = t.RoleId;
+                            role.Name = t.Role.Name;
+                            return role;
+                        }).ToList();
+                        employeeVm.Roles = roles;
                         result.Body = employeeVm;
                     }
                     else
@@ -401,8 +446,16 @@ namespace HTTAPI.Manager.Contract
                     {
                         var employeeViewModel = new EmployeeViewModel();
                         employeeViewModel.MapFromModel(t);
-                        employeeViewModel.RoleId = t.Role.Id;
-                        employeeViewModel.RoleName = t.Role.Name;
+                        var roles = new List<RoleViewModel>();
+                        roles = t.EmployeeRoles.Select(r =>
+                        {
+                            var role = new RoleViewModel();
+                            role.Id = r.RoleId;
+                            role.Name = r.Role.Name;
+                            return role;
+                        }).ToList();
+
+                        employeeViewModel.Roles = roles;
                         return employeeViewModel;
                     }).ToList();
                 }
@@ -446,10 +499,10 @@ namespace HTTAPI.Manager.Contract
                     result.StatusCode = HttpStatusCode.NotFound;
                     return result;
                 }
-                // create reset token that expires after 1 day
-                employee.ResetToken = randomTokenString();
-                employee.ResetTokenExpires = DateTime.Now.AddDays(1);
-                employee = await _employeeRepository.UpdateEmployee(employee);
+                //// create reset token that expires after 1 day
+                //employee.ResetToken = randomTokenString();
+                //employee.ResetTokenExpires = DateTime.Now.AddDays(1);
+                //employee = await _employeeRepository.UpdateEmployee(employee);
 
                 await SendForgotPasswordEmail(employee);
                 result.Message = "Password has been sent to your email.";
@@ -480,17 +533,17 @@ namespace HTTAPI.Manager.Contract
             try
             {
                 // in case of change pwd , will recieve email
-                // in case of reseting pwd by forgot email, will recieve token
                 var employee = new Employee();
                 if (!string.IsNullOrEmpty(model.email))
                 {
                     employee = await _employeeRepository.GetEmployeeByEmail(model.email);
                 }
-                else if (!string.IsNullOrEmpty(model.Token))
+                else
                 {
-                    employee = await _employeeRepository.GetEmployeeByToken(model.Token);
+                    result.Status = Status.Fail;
+                    result.StatusCode = HttpStatusCode.BadRequest;
+                    return result;
                 }
-
                 if (employee == null)
                 {
                     result.Body = null;
@@ -500,10 +553,8 @@ namespace HTTAPI.Manager.Contract
                     return result;
                 }
 
-                // update password and remove reset token
+                // update password
                 employee.Password = BC.HashPassword(model.Password);
-                employee.ResetToken = null;
-                employee.ResetTokenExpires = null;
                 employee = await _employeeRepository.UpdateEmployee(employee);
                 result.Message = "Password changed successfully.";
                 return result;
@@ -521,13 +572,13 @@ namespace HTTAPI.Manager.Contract
 
         #region Private methods
 
-        private string GenerateToken(string name, string email, string roleName)
+
+        private string GenerateToken(string name, string email)
         {
             var claims = new Claim[]
             {
                 new Claim("Name", name),
                 new Claim(ClaimTypes.Email,email),
-                new Claim(ClaimTypes.Role,roleName),
                 new Claim(JwtRegisteredClaimNames.Nbf, new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString()),
                 new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(DateTime.Now.AddDays(1)).ToUnixTimeSeconds().ToString()),
             };
@@ -544,16 +595,21 @@ namespace HTTAPI.Manager.Contract
         private async Task SendRegisterationRequestEmail(EmployeeViewModel empViewModel, MailTemplate mailTemplate)
         {
             appEmailHelper = new AppEmailHelper();
-            var hrEmployee = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRoles.HRManager.ToString());
-
-            appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
+            var hrEmployeeList = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRolesEnum.HRManager.ToString());
+            if (hrEmployeeList.Count > 0)
+            {
+                foreach (var hrEmployee in hrEmployeeList)
+                {
+                    appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
+                }
+            }
             appEmailHelper.CCMailAddresses.Add(new MailAddress(empViewModel.Email, empViewModel.Name));
             appEmailHelper.MailTemplate = mailTemplate;
             appEmailHelper.Subject = "Request for Registeration";
             EmployeeRegisterationEmailViewModel emailVm = new EmployeeRegisterationEmailViewModel();
             emailVm.MapFromViewModel(empViewModel);
             emailVm.LinkUrl = $"{ _configuration["AppUrl"]}users";
-            emailVm.HRName = hrEmployee.Name;
+            emailVm.HRName = "";
             appEmailHelper.MailBodyViewModel = emailVm;
             await appEmailHelper.InitMailMessage();
         }
@@ -561,10 +617,11 @@ namespace HTTAPI.Manager.Contract
         private async Task SendAccountStatusEmail(EmployeeViewModel empViewModel, MailTemplate mailTemplate)
         {
             appEmailHelper = new AppEmailHelper();
-            var hrEmployee = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRoles.HRManager.ToString());
-            if (hrEmployee != null)
+            var activeUserEmailId = ((ClaimsIdentity)_principal.Identity).GetActiveUserEmailId();
+            var activeUserName = ((ClaimsIdentity)_principal.Identity).GetActiveUserName();
+            if (!string.IsNullOrEmpty(activeUserEmailId))
             {
-                appEmailHelper.FromMailAddress = new MailAddress(hrEmployee.Email, hrEmployee.Name);
+                appEmailHelper.FromMailAddress = new MailAddress(activeUserEmailId, activeUserName ?? "HR");
             }
             appEmailHelper.ToMailAddresses.Add(new MailAddress(empViewModel.Email, empViewModel.Name));
             appEmailHelper.MailTemplate = mailTemplate;
@@ -580,7 +637,7 @@ namespace HTTAPI.Manager.Contract
             }
 
             emailVm.LinkUrl = $"{ _configuration["AppUrl"]}login";
-            emailVm.HRName = hrEmployee.Name;
+            emailVm.HRName = activeUserName ?? "HR";
             appEmailHelper.MailBodyViewModel = emailVm;
             await appEmailHelper.InitMailMessage();
         }

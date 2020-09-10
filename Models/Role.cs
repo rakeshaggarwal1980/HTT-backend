@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HTTAPI.Models
@@ -19,5 +20,10 @@ namespace HTTAPI.Models
         /// </summary>
         [Required, Column(TypeName = "nvarchar(50)")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public IList<EmployeeRole> EmployeeRoles { get; set; }
     }
 }

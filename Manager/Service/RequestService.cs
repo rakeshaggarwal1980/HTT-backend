@@ -358,11 +358,20 @@ namespace HTTAPI.Manager.Service
         private async Task SendResponseEmail(ComeToOfficeRequestViewModel requestViewModel, MailTemplate mailTemplate)
         {
             appEmailHelper = new AppEmailHelper();
-            var hrEmployee = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRoles.HRManager.ToString());
-            if (hrEmployee != null)
+
+            //var hrEmployee = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRolesEnum.HRManager.ToString());
+            //if (hrEmployee != null)
+            //{
+            //    appEmailHelper.FromMailAddress = new MailAddress(hrEmployee.Email, hrEmployee.Name);
+            //}
+
+            var activeUserEmailId = ((ClaimsIdentity)_principal.Identity).GetActiveUserEmailId();
+            var activeUserName = ((ClaimsIdentity)_principal.Identity).GetActiveUserName();
+            if (!string.IsNullOrEmpty(activeUserEmailId))
             {
-                appEmailHelper.FromMailAddress = new MailAddress(hrEmployee.Email, hrEmployee.Name);
+                appEmailHelper.FromMailAddress = new MailAddress(activeUserEmailId, activeUserName ?? "HR");
             }
+
             appEmailHelper.ToMailAddresses.Add(new MailAddress(requestViewModel.Employee.Email, requestViewModel.Employee.Name));
             appEmailHelper.MailTemplate = mailTemplate;
             ComeToOfficeRequestEmailViewModel emailVm = new ComeToOfficeRequestEmailViewModel();
@@ -379,7 +388,7 @@ namespace HTTAPI.Manager.Service
             }
 
             emailVm.LinkUrl = $"{ _configuration["AppUrl"]}declaration/{requestViewModel.RequestNumber}";
-            emailVm.HRName = hrEmployee.Name;
+            emailVm.HRName = activeUserName ?? "HR";
             appEmailHelper.MailBodyViewModel = emailVm;
             await appEmailHelper.InitMailMessage();
         }
@@ -387,15 +396,21 @@ namespace HTTAPI.Manager.Service
         private async Task SendRequestEmail(ComeToOfficeRequestViewModel requestViewModel, MailTemplate mailTemplate)
         {
             appEmailHelper = new AppEmailHelper();
-            var hrEmployee = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRoles.HRManager.ToString());
-            appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
+            var hrEmployeeList = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRolesEnum.HRManager.ToString());
+            if (hrEmployeeList.Count > 0)
+            {
+                foreach (var hrEmployee in hrEmployeeList)
+                {
+                    appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
+                }
+            }
             appEmailHelper.CCMailAddresses.Add(new MailAddress(requestViewModel.Employee.Email, requestViewModel.Employee.Name));
             appEmailHelper.MailTemplate = mailTemplate;
             appEmailHelper.Subject = "Request for attending Office";
             ComeToOfficeRequestEmailViewModel emailVm = new ComeToOfficeRequestEmailViewModel();
             emailVm.MapFromViewModel(requestViewModel);
             emailVm.LinkUrl = $"{ _configuration["AppUrl"]}requests";
-            emailVm.HRName = hrEmployee.Name;
+            emailVm.HRName = "HR";
             appEmailHelper.MailBodyViewModel = emailVm;
             await appEmailHelper.InitMailMessage();
         }
