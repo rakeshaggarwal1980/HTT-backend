@@ -200,8 +200,8 @@ namespace HTTAPI.Manager.Contract
             {
                 if (employeeViewModel != null)
                 {
-                  //  var emp = new Employee();
-                   var emp = await _employeeRepository.GetEmployeeById(employeeViewModel.Id);
+                    //  var emp = new Employee();
+                    var emp = await _employeeRepository.GetEmployeeById(employeeViewModel.Id);
                     if (emp != null)
                     {
                         emp.MapFromViewModel(employeeViewModel);
@@ -212,7 +212,7 @@ namespace HTTAPI.Manager.Contract
                         {
                             var empRole = new EmployeeRole
                             {
-                                Id= r.Id,
+                                Id = r.Id,
                                 RoleId = r.RoleId,
                                 EmployeeId = r.EmployeeId
                             };
@@ -526,8 +526,8 @@ namespace HTTAPI.Manager.Contract
                     result.StatusCode = HttpStatusCode.NotFound;
                     return result;
                 }
-                var mailResult= await SendForgotPasswordEmail(employee);
-                result.Message =mailResult.Message;
+                var mailResult = await SendForgotPasswordEmail(employee);
+                result.Message = mailResult.Message;
             }
             catch (Exception ex)
             {
@@ -589,6 +589,41 @@ namespace HTTAPI.Manager.Contract
             }
             return result;
 
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public async Task<IResult> DeleteEmployee(int Id)
+        {
+            var result = new Result
+            {
+                Operation = Operation.Delete,
+                Status = Status.Success
+            };
+            try
+            {
+                var employee = await _employeeRepository.GetEmployeeById(Id);
+                if (employee == null)
+                {
+                    result.Status = Status.Error;
+                    result.Message = "Employee Id does not exists"; 
+                    result.StatusCode = HttpStatusCode.NotFound;
+                    return result;
+                }
+                await _employeeRepository.DeleteEmployee(employee);
+                result.Message = "Employee deleted";
+                result.StatusCode = HttpStatusCode.OK;
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+                result.Status = Status.Error;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
+            return result;
         }
 
         #region Private methods

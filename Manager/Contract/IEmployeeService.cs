@@ -70,5 +70,12 @@ namespace HTTAPI.Manager.Contract
         /// <param name="model"></param>
         /// <returns></returns>
         Task<IResult> ResetPassword(ResetPasswordViewModel model);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<IResult> DeleteEmployee(int Id);
     }
 }

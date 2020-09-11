@@ -78,6 +78,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Controllers.EmployeeController.DeleteEmployee(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Controllers.HealthTrackController">
             <summary>
             
@@ -896,6 +903,13 @@
             <param name="model"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.DeleteEmployee(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Manager.Contract.IHealthTrackService">
             <summary>
             interface for ContentDetailService 
@@ -1091,6 +1105,13 @@
             
             </summary>
             <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.DeleteEmployee(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="Id"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Manager.Service.HealthTrackService">
@@ -1925,6 +1946,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.DeleteEmployee(HTTAPI.Models.Employee)">
+            <summary>
+            
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Contracts.IHealthTrackRepository">
             <summary>
             HealthTrackRepository 
@@ -2195,6 +2223,13 @@
             <summary>
             
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.DeleteEmployee(HTTAPI.Models.Employee)">
+            <summary>
+            
+            </summary>
+            <param name="Id"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Services.HealthTrackRepository">

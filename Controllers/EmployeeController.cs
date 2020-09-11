@@ -122,7 +122,19 @@ namespace HTTAPI.Controllers
             return StatusCode((int)result.StatusCode, result);
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("api/employee")]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public async Task<ActionResult<IResult>> DeleteEmployee(int id)
+        {
+            var result = await _employeeService.DeleteEmployee(id);
+            return StatusCode((int)result.StatusCode, result);
+        }
 
     }
 }

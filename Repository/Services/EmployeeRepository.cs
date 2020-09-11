@@ -1,6 +1,7 @@
 ﻿using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -46,7 +47,7 @@ namespace HTTAPI.Repository.Services
         public async Task<Employee> GetEmployeeById(int empId)
         {
             return await _context.Employee
-                    .Where(e => e.Id == empId).Include(e => e.EmployeeRoles).ThenInclude(e=>e.Role).SingleOrDefaultAsync();
+                    .Where(e => e.Id == empId).Include(e => e.EmployeeRoles).ThenInclude(e => e.Role).SingleOrDefaultAsync();
         }
 
         /// <summary>
@@ -132,7 +133,7 @@ namespace HTTAPI.Repository.Services
         /// <returns></returns>
         public async Task<List<Employee>> GetAllEmployees()
         {
-            return await _context.Employee.Include(e => e.EmployeeRoles).ThenInclude(e=>e.Role).ToListAsync();
+            return await _context.Employee.Include(e => e.EmployeeRoles).ThenInclude(e => e.Role).ToListAsync();
         }
 
         //public async Task<Employee> GetEmployeeByToken(string token)
@@ -140,6 +141,18 @@ namespace HTTAPI.Repository.Services
         //    return await _context.Employee.SingleOrDefaultAsync(x =>
         //       x.ResetToken == token && x.ResetTokenExpires > DateTime.UtcNow);
         //}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="emp"></param>
+        /// <returns></returns>
+        public async Task DeleteEmployee(Employee emp)
+        {
+            _context.Entry(emp).State = EntityState.Deleted;
+            await _context.SaveChangesAsync();
+
+        }
     }
 }
 
