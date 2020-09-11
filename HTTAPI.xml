@@ -277,6 +277,11 @@
             Delete
             </summary>
         </member>
+        <member name="F:HTTAPI.Enums.Operation.SendEmail">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:HTTAPI.Enums.MailTemplate">
             <summary>
             Type of mail to send
@@ -1395,6 +1400,11 @@
             
             </summary>
         </member>
+        <member name="T:HTTAPI.Models.EmployeeRole">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:HTTAPI.Models.EmployeeRole.Id">
             <summary>
             Primary key of entity
@@ -2040,6 +2050,13 @@
             <param name="name"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Repository.Contracts.IRoleRepository.DeleteEmployeeRoles(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="employeeId"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Repository.Contracts.ISymptomRepository">
             <summary>
             
@@ -2335,6 +2352,13 @@
             
             </summary>
             <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.RoleRepository.DeleteEmployeeRoles(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="employeeId"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Services.SymptomRepository">

@@ -42,5 +42,25 @@ namespace HTTAPI.Repository.Services
         {
             return await _context.Role.Where(r => r.Name == name).FirstOrDefaultAsync();
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <returns></returns>
+        public async Task DeleteEmployeeRoles(int employeeId)
+        {
+            var emp = _context.Employee.Where(x => x.Id == employeeId).Include(e=>e.EmployeeRoles).SingleOrDefault();
+            if (emp != null)
+            {
+                foreach (var role in emp.EmployeeRoles)
+                {
+                    emp.EmployeeRoles.Remove(role);
+
+                }
+            }
+            await _context.SaveChangesAsync();
+
+        }
     }
 }

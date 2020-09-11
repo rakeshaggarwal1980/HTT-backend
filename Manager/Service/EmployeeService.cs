@@ -118,7 +118,8 @@ namespace HTTAPI.Manager.Contract
                     //}).ToList();
 
                     // send email to HR for approval
-                    await SendRegisterationRequestEmail(employeeViewModel, MailTemplate.UserRegisterationRequest);
+                    var mailresult = await SendRegisterationRequestEmail(employeeViewModel);
+                    result.Message = mailresult.Message;
                     result.Body = employeeViewModel;
                     return result;
                 }
@@ -163,7 +164,8 @@ namespace HTTAPI.Manager.Contract
                     }
                     result.Message = emp.Status == EntityStatus.Accept ? "Confirmed" : "Declined";
                     // send email to employee via hR
-                    await SendAccountStatusEmail(employeeVm, MailTemplate.UserConfirmation);
+                    var mailResult = await SendAccountStatusEmail(employeeVm, MailTemplate.UserConfirmation);
+                    result.Message = mailResult.Message;
                     return result;
                 }
                 result.Status = Status.Fail;
@@ -200,6 +202,19 @@ namespace HTTAPI.Manager.Contract
                     if (emp != null)
                     {
                         emp.MapFromViewModel(employeeViewModel);
+
+                        // add new emp roles
+                        var empRoles = new List<EmployeeRole>();
+                        empRoles = employeeViewModel.Roles.Select(r =>
+                        {
+                            var empRole = new EmployeeRole
+                            {
+                                Employee = emp,
+                                Role = new Role { Id = r.Id, Name = r.Name }
+                            };
+                            return empRole;
+                        }).ToList();
+                        emp.EmployeeRoles = empRoles;
                         emp = await _employeeRepository.UpdateEmployee(emp);
                     }
                     employeeViewModel.MapFromModel(emp);
@@ -499,14 +514,8 @@ namespace HTTAPI.Manager.Contract
                     result.StatusCode = HttpStatusCode.NotFound;
                     return result;
                 }
-                //// create reset token that expires after 1 day
-                //employee.ResetToken = randomTokenString();
-                //employee.ResetTokenExpires = DateTime.Now.AddDays(1);
-                //employee = await _employeeRepository.UpdateEmployee(employee);
-
-                await SendForgotPasswordEmail(employee);
-                result.Message = "Password has been sent to your email.";
-
+                var mailResult= await SendForgotPasswordEmail(employee);
+                result.Message =mailResult.Message;
             }
             catch (Exception ex)
             {
@@ -592,84 +601,120 @@ namespace HTTAPI.Manager.Contract
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private async Task SendRegisterationRequestEmail(EmployeeViewModel empViewModel, MailTemplate mailTemplate)
+        private async Task<IResult> SendRegisterationRequestEmail(EmployeeViewModel empViewModel)
         {
-            appEmailHelper = new AppEmailHelper();
-            var hrEmployeeList = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRolesEnum.HRManager.ToString());
-            if (hrEmployeeList.Count > 0)
+            var result = new Result
             {
-                foreach (var hrEmployee in hrEmployeeList)
+                Operation = Operation.SendEmail,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                appEmailHelper = new AppEmailHelper();
+                var hrEmployeeList = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRolesEnum.HRManager.ToString());
+                if (hrEmployeeList.Count > 0)
                 {
-                    appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
+                    foreach (var hrEmployee in hrEmployeeList)
+                    {
+                        appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
+                    }
                 }
+                appEmailHelper.CCMailAddresses.Add(new MailAddress(empViewModel.Email, empViewModel.Name));
+                appEmailHelper.MailTemplate = MailTemplate.UserRegisterationRequest;
+                appEmailHelper.Subject = "Request for Registeration";
+                EmployeeRegisterationEmailViewModel emailVm = new EmployeeRegisterationEmailViewModel();
+                emailVm.MapFromViewModel(empViewModel);
+                emailVm.LinkUrl = $"{ _configuration["AppUrl"]}users";
+                emailVm.HRName = "";
+                appEmailHelper.MailBodyViewModel = emailVm;
+                await appEmailHelper.InitMailMessage();
             }
-            appEmailHelper.CCMailAddresses.Add(new MailAddress(empViewModel.Email, empViewModel.Name));
-            appEmailHelper.MailTemplate = mailTemplate;
-            appEmailHelper.Subject = "Request for Registeration";
-            EmployeeRegisterationEmailViewModel emailVm = new EmployeeRegisterationEmailViewModel();
-            emailVm.MapFromViewModel(empViewModel);
-            emailVm.LinkUrl = $"{ _configuration["AppUrl"]}users";
-            emailVm.HRName = "";
-            appEmailHelper.MailBodyViewModel = emailVm;
-            await appEmailHelper.InitMailMessage();
-        }
-
-        private async Task SendAccountStatusEmail(EmployeeViewModel empViewModel, MailTemplate mailTemplate)
-        {
-            appEmailHelper = new AppEmailHelper();
-            var activeUserEmailId = ((ClaimsIdentity)_principal.Identity).GetActiveUserEmailId();
-            var activeUserName = ((ClaimsIdentity)_principal.Identity).GetActiveUserName();
-            if (!string.IsNullOrEmpty(activeUserEmailId))
+            catch (Exception e)
             {
-                appEmailHelper.FromMailAddress = new MailAddress(activeUserEmailId, activeUserName ?? "HR");
-            }
-            appEmailHelper.ToMailAddresses.Add(new MailAddress(empViewModel.Email, empViewModel.Name));
-            appEmailHelper.MailTemplate = mailTemplate;
-            EmployeeRegisterationEmailViewModel emailVm = new EmployeeRegisterationEmailViewModel();
-            emailVm.MapFromViewModel(empViewModel);
-            if (empViewModel.Status == EntityStatus.Accept)
-            {
-                appEmailHelper.Subject = "Account confirmation";
-            }
-            else if (empViewModel.Status == EntityStatus.Deny)
-            {
-                appEmailHelper.Subject = "Account not confirmed";
-            }
+                result.Message = e.Message;
+                result.Status = Status.Error;
+                result.StatusCode = HttpStatusCode.InternalServerError;
 
-            emailVm.LinkUrl = $"{ _configuration["AppUrl"]}login";
-            emailVm.HRName = activeUserName ?? "HR";
-            appEmailHelper.MailBodyViewModel = emailVm;
-            await appEmailHelper.InitMailMessage();
+            }
+            return result;
         }
 
-        private string randomTokenString()
+        private async Task<IResult> SendAccountStatusEmail(EmployeeViewModel empViewModel, MailTemplate mailTemplate)
         {
-            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
-            var randomBytes = new byte[40];
-            rngCryptoServiceProvider.GetBytes(randomBytes);
-            // convert random bytes to hex string
-            return BitConverter.ToString(randomBytes).Replace("-", "");
+            var result = new Result
+            {
+                Operation = Operation.SendEmail,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                appEmailHelper = new AppEmailHelper();
+                var activeUserEmailId = ((ClaimsIdentity)_principal.Identity).GetActiveUserEmailId();
+                var activeUserName = ((ClaimsIdentity)_principal.Identity).GetActiveUserName();
+                if (!string.IsNullOrEmpty(activeUserEmailId))
+                {
+                    appEmailHelper.FromMailAddress = new MailAddress(activeUserEmailId, activeUserName ?? "HR");
+                }
+                appEmailHelper.ToMailAddresses.Add(new MailAddress(empViewModel.Email, empViewModel.Name));
+                appEmailHelper.MailTemplate = mailTemplate;
+                EmployeeRegisterationEmailViewModel emailVm = new EmployeeRegisterationEmailViewModel();
+                emailVm.MapFromViewModel(empViewModel);
+                if (empViewModel.Status == EntityStatus.Accept)
+                {
+                    appEmailHelper.Subject = "Account confirmation";
+                }
+                else if (empViewModel.Status == EntityStatus.Deny)
+                {
+                    appEmailHelper.Subject = "Account not confirmed";
+                }
+
+                emailVm.LinkUrl = $"{ _configuration["AppUrl"]}login";
+                emailVm.HRName = activeUserName ?? "HR";
+                appEmailHelper.MailBodyViewModel = emailVm;
+                await appEmailHelper.InitMailMessage();
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+                result.Status = Status.Error;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
+            return result;
         }
 
-
-        private async Task SendForgotPasswordEmail(Employee emp)
+        private async Task<IResult> SendForgotPasswordEmail(Employee emp)
         {
-            appEmailHelper = new AppEmailHelper();
-            appEmailHelper.ToMailAddresses.Add(new MailAddress(emp.Email, emp.Name));
-            appEmailHelper.MailTemplate = MailTemplate.PasswordReset;
+            var result = new Result
+            {
+                Operation = Operation.SendEmail,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                appEmailHelper = new AppEmailHelper();
+                appEmailHelper.ToMailAddresses.Add(new MailAddress(emp.Email, emp.Name));
+                appEmailHelper.MailTemplate = MailTemplate.PasswordReset;
 
-            EmployeePasswordResetEmailViewModel emailVm = new EmployeePasswordResetEmailViewModel();
-            emailVm.Name = emp.Name;
-            string password = GeneratePassword();
-            emailVm.Password = password;
-            appEmailHelper.Subject = "New Password";
-            appEmailHelper.MailBodyViewModel = emailVm;
-            await appEmailHelper.InitMailMessage();
-
+                EmployeePasswordResetEmailViewModel emailVm = new EmployeePasswordResetEmailViewModel();
+                emailVm.Name = emp.Name;
+                string password = GeneratePassword();
+                emailVm.Password = password;
+                appEmailHelper.Subject = "New Password";
+                appEmailHelper.MailBodyViewModel = emailVm;
+                await appEmailHelper.InitMailMessage();
+                result.Message = "Password has been sent to your email.";
+            }
+            catch (Exception e)
+            {
+                result.Message = e.Message;
+                result.Status = Status.Error;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
+            return result;
         }
-
-        #endregion
-
         private string GeneratePassword()
         {
             string allowedChars = "";
@@ -688,5 +733,9 @@ namespace HTTAPI.Manager.Contract
             }
             return passwordString;
         }
+
+        #endregion
+
+
     }
 }

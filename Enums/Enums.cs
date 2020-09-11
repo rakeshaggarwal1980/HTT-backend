@@ -78,7 +78,9 @@
         /// Delete
         /// </summary>
         Delete = 4,
-
+        /// <summary>
+        /// 
+        /// </summary>
         SendEmail = 5
     }
 

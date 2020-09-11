@@ -2,6 +2,9 @@
 
 namespace HTTAPI.Models
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class EmployeeRole
     {
         /// <summary>

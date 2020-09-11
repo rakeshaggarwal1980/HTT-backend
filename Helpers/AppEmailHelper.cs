@@ -77,11 +77,12 @@ namespace HTTAPI.Helpers
             // smtp client
             _client = new SmtpClient(_appEmailSetting.SmtpClient)
             {
-                EnableSsl = true,
+                Host = "smtp.gmail.com",
+                Port = _appEmailSetting.Port,
                 UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(_appEmailSetting.NetworkUserName, _appEmailSetting.NetworkPassword),
-                Host = "smtp.gmail.com",
-                Port = _appEmailSetting.Port
+                EnableSsl = true
+
             };
         }
 
@@ -120,7 +121,7 @@ namespace HTTAPI.Helpers
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<IResult> InitMailMessage()
+        public async Task InitMailMessage()
         {
             var result = new Result
             {
@@ -141,18 +142,18 @@ namespace HTTAPI.Helpers
                 message.Subject = Subject;
                 message.Body = await PrepareMailBody();
                 message.IsBodyHtml = true;
-                try
-                {
-                    await _client.SendMailAsync(message);
-                }
-                catch (Exception e)
-                {
-                    result.Message = e.Message;
-                    result.StatusCode = HttpStatusCode.InternalServerError;
-                    result.Status = Status.Error;
-                }
+                // try
+                //{
+                await _client.SendMailAsync(message);
+                //}
+                //catch (Exception e)
+                //{
+                //    result.Message = e.Message;
+                //    result.StatusCode = HttpStatusCode.InternalServerError;
+                //    result.Status = Status.Error;
+                //}
             }
-            return result;
+            // return result;
         }
 
         /// <summary>

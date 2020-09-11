@@ -21,5 +21,12 @@ namespace HTTAPI.Repository.Contracts
         /// <param name="name"></param>
         /// <returns></returns>
         Task<Role> GetRoleByName(string name);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <returns></returns>
+        Task DeleteEmployeeRoles(int employeeId);
     }
 }
