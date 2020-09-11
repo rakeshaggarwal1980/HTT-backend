@@ -35,6 +35,6 @@ namespace HTTAPI.ViewModels
         /// <summary>
         /// User Role
         /// </summary>
-        public List<RoleViewModel> Roles { get; set; }
+        public List<EmployeeRoleViewModel> Roles { get; set; }
     }
 }

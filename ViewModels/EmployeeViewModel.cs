@@ -38,7 +38,7 @@ namespace HTTAPI.ViewModels
         /// Emloyee Roles
         /// </summary>
         
-        public List<RoleViewModel> Roles { get; set; }
+        public List<EmployeeRoleViewModel> Roles { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -74,5 +74,13 @@ namespace HTTAPI.ViewModels
         /// 
         /// </summary>
         public string Password { get; set; }
+    }
+
+    public class EmployeeRoleViewModel
+    {
+        public int Id { get; set; }
+        public int  RoleId { get; set; }
+        public string RoleName { get; set; }
+        public int EmployeeId { get; set; }
     }
 }

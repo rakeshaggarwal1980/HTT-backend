@@ -56,7 +56,25 @@ namespace HTTAPI.Repository.Services
         /// <returns></returns>
         public async Task<Employee> UpdateEmployee(Employee employee)
         {
-            _context.Employee.Update(employee);
+            var db = _context.Employee.Where(e => e.Id == employee.Id).Include(e => e.EmployeeRoles).SingleOrDefault();
+            employee.Password = db.Password;
+            _context.Entry(db).CurrentValues.SetValues(employee);
+            // delete / clear subset1 from database
+            foreach (var dbSubset1 in db.EmployeeRoles.ToList())
+            {
+                if (!employee.EmployeeRoles.Any(i => i.Id == dbSubset1.Id))
+                    _context.EmployeeRole.Remove(dbSubset1);
+            }
+            foreach (var newSubset1 in employee.EmployeeRoles)
+            {
+                var dbSubset1 = db.EmployeeRoles.SingleOrDefault(i => i.Id == newSubset1.Id);
+                if (dbSubset1 != null)
+                    // update Subset1
+                    _context.Entry(dbSubset1).CurrentValues.SetValues(newSubset1);
+                else
+                    db.EmployeeRoles.Add(newSubset1);
+            }
+            _context.Employee.Update(db);
             await _context.SaveChangesAsync();
             return employee;
         }

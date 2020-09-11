@@ -108,12 +108,14 @@ namespace HTTAPI.Manager.Contract
                     employeeViewModel.MapFromModel(employeeModel);
 
                     // uncomment if required
-                    //var roles = new List<RoleViewModel>();
-                    //employeeViewModel.Roles = employeeModel.EmployeeRoles.Select(t =>
+                    //var roles = new List<EmployeeRoleViewModel>();
+                    //roles = employeeModel.EmployeeRoles.Select(t =>
                     //{
-                    //    var role = new RoleViewModel();
-                    //    role.Id = t.RoleId;
-                    //    role.Name = t.Role.Name;
+                    //    var role = new EmployeeRoleViewModel();
+                    //    role.Id = t.Id;
+                    //    role.RoleId = t.RoleId;
+                    //    role.RoleName = t.Role.Name;
+                    //    role.EmployeeId = t.EmployeeId;
                     //    return role;
                     //}).ToList();
 
@@ -198,7 +200,8 @@ namespace HTTAPI.Manager.Contract
             {
                 if (employeeViewModel != null)
                 {
-                    var emp = await _employeeRepository.GetEmployeeById(employeeViewModel.Id);
+                  //  var emp = new Employee();
+                   var emp = await _employeeRepository.GetEmployeeById(employeeViewModel.Id);
                     if (emp != null)
                     {
                         emp.MapFromViewModel(employeeViewModel);
@@ -209,8 +212,9 @@ namespace HTTAPI.Manager.Contract
                         {
                             var empRole = new EmployeeRole
                             {
-                                Employee = emp,
-                                Role = new Role { Id = r.Id, Name = r.Name }
+                                Id= r.Id,
+                                RoleId = r.RoleId,
+                                EmployeeId = r.EmployeeId
                             };
                             return empRole;
                         }).ToList();
@@ -273,12 +277,14 @@ namespace HTTAPI.Manager.Contract
                         // check if employee is confirmed or not
                         if (employeeModel.Status == EntityStatus.Accept)
                         {
-                            var roles = new List<RoleViewModel>();
+                            var roles = new List<EmployeeRoleViewModel>();
                             roles = employeeModel.EmployeeRoles.Select(t =>
                             {
-                                var role = new RoleViewModel();
-                                role.Id = t.RoleId;
-                                role.Name = t.Role.Name;
+                                var role = new EmployeeRoleViewModel();
+                                role.Id = t.Id;
+                                role.RoleId = t.RoleId;
+                                role.RoleName = t.Role.Name;
+                                role.EmployeeId = t.EmployeeId;
                                 return role;
                             }).ToList();
 
@@ -348,12 +354,14 @@ namespace HTTAPI.Manager.Contract
                     if (employeeModel != null)
                     {
                         employeeVm.MapFromModel(employeeModel);
-                        var roles = new List<RoleViewModel>();
+                        var roles = new List<EmployeeRoleViewModel>();
                         roles = employeeModel.EmployeeRoles.Select(t =>
                         {
-                            var role = new RoleViewModel();
-                            role.Id = t.RoleId;
-                            role.Name = t.Role.Name;
+                            var role = new EmployeeRoleViewModel();
+                            role.Id = t.Id;
+                            role.RoleId = t.RoleId;
+                            role.RoleName = t.Role.Name;
+                            role.EmployeeId = t.EmployeeId;
                             return role;
                         }).ToList();
                         employeeVm.Roles = roles;
@@ -404,12 +412,14 @@ namespace HTTAPI.Manager.Contract
                     if (employeeModel != null)
                     {
                         employeeVm.MapFromModel(employeeModel);
-                        var roles = new List<RoleViewModel>();
+                        var roles = new List<EmployeeRoleViewModel>();
                         roles = employeeModel.EmployeeRoles.Select(t =>
                         {
-                            var role = new RoleViewModel();
-                            role.Id = t.RoleId;
-                            role.Name = t.Role.Name;
+                            var role = new EmployeeRoleViewModel();
+                            role.Id = t.Id;
+                            role.RoleId = t.RoleId;
+                            role.RoleName = t.Role.Name;
+                            role.EmployeeId = t.EmployeeId;
                             return role;
                         }).ToList();
                         employeeVm.Roles = roles;
@@ -461,12 +471,14 @@ namespace HTTAPI.Manager.Contract
                     {
                         var employeeViewModel = new EmployeeViewModel();
                         employeeViewModel.MapFromModel(t);
-                        var roles = new List<RoleViewModel>();
+                        var roles = new List<EmployeeRoleViewModel>();
                         roles = t.EmployeeRoles.Select(r =>
                         {
-                            var role = new RoleViewModel();
-                            role.Id = r.RoleId;
-                            role.Name = r.Role.Name;
+                            var role = new EmployeeRoleViewModel();
+                            role.Id = r.Id;
+                            role.RoleId = r.RoleId;
+                            role.RoleName = r.Role.Name;
+                            role.EmployeeId = r.EmployeeId;
                             return role;
                         }).ToList();
 
