@@ -233,6 +233,7 @@ namespace HTTAPI.Manager.Contract
             {
                 result.Message = e.Message;
                 result.Status = Status.Error;
+                result.StatusCode = HttpStatusCode.InternalServerError;
                 return result;
             }
 
