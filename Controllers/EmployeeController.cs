@@ -26,6 +26,7 @@ namespace HTTAPI.Controllers
         /// <param name="employeeService"></param>
         public EmployeeController(ILogger<EmployeeController> logger, IEmployeeService employeeService)
         {
+
             _logger = logger;
             _employeeService = employeeService;
         }
