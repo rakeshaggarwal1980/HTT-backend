@@ -63,6 +63,11 @@
         /// 
         /// </summary>
         public const string PasswordResetEmail = "Views/PasswordReset.cshtml";
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public const string EmployeeCovidDeclaration = "Views/EmployeeCovidDeclaration.cshtml";
     }
 
 }

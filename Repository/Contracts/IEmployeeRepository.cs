@@ -1,4 +1,5 @@
-﻿using HTTAPI.Models;
+﻿using HTTAPI.Helpers;
+using HTTAPI.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -59,8 +60,7 @@ namespace HTTAPI.Repository.Contracts
         /// <summary>
         ///  Returns list of all employees
         /// </summary>
-        /// <returns></returns>
-        Task<List<Employee>> GetAllEmployees();
+        List<Employee> GetAllEmployees(SearchSortModel search);
 
         /// <summary>
         /// 

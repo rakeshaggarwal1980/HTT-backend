@@ -52,6 +52,7 @@ namespace HTTAPI.ViewModels
         /// 
         /// </summary>
         public EmployeeViewModel Employee { get; set; }
+
         /// <summary>
         ///Health Track Symptoms
         /// </summary>

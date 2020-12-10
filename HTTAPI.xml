@@ -72,7 +72,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Controllers.EmployeeController.GetEmployees">
+        <member name="M:HTTAPI.Controllers.EmployeeController.GetEmployees(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             Get all employees
             </summary>
@@ -115,7 +115,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Controllers.HealthTrackController.GetAllDeclarations">
+        <member name="M:HTTAPI.Controllers.HealthTrackController.GetAllDeclarations(HTTAPI.Helpers.SearchSortModel)">
             <summary>
              Returns declaration made by employee
             </summary>
@@ -126,6 +126,42 @@
              Get Declarations
             </summary>
             <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.HealthTrackController.GetDeclarationsByUserId(HTTAPI.Helpers.SearchSortModel)">
+            <summary>
+             Get Declarations By UserId
+            </summary>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.HealthTrackController.GetCovidDeclarations(HTTAPI.Helpers.SearchSortModel)">
+            <summary>
+            
+            </summary>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.HealthTrackController.SubmitCovidDeclarationData(HTTAPI.ViewModels.CovidHealthTrackViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="covidHealthTrackViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.HealthTrackController.getCovidDeclaration(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="declarationId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Controllers.HealthTrackController.GetExistingSelfDeclarationOfEmployee(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="employeeId"></param>
+            <param name="requestNumber"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Controllers.LoginController">
@@ -169,13 +205,13 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Controllers.RequestController.GetAllRequests">
+        <member name="M:HTTAPI.Controllers.RequestController.GetAllRequests(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Controllers.RequestController.GetAllRequestsByUserId(System.Int32)">
+        <member name="M:HTTAPI.Controllers.RequestController.GetAllRequestsByUserId(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             
             </summary>
@@ -320,6 +356,11 @@
             </summary>
         </member>
         <member name="F:HTTAPI.Enums.MailTemplate.PasswordReset">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:HTTAPI.Enums.MailTemplate.EmployeeCovidDeclaration">
             <summary>
             
             </summary>
@@ -621,6 +662,11 @@
             
             </summary>
         </member>
+        <member name="F:HTTAPI.Helpers.EmailTemplatePath.EmployeeCovidDeclaration">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:HTTAPI.Helpers.EntityMapperExtensions">
             <summary>
             Extension Methods for Entity Mapper.
@@ -875,7 +921,7 @@
             <param name="employeeViewModel"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.GetEmployeeList">
+        <member name="M:HTTAPI.Manager.Contract.IEmployeeService.GetEmployeeList(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             
             </summary>
@@ -936,7 +982,7 @@
             <param name="requestNumber"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.IHealthTrackService.GetAllDeclarations">
+        <member name="M:HTTAPI.Manager.Contract.IHealthTrackService.GetAllDeclarations(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             
             </summary>
@@ -949,22 +995,58 @@
             <param name="search"></param>
             <returns></returns>
         </member>
+        <member name="M:HTTAPI.Manager.Contract.IHealthTrackService.GetDeclarationsByUserId(HTTAPI.Helpers.SearchSortModel)">
+            <summary>
+            get declarations by userId
+            </summary>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IHealthTrackService.CreateCovidHealthTrack(HTTAPI.ViewModels.CovidHealthTrackViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="covidHealthTrackViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IHealthTrackService.GetCovidDeclarations(HTTAPI.Helpers.SearchSortModel)">
+            <summary>
+            
+            </summary>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IHealthTrackService.GetCovidDeclaration(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="employeedId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Contract.IHealthTrackService.GetExistingSelfDeclarationOfEmployee(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="employeedId"></param>
+            <param name="requestNumber"></param>
+            <returns></returns>
+        </member>
         <member name="T:HTTAPI.Manager.Contract.IRequestService">
             <summary>
              Contract for Come to office request
             </summary>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.IRequestService.GetRequestsList">
+        <member name="M:HTTAPI.Manager.Contract.IRequestService.GetRequestsList(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.IRequestService.GetRequestsListByUserId(System.Int32)">
+        <member name="M:HTTAPI.Manager.Contract.IRequestService.GetRequestsListByUserId(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             Get requests by UserId
             </summary>
-            <param name="userId"></param>
+            <param name="search"></param>
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Manager.Contract.IRequestService.CreateRequest(HTTAPI.ViewModels.ComeToOfficeRequestViewModel)">
@@ -1046,7 +1128,7 @@
         </member>
         <member name="M:HTTAPI.Manager.Contract.EmployeeService.CreateEmployee(HTTAPI.ViewModels.UserSignUpViewModel)">
             <summary>
-            Create Employee
+            Create Employee                                                        
             </summary>
             <param name="signUpViewModel"></param>
             <returns></returns>
@@ -1087,7 +1169,7 @@
             <param name="employeeId"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetEmployeeList">
+        <member name="M:HTTAPI.Manager.Contract.EmployeeService.GetEmployeeList(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             Returns employees
             </summary>
@@ -1168,9 +1250,9 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Manager.Service.HealthTrackService.GetAllDeclarations">
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.GetAllDeclarations(HTTAPI.Helpers.SearchSortModel)">
             <summary>
-             Returns data to bind on declaration form
+             Returns data to export in excel
             </summary>
             <returns></returns>
         </member>
@@ -1179,6 +1261,42 @@
             
             </summary>
             <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.GetDeclarationsByUserId(HTTAPI.Helpers.SearchSortModel)">
+            <summary>
+            
+            </summary>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.CreateCovidHealthTrack(HTTAPI.ViewModels.CovidHealthTrackViewModel)">
+            <summary>
+            
+            </summary>
+            <param name="covidHealthTrackViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.GetCovidDeclarations(HTTAPI.Helpers.SearchSortModel)">
+            <summary>
+            
+            </summary>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.GetCovidDeclaration(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="declarationId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Manager.Service.HealthTrackService.GetExistingSelfDeclarationOfEmployee(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="employeeId"></param>
+            <param name="requestNumber"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Manager.Service.RequestService">
@@ -1227,17 +1345,17 @@
             <param name="configuration"></param>
             <param name="employeeRepository"></param>
         </member>
-        <member name="M:HTTAPI.Manager.Service.RequestService.GetRequestsList">
+        <member name="M:HTTAPI.Manager.Service.RequestService.GetRequestsList(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Manager.Service.RequestService.GetRequestsListByUserId(System.Int32)">
+        <member name="M:HTTAPI.Manager.Service.RequestService.GetRequestsListByUserId(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             Get Requests by UserId
             </summary>
-            <param name="userId"></param>
+            <param name="search"></param>
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Manager.Service.RequestService.CreateRequest(HTTAPI.ViewModels.ComeToOfficeRequestViewModel)">
@@ -1369,6 +1487,66 @@
         <member name="P:HTTAPI.Models.ComeToOfficeRequest.Employee">
             <summary>
             Employee ForeignKey
+            </summary>
+        </member>
+        <member name="T:HTTAPI.Models.CovidHealthTrack">
+            <summary>
+            CovidHealthTrack
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.CovidHealthTrack.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.CovidHealthTrack.EmployeeId">
+            <summary>
+            Employee ForeignKey
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.CovidHealthTrack.Employee">
+            <summary>
+            Employee
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.CovidHealthTrack.LocationId">
+            <summary>
+            Location ForeignKey
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.CovidHealthTrack.Location">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.CovidHealthTrack.DateOfSymptoms">
+            <summary>
+            DateOfSymptoms
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.CovidHealthTrack.OfficeLastDay">
+            <summary>
+            OfficeLastDay
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.CovidHealthTrack.CovidConfirmationDate">
+            <summary>
+            CovidConfirmationDate
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.CovidHealthTrack.OthersInfectedInFamily">
+            <summary>
+            OthersInfectedInFamily
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.CovidHealthTrack.FamilyMembersCount">
+            <summary>
+            FamilyMembersCount
+            </summary>
+        </member>
+        <member name="P:HTTAPI.Models.CovidHealthTrack.HospitalizationNeed">
+            <summary>
+            HospitalizationNeed
             </summary>
         </member>
         <member name="T:HTTAPI.Models.Employee">
@@ -1864,6 +2042,11 @@
             
             </summary>
         </member>
+        <member name="P:HTTAPI.Repository.Context.CovidHealthTrack">
+            <summary>
+            CovidHealthTrack
+            </summary>
+        </member>
         <member name="M:HTTAPI.Repository.ModelBuilderExtensions.Seed(HTTAPI.Repository.Context)">
             <summary>
             Get set data on db creation
@@ -1940,11 +2123,10 @@
             <param name="empId"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetAllEmployees">
+        <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.GetAllEmployees(HTTAPI.Helpers.SearchSortModel)">
             <summary>
              Returns list of all employees
             </summary>
-            <returns></returns>
         </member>
         <member name="M:HTTAPI.Repository.Contracts.IEmployeeRepository.DeleteEmployee(HTTAPI.Models.Employee)">
             <summary>
@@ -1973,10 +2155,17 @@
             <param name="requestNumber"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Repository.Contracts.IHealthTrackRepository.GetAllDeclarations">
+        <member name="M:HTTAPI.Repository.Contracts.IHealthTrackRepository.GetAllDeclarations(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IHealthTrackRepository.GetDeclarationsByUserId(HTTAPI.Helpers.SearchSortModel)">
+            <summary>
+            
+            </summary>
+            <param name="search"></param>
             <returns></returns>
         </member>
         <member name="M:HTTAPI.Repository.Contracts.IHealthTrackRepository.GetDeclarations(HTTAPI.Helpers.SearchSortModel)">
@@ -1984,6 +2173,41 @@
             
             </summary>
             <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IHealthTrackRepository.CreateCovidHealthTrack(HTTAPI.Models.CovidHealthTrack)">
+            <summary>
+            
+            </summary>
+            <param name="covidHealthTrack"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IHealthTrackRepository.GetExistingCovidDeclaration(System.DateTime,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="confirmationDate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IHealthTrackRepository.GetCovidDeclarations(HTTAPI.Helpers.SearchSortModel)">
+            <summary>
+            
+            </summary>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IHealthTrackRepository.GetCovidDeclarationByEmployee(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="employeedId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IHealthTrackRepository.GetCovidDeclaration(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="declarationId"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Contracts.ILocationRepository">
@@ -2027,13 +2251,13 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestsList">
+        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestsList(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             Get all requests
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestsListByUserId(System.Int32)">
+        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestsListByUserId(HTTAPI.Helpers.SearchSortModel)">
             <summary>
              Get Requests of a user
             </summary>
@@ -2058,6 +2282,13 @@
             Get request by request number
             </summary>
             <param name="requestNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Contracts.IRequestRepository.GetRequestsByUserId(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="employeeId"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Contracts.IRoleRepository">
@@ -2219,7 +2450,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetAllEmployees">
+        <member name="M:HTTAPI.Repository.Services.EmployeeRepository.GetAllEmployees(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             
             </summary>
@@ -2258,7 +2489,7 @@
             <param name="requestNumber"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Repository.Services.HealthTrackRepository.GetAllDeclarations">
+        <member name="M:HTTAPI.Repository.Services.HealthTrackRepository.GetAllDeclarations(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             
             </summary>
@@ -2269,6 +2500,47 @@
             
             </summary>
             <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.HealthTrackRepository.GetDeclarationsByUserId(HTTAPI.Helpers.SearchSortModel)">
+            <summary>
+            
+            </summary>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.HealthTrackRepository.CreateCovidHealthTrack(HTTAPI.Models.CovidHealthTrack)">
+            <summary>
+            This method is used to Create Health Track
+            </summary>       
+        </member>
+        <member name="M:HTTAPI.Repository.Services.HealthTrackRepository.GetExistingCovidDeclaration(System.DateTime,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="confirmationDate"></param>
+            <param name="employeeId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.HealthTrackRepository.GetCovidDeclarations(HTTAPI.Helpers.SearchSortModel)">
+            <summary>
+            
+            </summary>
+            <param name="search"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.HealthTrackRepository.GetCovidDeclarationByEmployee(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="employeedId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.HealthTrackRepository.GetCovidDeclaration(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="declarationId"></param>
             <returns></returns>
         </member>
         <member name="T:HTTAPI.Repository.Services.LocationRepository">
@@ -2332,13 +2604,13 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestsList">
+        <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestsList(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             
             </summary>
             <returns></returns>
         </member>
-        <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestsListByUserId(System.Int32)">
+        <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestsListByUserId(HTTAPI.Helpers.SearchSortModel)">
             <summary>
             
             </summary>
@@ -2361,6 +2633,13 @@
         <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestsByEmployee(System.Int32)">
             <summary>
             Checks if Employee has already submitted request
+            </summary>
+            <param name="employeeId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HTTAPI.Repository.Services.RequestRepository.GetRequestsByUserId(System.Int32)">
+            <summary>
+            
             </summary>
             <param name="employeeId"></param>
             <returns></returns>
@@ -2516,6 +2795,76 @@
             </summary>
         </member>
         <member name="P:HTTAPI.ViewModels.ComeToOfficeRequestEmailViewModel.Status">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.CovidHealthTrackViewModel.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.CovidHealthTrackViewModel.EmployeeId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.CovidHealthTrackViewModel.Employee">
+            <summary>
+            Employee
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.CovidHealthTrackViewModel.LocationId">
+            <summary>
+            Location ForeignKey
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.CovidHealthTrackViewModel.DateOfSymptoms">
+            <summary>
+            DateOfSymptoms
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.CovidHealthTrackViewModel.OfficeLastDay">
+            <summary>
+            OfficeLastDay
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.CovidHealthTrackViewModel.CovidConfirmationDate">
+            <summary>
+            CovidConfirmationDate
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.CovidHealthTrackViewModel.OthersInfectedInFamily">
+            <summary>
+            OthersInfectedInFamily
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.CovidHealthTrackViewModel.FamilyMembersCount">
+            <summary>
+            FamilyMembersCount
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.CovidHealthTrackViewModel.HospitalizationNeed">
+            <summary>
+            HospitalizationNeed
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.CovidHealthTrackViewModel.CreatedDate">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.CovidHealthTrackViewModel.Status">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:HTTAPI.ViewModels.CovidHealthTrackEmailViewModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.CovidHealthTrackEmailViewModel.LinkUrl">
             <summary>
             
             </summary>
@@ -2856,6 +3205,16 @@
             </summary>
         </member>
         <member name="P:HTTAPI.ViewModels.UserViewModel.Token">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserViewModel.CurrentResidentialAddress">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HTTAPI.ViewModels.UserViewModel.PermanentResidentialAddress">
             <summary>
             
             </summary>

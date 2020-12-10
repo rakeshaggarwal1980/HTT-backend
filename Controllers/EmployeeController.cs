@@ -61,6 +61,7 @@ namespace HTTAPI.Controllers
         }
 
 
+
         /// <summary>
         /// Employee Confirmation
         /// </summary>
@@ -111,14 +112,14 @@ namespace HTTAPI.Controllers
         /// Get all employees
         /// </summary>
         /// <returns></returns>
-        [HttpGet("api/employee/list")]
+        [HttpPost("api/employee/list")]
         [ProducesResponseType(typeof(List<EmployeeViewModel>), (int)HttpStatusCode.PartialContent)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
-        public async Task<ActionResult<IResult>> GetEmployees()
+        public ActionResult<IResult> GetEmployees(SearchSortModel search)
         {
             _logger.LogInformation("get All Employees");
-            var result = await _employeeService.GetEmployeeList();
+            var result = _employeeService.GetEmployeeList(search);
             return StatusCode((int)result.StatusCode, result);
         }
 

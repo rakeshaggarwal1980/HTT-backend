@@ -76,12 +76,14 @@ namespace HTTAPI.Models
         /// <summary>
         /// Collection HealthTrackSymptom
         /// </summary>
+        [ForeignKey("HealthTrackId")]
         public ICollection<HealthTrackSymptom> HealthTrackSymptoms { get; set; }
 
-
+      
         /// <summary>
         /// Collection HealthTrackQuestionAnswer
         /// </summary>
+        [ForeignKey("HealthTrackId")]
         public ICollection<HealthTrackQuestionAnswer> HealthTrackQuestions { get; set; }
 
     }

@@ -33,6 +33,15 @@ namespace HTTAPI.ViewModels
         public string Token { get; set; }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public string CurrentResidentialAddress { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string PermanentResidentialAddress { get; set; }
+        /// <summary>
         /// User Role
         /// </summary>
         public List<EmployeeRoleViewModel> Roles { get; set; }

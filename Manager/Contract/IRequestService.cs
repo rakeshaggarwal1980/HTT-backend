@@ -14,15 +14,15 @@ namespace HTTAPI.Manager.Contract
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<IResult> GetRequestsList();
+        IResult GetRequestsList(SearchSortModel search);
 
 
         /// <summary>
         /// Get requests by UserId
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="search"></param>
         /// <returns></returns>
-        Task<IResult> GetRequestsListByUserId(int userId);
+        IResult GetRequestsListByUserId(SearchSortModel search);
 
         /// <summary>
         /// 

@@ -1,5 +1,6 @@
 ﻿using HTTAPI.Helpers;
 using HTTAPI.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -30,14 +31,54 @@ namespace HTTAPI.Repository.Contracts
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<List<HealthTrack>> GetAllDeclarations();
-
+        List<HealthTrack> GetAllDeclarations(SearchSortModel search);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="search"></param>
         /// <returns></returns>
+        List<HealthTrack> GetDeclarationsByUserId(SearchSortModel search);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
         List<HealthTrack> GetDeclarations(SearchSortModel search);
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="covidHealthTrack"></param>
+        /// <returns></returns>
+        Task<CovidHealthTrack> CreateCovidHealthTrack(CovidHealthTrack covidHealthTrack);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="confirmationDate"></param>
+        /// <returns></returns>
+        Task<CovidHealthTrack> GetExistingCovidDeclaration(DateTime confirmationDate, int employeeId);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        List<CovidHealthTrack> GetCovidDeclarations(SearchSortModel search);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeedId"></param>
+        /// <returns></returns>
+        Task<List<CovidHealthTrack>> GetCovidDeclarationByEmployee(int employeedId);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="declarationId"></param>
+        /// <returns></returns>
+        Task<List<CovidHealthTrack>> GetCovidDeclaration(int declarationId);
     }
 }

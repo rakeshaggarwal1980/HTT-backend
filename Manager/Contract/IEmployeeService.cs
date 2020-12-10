@@ -47,7 +47,7 @@ namespace HTTAPI.Manager.Contract
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<IResult> GetEmployeeList();
+        IResult GetEmployeeList(SearchSortModel search);
 
         /// <summary>
         /// 

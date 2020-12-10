@@ -35,7 +35,7 @@ namespace HTTAPI.Manager.Contract
         /// 
         /// </summary>
         /// <returns></returns>
-        Task<IResult> GetAllDeclarations();
+        IResult GetAllDeclarations(SearchSortModel search);
 
         /// <summary>
         /// 
@@ -43,6 +43,42 @@ namespace HTTAPI.Manager.Contract
         /// <param name="search"></param>
         /// <returns></returns>
         IResult GetDeclarations(SearchSortModel search);
+
+        /// <summary>
+        /// get declarations by userId
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        IResult GetDeclarationsByUserId(SearchSortModel search);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="covidHealthTrackViewModel"></param>
+        /// <returns></returns>
+        Task<IResult> CreateCovidHealthTrack(CovidHealthTrackViewModel covidHealthTrackViewModel);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        IResult GetCovidDeclarations(SearchSortModel search);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeedId"></param>
+        /// <returns></returns>
+        Task<IResult> GetCovidDeclaration(int declarationId);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeedId"></param>
+        /// <param name="requestNumber"></param>
+        /// <returns></returns>
+        Task<IResult> GetExistingSelfDeclarationOfEmployee(int employeedId);
     }
 
 }

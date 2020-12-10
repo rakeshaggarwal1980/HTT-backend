@@ -80,14 +80,14 @@ namespace HTTAPI.Controllers
         ///  Returns declaration made by employee
         /// </summary>
         /// <returns></returns>
-        [HttpGet("declarationList")]
+        [HttpPost("declarationList")]
         [ProducesResponseType(typeof(List<HealthTrackViewModel>), (int)HttpStatusCode.PartialContent)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
-        public async Task<ActionResult<IResult>> GetAllDeclarations()
+        public ActionResult<IResult> GetAllDeclarations(SearchSortModel search)
         {
             _logger.LogInformation("get all declarations");
-            var result = await _healthTrackService.GetAllDeclarations();
+            var result = _healthTrackService.GetAllDeclarations(search);
             return StatusCode((int)result.StatusCode, result);
         }
 
@@ -105,6 +105,88 @@ namespace HTTAPI.Controllers
         {
             _logger.LogInformation("get all declarations");
             var result = _healthTrackService.GetDeclarations(search);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+        /// <summary>
+        ///  Get Declarations By UserId
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        [HttpPost("declarationsByUserId")]
+        [ProducesResponseType(typeof(HealthTrackViewModel), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public ActionResult<IResult> GetDeclarationsByUserId([FromBody] SearchSortModel search)
+        {
+            _logger.LogInformation("get all declarations by UserId");
+            var result = _healthTrackService.GetDeclarationsByUserId(search);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        [HttpPost("coviddeclarations")]
+        [ProducesResponseType(typeof(CovidHealthTrackViewModel), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public ActionResult<IResult> GetCovidDeclarations([FromBody] SearchSortModel search)
+        {
+            _logger.LogInformation("get all Covid declarations");
+            var result = _healthTrackService.GetCovidDeclarations(search);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="covidHealthTrackViewModel"></param>
+        /// <returns></returns>
+        [HttpPost("covidDeclarationData")]
+        [ProducesResponseType(typeof(CovidHealthTrackViewModel), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public async Task<ActionResult<IResult>> SubmitCovidDeclarationData([FromBody] CovidHealthTrackViewModel covidHealthTrackViewModel)
+        {
+            _logger.LogInformation("Save employee covid declaration detail");
+            var result = await _healthTrackService.CreateCovidHealthTrack(covidHealthTrackViewModel);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="declarationId"></param>
+        /// <returns></returns>
+        [HttpGet("covidDeclaration")]
+        [ProducesResponseType(typeof(List<CovidHealthTrackViewModel>), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public async Task<ActionResult<IResult>> getCovidDeclaration(int declarationId)
+        {
+            _logger.LogInformation("get employee covid declaration detail");
+            var result = await _healthTrackService.GetCovidDeclaration(declarationId);
+            return StatusCode((int)result.StatusCode, result);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <param name="requestNumber"></param>
+        /// <returns></returns>
+        [HttpGet("existingSelfDeclaration")]
+        [ProducesResponseType(typeof(List<HealthTrackViewModel>), (int)HttpStatusCode.PartialContent)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
+        public async Task<ActionResult<IResult>> GetExistingSelfDeclarationOfEmployee(int employeeId)
+        {
+            _logger.LogInformation("get employee declaration detail");
+            var result = await _healthTrackService.GetExistingSelfDeclarationOfEmployee(employeeId);
             return StatusCode((int)result.StatusCode, result);
         }
     }

@@ -71,6 +71,62 @@ namespace HTTAPI.Migrations
                     b.ToTable("ComeToOfficeRequest");
                 });
 
+            modelBuilder.Entity("HTTAPI.Models.CovidHealthTrack", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CovidConfirmationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfSymptoms")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FamilyMembersCount")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HospitalizationNeed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LocationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("OfficeLastDay")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("OthersInfectedInFamily")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("CovidHealthTrack");
+                });
+
             modelBuilder.Entity("HTTAPI.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -515,6 +571,21 @@ namespace HTTAPI.Migrations
                     b.HasOne("HTTAPI.Models.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HTTAPI.Models.CovidHealthTrack", b =>
+                {
+                    b.HasOne("HTTAPI.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HTTAPI.Models.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

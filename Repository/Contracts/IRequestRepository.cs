@@ -1,4 +1,5 @@
-﻿using HTTAPI.Models;
+﻿using HTTAPI.Helpers;
+using HTTAPI.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -28,14 +29,14 @@ namespace HTTAPI.Repository.Contracts
         /// Get all requests
         /// </summary>
         /// <returns></returns>
-        Task<List<ComeToOfficeRequest>> GetRequestsList();
+        List<ComeToOfficeRequest> GetRequestsList(SearchSortModel search);
 
 
         /// <summary>
         ///  Get Requests of a user
         /// </summary>
         /// <returns></returns>
-        Task<List<ComeToOfficeRequest>> GetRequestsListByUserId(int userId);
+        List<ComeToOfficeRequest> GetRequestsListByUserId(SearchSortModel search);
 
 
         /// <summary>
@@ -59,6 +60,13 @@ namespace HTTAPI.Repository.Contracts
         /// <param name="requestNumber"></param>
         /// <returns></returns>
         Task<ComeToOfficeRequest> GetRequestByNumber(string requestNumber);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <returns></returns>
+        Task<List<ComeToOfficeRequest>> GetRequestsByUserId(int employeeId);
     }
 
 }

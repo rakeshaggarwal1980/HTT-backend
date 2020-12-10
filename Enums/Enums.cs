@@ -117,7 +117,12 @@
         /// <summary>
         /// 
         /// </summary>
-        PasswordReset = 6
+        PasswordReset = 6,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        EmployeeCovidDeclaration = 7
     }
 
     /// <summary>

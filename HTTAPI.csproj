@@ -13,6 +13,8 @@
     <Compile Remove="Migrations\20200820104700_added-employeeFK-to-request.Designer.cs" />
     <Compile Remove="Migrations\20200831064727_add-roles.cs" />
     <Compile Remove="Migrations\20200831064727_add-roles.Designer.cs" />
+    <Compile Remove="Migrations\20201027142610_CovidHealthTrack.cs" />
+    <Compile Remove="Migrations\20201027142610_CovidHealthTrack.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

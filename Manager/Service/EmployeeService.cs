@@ -60,7 +60,7 @@ namespace HTTAPI.Manager.Contract
         }
 
         /// <summary>
-        /// Create Employee
+        /// Create Employee                                                        
         /// </summary>
         /// <param name="signUpViewModel"></param>
         /// <returns></returns>
@@ -295,6 +295,8 @@ namespace HTTAPI.Manager.Contract
                                 EmployeeCode = employeeModel.EmployeeCode,
                                 Name = employeeModel.Name,
                                 UserId = employeeModel.Id,
+                                CurrentResidentialAddress = employeeModel.CurrentResidentialAddress,
+                                PermanentResidentialAddress = employeeModel.PermanentResidentialAddress,
                                 Token = GenerateToken(employeeModel.Name, employeeModel.Email),
                                 Roles = roles
                             };
@@ -454,7 +456,7 @@ namespace HTTAPI.Manager.Contract
         /// Returns employees
         /// </summary>
         /// <returns></returns>
-        public async Task<IResult> GetEmployeeList()
+        public IResult GetEmployeeList(SearchSortModel search)
         {
             var employeeViewModels = new List<EmployeeViewModel>();
             var result = new Result
@@ -465,7 +467,7 @@ namespace HTTAPI.Manager.Contract
             };
             try
             {
-                var employees = await _employeeRepository.GetAllEmployees();
+                var employees = _employeeRepository.GetAllEmployees(search);
                 if (employees.Any())
                 {
                     employeeViewModels = employees.Select(t =>
@@ -491,7 +493,8 @@ namespace HTTAPI.Manager.Contract
                 {
                     result.Message = "No records found";
                 }
-                result.Body = employeeViewModels;
+                search.SearchResult = employeeViewModels;
+                result.Body = search;
 
             }
             catch (Exception ex)
@@ -610,7 +613,7 @@ namespace HTTAPI.Manager.Contract
                 if (employee == null)
                 {
                     result.Status = Status.Error;
-                    result.Message = "Employee Id does not exists"; 
+                    result.Message = "Employee Id does not exists";
                     result.StatusCode = HttpStatusCode.NotFound;
                     return result;
                 }

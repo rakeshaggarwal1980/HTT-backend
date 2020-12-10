@@ -11,9 +11,12 @@ namespace HTTAPI.Helpers
 
         public string SearchString { get; set; }
 
-        public string SortColumn { get; set; }
+        public string SortColumn { get; set; } = "id";
 
         public SortDirection SortDirection { get; set; } = SortDirection.Desc;
+
+        public int userId { get; set; }
+        public int roleId { get; set; }
 
         public int Page { get; set; } = 1;
 

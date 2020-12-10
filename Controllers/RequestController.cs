@@ -64,14 +64,14 @@ namespace HTTAPI.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [HttpGet("requests")]
+        [HttpPost("requests")]
         [ProducesResponseType(typeof(List<ComeToOfficeRequestViewModel>), (int)HttpStatusCode.PartialContent)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
-        public async Task<ActionResult<IResult>> GetAllRequests()
+        public ActionResult<IResult> GetAllRequests([FromBody] SearchSortModel search)
         {
             _logger.LogInformation("Get all requests");
-            var result = await _requestService.GetRequestsList();
+            var result = _requestService.GetRequestsList(search);
             return StatusCode((int)result.StatusCode, result);
         }
 
@@ -80,14 +80,14 @@ namespace HTTAPI.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [HttpGet("requests/{userId}")]
+        [HttpPost("requestsByUserId")]
         [ProducesResponseType(typeof(List<ComeToOfficeRequestViewModel>), (int)HttpStatusCode.PartialContent)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(IResult), (int)HttpStatusCode.InternalServerError)]
-        public async Task<ActionResult<IResult>> GetAllRequestsByUserId(int userId)
+        public ActionResult<IResult> GetAllRequestsByUserId(SearchSortModel search)
         {
             _logger.LogInformation("Get all requests by userId");
-            var result = await _requestService.GetRequestsListByUserId(userId);
+            var result = _requestService.GetRequestsListByUserId(search);
             return StatusCode((int)result.StatusCode, result);
         }
 

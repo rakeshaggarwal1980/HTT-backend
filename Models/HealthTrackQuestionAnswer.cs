@@ -20,6 +20,7 @@ namespace HTTAPI.Models
         /// HealthTrack ForeignKey
         /// </summary>
         [ForeignKey("HealthTrack")] public int HealthTrackId { get; set; }
+
         public HealthTrack HealthTrack { get; set; }
 
 

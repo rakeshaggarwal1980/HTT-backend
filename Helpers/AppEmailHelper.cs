@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
@@ -80,6 +81,7 @@ namespace HTTAPI.Helpers
                 Host = "smtp.gmail.com",
                 Port = _appEmailSetting.Port,
                 UseDefaultCredentials = false,
+                DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network,
                 Credentials = new NetworkCredential(_appEmailSetting.NetworkUserName, _appEmailSetting.NetworkPassword),
                 EnableSsl = true
 
@@ -112,6 +114,9 @@ namespace HTTAPI.Helpers
                 case MailTemplate.PasswordReset:
                     var result6 = await _viewRenderService.RenderToStringAsync(EmailTemplatePath.PasswordResetEmail, MailBodyViewModel);
                     return result6.Body;
+                case MailTemplate.EmployeeCovidDeclaration:
+                    var result7 = await _viewRenderService.RenderToStringAsync(EmailTemplatePath.EmployeeCovidDeclaration, MailBodyViewModel);
+                    return result7.Body;
                 default:
                     return "";
             }
@@ -141,19 +146,26 @@ namespace HTTAPI.Helpers
 
                 message.Subject = Subject;
                 message.Body = await PrepareMailBody();
+                string logoContentID = Guid.NewGuid().ToString().Replace("-", "");
+                message.Body = message.Body.Replace("$LOGOCONTENTID$", "cid:" + logoContentID);
+                string footerLogoContentID = Guid.NewGuid().ToString().Replace("-", "");
+                message.Body = message.Body.Replace("$FOOTERLOGOCONTENTID$", "cid:" + footerLogoContentID);
+                
+                AlternateView htmlView = AlternateView.CreateAlternateViewFromString(message.Body, null, "text/html");
+                //path of image or stream
+                LinkedResource logoImagelink = new LinkedResource(@"C:\Users\EI11023\Davinder Projects\HTT-backend\images\Logo.png", "image/png");
+                logoImagelink.ContentId = logoContentID;
+                logoImagelink.TransferEncoding = System.Net.Mime.TransferEncoding.Base64;
+                htmlView.LinkedResources.Add(logoImagelink);
+                LinkedResource footerLogoImagelink = new LinkedResource(@"C:\Users\EI11023\Davinder Projects\HTT-backend\images\footer-logo.png", "image/png");
+                footerLogoImagelink.ContentId = footerLogoContentID;
+                footerLogoImagelink.TransferEncoding = System.Net.Mime.TransferEncoding.Base64;
+                htmlView.LinkedResources.Add(footerLogoImagelink);
+                message.AlternateViews.Add(htmlView);
                 message.IsBodyHtml = true;
-                // try
-                //{
                 await _client.SendMailAsync(message);
-                //}
-                //catch (Exception e)
-                //{
-                //    result.Message = e.Message;
-                //    result.StatusCode = HttpStatusCode.InternalServerError;
-                //    result.Status = Status.Error;
-                //}
             }
-            // return result;
+
         }
 
         /// <summary>

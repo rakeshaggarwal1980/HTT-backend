@@ -71,5 +71,10 @@ namespace HTTAPI.Repository
         /// 
         /// </summary>
         public DbSet<EmployeeRole> EmployeeRole { get; set; }
+
+        /// <summary>
+        /// CovidHealthTrack
+        /// </summary>
+        public DbSet<CovidHealthTrack> CovidHealthTrack { get; set; }
     }
 }

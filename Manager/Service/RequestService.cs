@@ -82,7 +82,7 @@ namespace HTTAPI.Manager.Service
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<IResult> GetRequestsList()
+        public IResult GetRequestsList(SearchSortModel search)
         {
             var requestViewModels = new List<ComeToOfficeRequestViewModel>();
             var result = new Result
@@ -93,7 +93,7 @@ namespace HTTAPI.Manager.Service
             };
             try
             {
-                var requests = await _requestRepository.GetRequestsList();
+                var requests = _requestRepository.GetRequestsList(search);
                 if (requests.Any())
                 {
                     requestViewModels = requests.Select(t =>
@@ -111,7 +111,8 @@ namespace HTTAPI.Manager.Service
                 {
                     result.Message = "No records found";
                 }
-                result.Body = requestViewModels;
+                search.SearchResult = requestViewModels;
+                result.Body = search;
 
             }
             catch (Exception ex)
@@ -128,9 +129,9 @@ namespace HTTAPI.Manager.Service
         /// <summary>
         /// Get Requests by UserId
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="search"></param>
         /// <returns></returns>
-        public async Task<IResult> GetRequestsListByUserId(int userId)
+        public IResult GetRequestsListByUserId(SearchSortModel search)
         {
             var requestViewModels = new List<ComeToOfficeRequestViewModel>();
             var result = new Result
@@ -141,7 +142,7 @@ namespace HTTAPI.Manager.Service
             };
             try
             {
-                var requests = await _requestRepository.GetRequestsListByUserId(userId);
+                var requests = _requestRepository.GetRequestsListByUserId(search);
                 if (requests.Any())
                 {
                     requestViewModels = requests.Select(t =>
@@ -159,7 +160,8 @@ namespace HTTAPI.Manager.Service
                 {
                     result.Message = "No records found";
                 }
-                result.Body = requestViewModels;
+                search.SearchResult = requestViewModels;
+                result.Body = search;
 
             }
             catch (Exception ex)
@@ -213,11 +215,11 @@ namespace HTTAPI.Manager.Service
                         }
                         //  if request for the same date exists and is declined , then can raise new request
                         //  and if no request matching date exists
-                        else if (empRequests.Where(x => x.ToDate.Date >= requestViewModel.ToDate.Date && x.IsDeclined).Any()
-                            || empRequests.Where(x => x.ToDate.Date < requestViewModel.ToDate.Date).Any())
+                        else if (empRequests.Where(x => x.ToDate.Date <= requestViewModel.FromDate.Date).Any() || empRequests.Where(x => x.FromDate.Date >= requestViewModel.ToDate.Date).Any())
                         {
 
                             requesModel.MapFromViewModel(requestViewModel, (ClaimsIdentity)_principal.Identity);
+                            requesModel.CreatedBy = requestViewModel.Employee.Email;
                             requesModel = await _requestRepository.CreateRequest(requesModel);
                             requestViewModel.Id = requesModel.Id;
                             var employeeVm = new EmployeeViewModel();
@@ -229,7 +231,7 @@ namespace HTTAPI.Manager.Service
                             result.Body = requestViewModel;
                             return result;
                         }
-                        else if (empRequests.Where(x => x.ToDate.Date == requestViewModel.ToDate.Date && !x.IsDeclined && !x.IsApproved).Any())
+                        else if (empRequests.Where(x => (x.ToDate.Date == requestViewModel.ToDate.Date || (requestViewModel.FromDate.Date < x.ToDate.Date && requestViewModel.FromDate.Date >= x.FromDate.Date) || (requestViewModel.ToDate.Date < x.ToDate.Date && requestViewModel.ToDate.Date >= x.FromDate.Date)) && !x.IsDeclined && !x.IsApproved).Any())
                         {
                             result.Status = Status.Fail;
                             result.StatusCode = HttpStatusCode.NotAcceptable;
@@ -241,6 +243,7 @@ namespace HTTAPI.Manager.Service
                     {
                         // To map employee detail
                         requesModel.MapFromViewModel(requestViewModel, (ClaimsIdentity)_principal.Identity);
+                        requesModel.CreatedBy = requestViewModel.Employee.Email;
                         requesModel = await _requestRepository.CreateRequest(requesModel);
                         requestViewModel.Id = requesModel.Id;
                         var employeeVm = new EmployeeViewModel();

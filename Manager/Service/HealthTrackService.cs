@@ -138,7 +138,11 @@ namespace HTTAPI.Manager.Service
                     if (string.IsNullOrEmpty(healthTrackViewModel.RequestNumber))
                     {
                         // find recent approved request
-                        var requests = await _requestRepository.GetRequestsListByUserId(healthTrackViewModel.EmployeeId);
+                        var searchModel = new SearchSortModel();
+                        searchModel.userId = healthTrackViewModel.EmployeeId;
+                        searchModel.roleId = 0;
+                        searchModel.SearchString = "";
+                        var requests = _requestRepository.GetRequestsListByUserId(searchModel);
                         request = requests.OrderBy(x => x.FromDate)
                              .Where(x => x.IsApproved &&
                                     (x.FromDate.Date <= todayDate && x.ToDate.Date >= todayDate)).FirstOrDefault();
@@ -373,10 +377,10 @@ namespace HTTAPI.Manager.Service
 
 
         /// <summary>
-        ///  Returns data to bind on declaration form
+        ///  Returns data to export in excel
         /// </summary>
         /// <returns></returns>
-        public async Task<IResult> GetAllDeclarations()
+        public IResult GetAllDeclarations(SearchSortModel search)
         {
             var healthViewModelList = new List<HealthTrackViewModel>();
             var result = new Result
@@ -387,7 +391,7 @@ namespace HTTAPI.Manager.Service
             };
             try
             {
-                var declarationList = await _healthTrackRepository.GetAllDeclarations();
+                var declarationList = _healthTrackRepository.GetAllDeclarations(search);
                 if (declarationList.Any())
                 {
                     healthViewModelList = declarationList.Select(declaration =>
@@ -494,6 +498,54 @@ namespace HTTAPI.Manager.Service
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        public IResult GetDeclarationsByUserId(SearchSortModel search)
+        {
+            var healthViewModelList = new List<HealthTrackViewModel>();
+            var result = new Result
+            {
+                Operation = Operation.Read,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                var declarationList = _healthTrackRepository.GetDeclarationsByUserId(search);
+                if (declarationList.Any())
+                {
+                    healthViewModelList = declarationList.Select(declaration =>
+                    {
+                        var healthViewModel = new HealthTrackViewModel();
+                        healthViewModel.MapFromModel(declaration);
+                        var employeeVm = new EmployeeViewModel();
+                        employeeVm.MapFromModel(declaration.Employee);
+                        healthViewModel.Employee = employeeVm;
+                        return healthViewModel;
+                    }).ToList();
+
+                    search.SearchResult = healthViewModelList;
+                    result.Body = search;
+                }
+                else
+                {
+                    result.Status = Status.Fail;
+                    result.StatusCode = HttpStatusCode.NotFound;
+                    result.Message = "No declaration exists";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                result.Status = Status.Error;
+                result.Message = ex.Message;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
+            return result;
+        }
         private async Task SendEmail(HealthTrackViewModel healthViewModel)
         {
             var appEmailHelper = new AppEmailHelper();
@@ -528,5 +580,250 @@ namespace HTTAPI.Manager.Service
             await appEmailHelper.InitMailMessage();
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="covidHealthTrackViewModel"></param>
+        /// <returns></returns>
+        public async Task<IResult> CreateCovidHealthTrack(CovidHealthTrackViewModel covidHealthTrackViewModel)
+        {
+            var result = new Result
+            {
+                Operation = Operation.Create,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                if (covidHealthTrackViewModel != null)
+                {
+                    var todayDate = DateTime.Now.Date;
+
+                    var existingDeclaration = _healthTrackRepository.GetExistingCovidDeclaration(covidHealthTrackViewModel.CovidConfirmationDate, covidHealthTrackViewModel.EmployeeId);
+                    if (existingDeclaration.Result != null)
+                    {
+                        result.Status = Status.Fail;
+                        result.StatusCode = HttpStatusCode.NotAcceptable;
+                        result.Message = "You have already submitted declaration for this confirmation date.";
+                        return result;
+                    }
+                    else
+                    {
+                        // now add logic to create Covid declaration
+                        var covidHealthTrackModel = new CovidHealthTrack();
+                        // To map health Track detail
+                        covidHealthTrackModel.MapFromViewModel(covidHealthTrackViewModel, (ClaimsIdentity)_principal.Identity);
+                        covidHealthTrackModel = await _healthTrackRepository.CreateCovidHealthTrack(covidHealthTrackModel);
+                        covidHealthTrackViewModel.Id = covidHealthTrackModel.Id;
+                        var employeeVm = new EmployeeViewModel();
+                        employeeVm.MapFromModel(covidHealthTrackModel.Employee);
+                        covidHealthTrackViewModel.Employee = employeeVm;
+                        // send email to HR
+                        await SendCovidEmail(covidHealthTrackViewModel);
+                        result.Body = covidHealthTrackViewModel;
+                        return result;
+                    }
+
+                }
+
+
+                result.Status = Status.Fail;
+                result.StatusCode = HttpStatusCode.BadRequest;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                result.Status = Status.Error;
+                result.Message = ex.Message;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+                return result;
+            }
+
+        }
+
+        private async Task SendCovidEmail(CovidHealthTrackViewModel covidHealthTrackViewModel)
+        {
+            var appEmailHelper = new AppEmailHelper();
+            var hrEmployeeList = await _employeeRepository.GetEmployeeDetailsByRole(EmployeeRolesEnum.HRManager.ToString());
+            if (hrEmployeeList.Count > 0)
+            {
+                foreach (var hrEmployee in hrEmployeeList)
+                {
+                    appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
+                }
+            }
+
+
+            // appEmailHelper.ToMailAddresses.Add(new MailAddress(hrEmployee.Email, hrEmployee.Name));
+            // appEmailHelper.CCMailAddresses.Add(new MailAddress(securityEmp.Email, securityEmp.Name));
+
+            appEmailHelper.MailTemplate = MailTemplate.EmployeeCovidDeclaration;
+            appEmailHelper.Subject = "Covid declaration submission";
+            CovidHealthTrackViewModel emailVm = new CovidHealthTrackViewModel();
+            emailVm.MapFromViewModel(covidHealthTrackViewModel);
+            appEmailHelper.MailBodyViewModel = emailVm;
+            await appEmailHelper.InitMailMessage();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        public IResult GetCovidDeclarations(SearchSortModel search)
+        {
+            var covidHealthViewModelList = new List<CovidHealthTrackViewModel>();
+            var result = new Result
+            {
+                Operation = Operation.Read,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                var declarationList = _healthTrackRepository.GetCovidDeclarations(search);
+                if (declarationList.Any())
+                {
+                    covidHealthViewModelList = declarationList.Select(declaration =>
+                    {
+                        var healthViewModel = new CovidHealthTrackViewModel();
+                        healthViewModel.MapFromModel(declaration);
+                        var employeeVm = new EmployeeViewModel();
+                        employeeVm.MapFromModel(declaration.Employee);
+                        healthViewModel.Employee = employeeVm;
+                        return healthViewModel;
+                    }).ToList();
+
+                    search.SearchResult = covidHealthViewModelList;
+                    result.Body = search;
+                }
+                else
+                {
+                    result.Status = Status.Fail;
+                    result.StatusCode = HttpStatusCode.NotFound;
+                    result.Message = "No declaration exists";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                result.Status = Status.Error;
+                result.Message = ex.Message;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="declarationId"></param>
+        /// <returns></returns>
+        public async Task<IResult> GetCovidDeclaration(int declarationId)
+        {
+            var covidHealthViewModelList = new List<CovidHealthTrackViewModel>();
+            var result = new Result
+            {
+                Operation = Operation.Read,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                var declarationList = await _healthTrackRepository.GetCovidDeclaration(declarationId);
+                if (declarationList.Any())
+                {
+                    covidHealthViewModelList = declarationList.Select(declaration =>
+                    {
+                        var covidHealthViewModel = new CovidHealthTrackViewModel();
+                        covidHealthViewModel.MapFromModel(declaration);
+                        var employeeVm = new EmployeeViewModel();
+                        employeeVm.MapFromModel(declaration.Employee);
+                        covidHealthViewModel.Employee = employeeVm;
+                        return covidHealthViewModel;
+                    }).ToList();
+
+                    result.Body = covidHealthViewModelList;
+                }
+                else
+                {
+                    result.Status = Status.Fail;
+                    result.StatusCode = HttpStatusCode.NotFound;
+                    result.Message = "No declaration exists";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                result.Status = Status.Error;
+                result.Message = ex.Message;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <param name="requestNumber"></param>
+        /// <returns></returns>
+        public async Task<IResult> GetExistingSelfDeclarationOfEmployee(int employeeId)
+        {
+            var result = new Result
+            {
+                Operation = Operation.Create,
+                Status = Status.Success,
+                StatusCode = HttpStatusCode.OK
+            };
+            try
+            {
+                var todayDate = DateTime.Now.Date;
+                var requests =await _requestRepository.GetRequestsByUserId(employeeId);
+               var request = requests.OrderBy(x => x.FromDate)
+                     .Where(x => x.IsApproved &&
+                            (x.FromDate.Date <= todayDate && x.ToDate.Date >= todayDate)).FirstOrDefault();
+                if (request != null)
+                {
+                    var declarations = await _healthTrackRepository.GetSelfDeclarationByEmployeeForRequest(employeeId, request.RequestNumber);
+                    if (declarations.Any())
+                    {
+                        // if user has already submiited declaration for today
+                        if (declarations.Any(d => d.CreatedDate.Date == todayDate))
+                        {
+                            result.Status = Status.Fail;
+                            result.StatusCode = HttpStatusCode.NotAcceptable;
+                            result.Message = "You already have submitted declaration for today";
+                        }
+                        else
+                        {
+                            result.Status = Status.Success;
+                            result.StatusCode = HttpStatusCode.Accepted;
+                            result.Message = "";
+                        }
+
+                    }
+                }
+                else
+                {
+                    result.Status = Status.Fail;
+                    result.StatusCode = HttpStatusCode.NotFound;
+                    result.Message = "Either you do not have any approved request or you can not declare prior to the request From date";
+                    return result;
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                result.Status = Status.Error;
+                result.Message = ex.Message;
+                result.StatusCode = HttpStatusCode.InternalServerError;
+            }
+            return result;
+        }
     }
 }
+

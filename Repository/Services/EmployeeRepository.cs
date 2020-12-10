@@ -1,4 +1,5 @@
-﻿using HTTAPI.Models;
+﻿using HTTAPI.Helpers;
+using HTTAPI.Models;
 using HTTAPI.Repository.Contracts;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -131,10 +132,107 @@ namespace HTTAPI.Repository.Services
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Employee>> GetAllEmployees()
+        //public async Task<List<Employee>> GetAllEmployees()
+        //{
+        //    return await _context.Employee.Include(e => e.EmployeeRoles).ThenInclude(e => e.Role).ToListAsync();
+        //}
+
+
+        public List<Employee> GetAllEmployees(SearchSortModel search)
         {
-            return await _context.Employee.Include(e => e.EmployeeRoles).ThenInclude(e => e.Role).ToListAsync();
+
+            var query = _context.Employee.Include(e => e.EmployeeRoles).ThenInclude(e => e.Role).AsQueryable();
+
+
+            if (!string.IsNullOrEmpty(search.SearchString) && search.PropertyName.ToLower() == "employeename")
+            {
+                query = query.Where(t => t.Name.ToLower().Contains(search.SearchString));
+
+            }
+            if (!string.IsNullOrEmpty(search.SearchString) && search.PropertyName.ToLower() == "email")
+            {
+                query = query.Where(t => t.Email.ToLower().Contains(search.SearchString));
+
+            }
+            if (!string.IsNullOrEmpty(search.SearchString) && search.PropertyName.ToLower() == "role")
+            {
+                query = query.Where(t => t.EmployeeRoles.Any(r => r.RoleId == Convert.ToInt32(search.SearchString)));
+
+            }
+
+            if (search.userId != 0 && search.roleId != 0)
+            {
+                if (search.roleId == 1)
+                {
+                    query = query.Where(t => t.Id != search.userId && (
+                     t.EmployeeRoles.Any(role => role.RoleId == 2 || role.RoleId == 3)));
+                }
+                if (search.roleId == 2)
+                {
+                    query = query.Where(t => t.Id != search.userId && (
+                     t.EmployeeRoles.Any(role => role.RoleId == 3)));
+                }
+
+            }
+
+            search.TotalRecords = query.Count();
+
+            switch (search.SortDirection.ToString().ToLower())
+            {
+                case "asc":
+                    if (search.SortColumn.ToLower() == "employeecode")
+                    {
+                        query = query.OrderBy(dec => dec.EmployeeCode);
+                    }
+                    else if (search.SortColumn.ToLower() == "employeename")
+                    {
+                        query = query.OrderBy(dec => dec.Name);
+                    }
+                    else
+                    {
+                        query = query.OrderBy(dec => dec.EmployeeCode);
+
+                    }
+                    break;
+                default:
+                    if (search.SortColumn.ToLower() == "employeecode")
+                    {
+                        query = query.OrderByDescending(dec => dec.EmployeeCode);
+                    }
+                    else if (search.SortColumn.ToLower() == "employeename")
+                    {
+                        query = query.OrderByDescending(dec => dec.Name);
+                    }
+                    else
+                    {
+                        query = query.OrderByDescending(dec => dec.EmployeeCode);
+
+                    }
+                    break;
+            }
+
+            query = PagingExtensions.Page(query, search.Page, search.PageSize);
+
+            var data = query
+                .Select(user => new Employee
+                {
+                    Id = user.Id,
+                    EmployeeCode = user.EmployeeCode,
+                    CurrentResidentialAddress = user.CurrentResidentialAddress,
+                    Email = user.Email,
+                    Name = user.Name,
+                    Password = user.Password,
+                    PermanentResidentialAddress = user.PermanentResidentialAddress,
+                    EmployeeRoles = user.EmployeeRoles,
+                    Status = user.Status
+                })
+                .ToList();
+
+            return data;
+
         }
+
+
 
         //public async Task<Employee> GetEmployeeByToken(string token)
         //{
