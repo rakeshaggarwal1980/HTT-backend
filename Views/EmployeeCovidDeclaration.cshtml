@@ -1,0 +1,83 @@
+﻿@model HTTAPI.ViewModels.CovidHealthTrackViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <style>
+        body {
+            width: 850px;
+        }
+
+        h3.summary-header {
+            font-weight: bold;
+        }
+
+        span.form-header {
+            font-weight: bold;
+        }
+
+        .summary {
+            margin-left: 15px;
+        }
+
+        .description {
+            margin-top: 25px;
+        }
+
+        .bye {
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+    <p>Hello</p>
+    <p>
+        This is to update you that Employee with the following details has declared himself/herself <b>Covid-19 Positive</b>
+    </p>
+    <div class="summary">
+        <h3 class=summary-header>Summary</h3>
+        <div>
+            <span class="form-header">Name: </span>
+            <span class="form-data">@Html.DisplayFor(model => model.Employee.Name)</span>
+        </div>
+        <div>
+            <span class="form-header">Employee Code: </span>
+            <span class="form-data">@Html.DisplayFor(model => model.Employee.EmployeeCode)</span>
+        </div>
+        <div>
+            <span class="form-header">Email: </span>
+            <span class="form-data">@Html.DisplayFor(model => model.Employee.Email)</span>
+        </div>
+        <div>
+            <span class="form-header">Role Name: </span>
+            <span class="form-data">Employee</span>
+        </div>
+        <div>
+            <span class="form-header">Current Address: </span>
+            <span class="form-data">@Html.DisplayFor(model => model.Employee.CurrentResidentialAddress)</span>
+        </div>
+        <div>
+            <span class="form-header">Permanent Address: </span>
+            <span class="form-data">@Html.DisplayFor(model => model.Employee.PermanentResidentialAddress)</span>
+        </div>
+        @*<div class="description">
+            <div>
+                <a title="Click to view users" href="@Model.LinkUrl">Click to view users</a>
+            </div>
+        </div>*@
+    </div>
+    <div class="bye">
+        <span class="br">Best Regards</span><br />
+        <span class="thnks">EVRY Survey</span>
+    </div>
+
+
+</body>
+</html>
+
+
